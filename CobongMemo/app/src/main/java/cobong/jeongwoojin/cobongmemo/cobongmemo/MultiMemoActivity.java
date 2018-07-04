@@ -1,5 +1,6 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -21,12 +23,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiMemoActivity extends AppCompatActivity implements View.OnClickListener{
+public class MultiMemoActivity extends AppCompatActivity{
 
     ImageView edit;
     ImageView remove;
 
-    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +37,7 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
         edit = (ImageView)findViewById(R.id.edit);
         remove = (ImageView)findViewById(R.id.remove);
 
-        fab = (FloatingActionButton)findViewById(R.id.cobong_fab);
-
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.lab3_recycler);
+        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.main_recycler);
 
         List<String> list = new ArrayList<>();
         for(int i=0; i<20; i++){
@@ -49,20 +48,15 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
         recyclerView.setAdapter(new MyAdapter(list));
         recyclerView.addItemDecoration(new MyItemDecoration());
 
-
-        fab.setOnClickListener(this);
     }
 
     //클릭 이벤트
-    @Override
-    public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.cobong_fab:
-                Toast.makeText(this,"메모 추가 버튼 입니다.",Toast.LENGTH_SHORT).show();
 
-
-        }
+    public void addMemo(View view){
+        Intent intent = new Intent(this,WriteMemoActivity.class);
+        startActivity(intent);
     }
+
 
     //ImageView 이벤트 , xml파일에서 onClick 속성으로 이벤트에 사용할 함수를 등록한다.
     public void imageClick(View view){
@@ -90,13 +84,17 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
 
         switch (item.getItemId()){
             case R.id.cobong_custom:
-                Toast.makeText(this,"환경설정 입니다.",Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this,SettingsActivity.class);
+                startActivity(intent);
                 break;
 
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    //RecyclerView 터치 이벤트
+
 
 
 
@@ -107,6 +105,8 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
         public MyViewHolder(View itemView){
             super(itemView);
             title = (TextView)itemView.findViewById(R.id.memo_title);
+
+
         }
     }
 

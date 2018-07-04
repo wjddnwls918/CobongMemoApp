@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">CobongMemo</string>
+
+    <string name="writeMemoTextView">Memo</string>
+    <string name="writeMemoTitle">Title</string>
+    <string name="writeMemoSub">SubTitle</string>
+    <string name="writeMemoContent">Enter Your Content</string>
 </resources>

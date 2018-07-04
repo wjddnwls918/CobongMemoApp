@@ -11,19 +11,25 @@
         android:theme="@style/AppTheme">
 
         <!-- Splash Activity -->
-        <activity android:name=".StartActivity"
-            android:theme="@style/SplashTheme"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".StartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".MultiMemoActivity">
-        </activity>
-
+        <activity android:name=".MultiMemoActivity" />
+        <activity
+            android:name=".WriteMemoActivity"
+            android:theme="@style/myTheme"></activity>
+        <activity android:name=".SettingsActivity"
+            
+            ></activity>
     </application>
 
 </manifest>
