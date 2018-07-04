@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <!-- cobong custom -->
+    <color name="cobongGray">#b7b7b7</color>
+    <color name="cobongDarkGray">#666666</color>
+
+    <color name="cobongGreen">#91f752</color>
+    <!-- end of custom -->
+
+</resources>
