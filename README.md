@@ -1,4 +1,4 @@
-﻿## **HomeCCTV-Project** / 정우진 (wjddnwls918)
+﻿## **CobongMemo Application** / 정우진 (wjddnwls918)
 
 SW
 - 안드로이드
