@@ -19,8 +19,11 @@ public class DBHelper extends SQLiteOpenHelper{
 
         String memoSQL = "create table memo_tb "+
                 "(idx integer primary key autoincrement,"+
-                "title,"+
-                "content)";
+                "title not null,"+
+                "subtitle,"+
+                "content not null)";
+
+        db.execSQL(memoSQL);
 
     }
 

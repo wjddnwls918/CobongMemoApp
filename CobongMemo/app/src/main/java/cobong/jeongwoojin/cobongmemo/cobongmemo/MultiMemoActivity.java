@@ -17,16 +17,20 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MultiMemoActivity extends AppCompatActivity{
+public class MultiMemoActivity extends AppCompatActivity implements View.OnClickListener{
 
     ImageView edit;
     ImageView remove;
+
+    ImageView add;
+    LinearLayout showContent;
 
 
     @Override
@@ -34,8 +38,8 @@ public class MultiMemoActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        edit = (ImageView)findViewById(R.id.edit);
-        remove = (ImageView)findViewById(R.id.remove);
+
+        add = (ImageView)findViewById(R.id.addMemo);
 
         RecyclerView recyclerView = (RecyclerView)findViewById(R.id.main_recycler);
 
@@ -48,28 +52,22 @@ public class MultiMemoActivity extends AppCompatActivity{
         recyclerView.setAdapter(new MyAdapter(list));
         recyclerView.addItemDecoration(new MyItemDecoration());
 
+        add.setOnClickListener(this);
+
     }
 
     //클릭 이벤트
 
-    public void addMemo(View view){
-        Intent intent = new Intent(this,WriteMemoActivity.class);
-        startActivity(intent);
-    }
-
-
-    //ImageView 이벤트 , xml파일에서 onClick 속성으로 이벤트에 사용할 함수를 등록한다.
-    public void imageClick(View view){
-        switch(view.getId()){
-            case R.id.edit:
-                Toast.makeText(this,"edit 입니다.",Toast.LENGTH_SHORT).show();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.addMemo:
+                Intent intent = new Intent(this,WriteMemoActivity.class);
+                startActivity(intent);
                 break;
-            case R.id.remove:
-                Toast.makeText(this,"remove 입니다.",Toast.LENGTH_SHORT).show();
-                break;
-
         }
     }
+
 
     //메뉴 생성
     @Override
@@ -93,9 +91,6 @@ public class MultiMemoActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    //RecyclerView 터치 이벤트
-
-
 
 
     private class MyViewHolder extends RecyclerView.ViewHolder{
@@ -105,7 +100,31 @@ public class MultiMemoActivity extends AppCompatActivity{
         public MyViewHolder(View itemView){
             super(itemView);
             title = (TextView)itemView.findViewById(R.id.memo_title);
+            edit = (ImageView)itemView.findViewById(R.id.edit);
+            remove = (ImageView)itemView.findViewById(R.id.remove);
+            showContent = (LinearLayout)itemView.findViewById(R.id.showContent);
 
+
+            //recyclerView 에서의 이벤트 처리는 ViewHolder에서 진행
+            edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"edit 입니다.",Toast.LENGTH_SHORT).show();
+                }
+            });
+            remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"remove 입니다.",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            showContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
     }
