@@ -46,11 +46,15 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
 
     RecyclerView recyclerView;
 
+    List<MyListItem> list;
+
+    MyAdapter myAdapter;
 
     //load List or refresh List
     public void loadList(){
 
-        List<MyListItem> list = new ArrayList<>();
+
+        list = new ArrayList<>();
 
 
         helper = new DBHelper(this);
@@ -88,12 +92,10 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
                 " ID_HANDWRITING INTEGER "+
                 ")";*/
 
-        recyclerView.setLayoutManager(new LinearLayoutManager( this ));
-        recyclerView.setAdapter(new MyAdapter(list));
-        recyclerView.addItemDecoration(new MyItemDecoration());
 
 
-        add.setOnClickListener(this);
+
+
     }
 
 
@@ -102,6 +104,12 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
         super.onResume();
 
         loadList();
+
+
+        myAdapter = new MyAdapter(list);
+        recyclerView.setLayoutManager(new LinearLayoutManager( this ));
+        recyclerView.setAdapter(myAdapter);
+        //recyclerView.addItemDecoration(new MyItemDecoration());
 
     }
 
@@ -148,8 +156,15 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
         loadList();
 
 
+        myAdapter = new MyAdapter(list);
+        recyclerView.setLayoutManager(new LinearLayoutManager( this ));
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.addItemDecoration(new MyItemDecoration());
+
         //권한
         checkDangerousPermissions();
+
+        add.setOnClickListener(this);
 
     }
 
@@ -367,7 +382,18 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
                                 public void onClick(DialogInterface dialog, int which) {
                                     deleteData(list.get(position).index);
 
+
+
                                     loadList();
+                                    list.remove(position);
+                                    recyclerView.removeViewAt(position);
+                                    myAdapter.notifyItemRemoved(position);
+                                    myAdapter.notifyItemRangeChanged(position,list.size());
+
+                                     /*recyclerView.setLayoutManager(new LinearLayoutManager( MultiMemoActivity.this ));
+                                    recyclerView.setAdapter(new MyAdapter(list));
+                                    recyclerView.addItemDecoration(new MyItemDecoration());*/
+
                                 }
                             });
 
@@ -405,19 +431,21 @@ public class MultiMemoActivity extends AppCompatActivity implements View.OnClick
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
+
+    }
 
     class MyItemDecoration extends RecyclerView.ItemDecoration{
         @Override
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             super.getItemOffsets(outRect, view, parent, state);
-            int index = parent.getChildAdapterPosition(view)+1;
-            if( index % 3 == 0){
-                outRect.set(20, 10, 20 ,10);
+            //int index = parent.getChildAdapterPosition(view)+1;
 
-            }else{
-                outRect.set(20, 10, 20, 10);
-            }
+            outRect.set(20, 10, 20 ,10);
+
 
             view.setBackgroundColor(0xFFECE9E9);
             ViewCompat.setElevation(view, 20.0f);
