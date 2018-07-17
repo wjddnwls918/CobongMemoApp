@@ -2,6 +2,8 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,6 +22,9 @@ public class WriteMemoActivity extends Activity implements View.OnClickListener 
 
     ImageView exit;
     ImageView writeMemo;
+
+    SQLiteDatabase db;
+    Cursor cursor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +65,16 @@ public class WriteMemoActivity extends Activity implements View.OnClickListener 
                 onBackPressed();
                 break;
             case R.id.writeMemo:
-                Toast.makeText(this,"메모 입력 버튼입니다. \n"+title.getText()+"\n"+subTitle.getText()+"\n"+content.getText(),Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this,"메모 입력 버튼입니다. \n"+title.getText()+"\n"+subTitle.getText()+"\n"+content.getText(),Toast.LENGTH_SHORT).show();
 
                 DBHelper helper = new DBHelper(this);
+                db = helper.getWritableDatabase();
+
+                String insertMemo;
+                insertMemo = "insert into memo(title,subtitle,content,memo_type) values(?,?,?,?)";
+                String args[] = {title.getText().toString(),subTitle.getText().toString(),content.getText().toString(),"text"};
+                db.execSQL(insertMemo,args);
+                finish();
                 break;
 
         }
