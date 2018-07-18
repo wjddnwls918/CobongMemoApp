@@ -44,7 +44,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 "  INPUT_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "+
                 "TITLE not null,"+
                 "SUBTITLE TEXT DEFAULT '',"+
-                "CONTENT TEXT DEFAULT '', " +
+                "CONTENT not null , " +
                 " MEMO_TYPE text default '', "+
                 " ID_VOICE INTEGER, "+
                 " ID_HANDWRITING INTEGER "+

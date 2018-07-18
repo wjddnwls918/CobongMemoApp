@@ -22,5 +22,8 @@
     </style>
 
 
+    <style name="myTheme2" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:background">#fafafa</item>
+    </style>
 
 </resources>

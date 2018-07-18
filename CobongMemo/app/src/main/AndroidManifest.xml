@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cobong.jeongwoojin.cobongmemo.cobongmemo">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -28,13 +28,15 @@
         </activity>
 
         <!-- Main Activity -->
-        <activity android:name=".MultiMemoActivity" />
         <activity
             android:name=".WriteMemoActivity"
-            android:theme="@style/myTheme"></activity>
-        <activity android:name=".SettingsActivity"
-            
-            ></activity>
+            android:theme="@style/myTheme" />
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".TextMemoView" />
+        <activity android:name=".MainActivity">
+
+
+        </activity>
     </application>
 
 </manifest>

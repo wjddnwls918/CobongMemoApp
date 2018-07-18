@@ -5,10 +5,14 @@
     <color name="colorAccent">#FF4081</color>
 
     <!-- cobong custom -->
-    <color name="cobongGray">#b7b7b7</color>
+    <color name="cobongGray">#4d718c</color>
     <color name="cobongDarkGray">#666666</color>
 
     <color name="cobongGreen">#91f752</color>
+
+
+
     <!-- end of custom -->
+
 
 </resources>

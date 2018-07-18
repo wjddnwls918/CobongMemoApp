@@ -13,12 +13,12 @@ public class StartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         try{
-            Thread.sleep(4000);
+            Thread.sleep(3000);
         }catch (InterruptedException e){
             e.printStackTrace();
         }
 
-        startActivity(new Intent(this,MultiMemoActivity.class));
+        startActivity(new Intent(this,MainActivity.class));
         finish();
 
 

@@ -6,11 +6,13 @@ public class MyListItem {
     String title,subTitle;
     String memo_type;
     String input_time;
+    String content;
 
-    public MyListItem(int index, String title, String subTitle, String memo_type, String input_time){
+    public MyListItem(int index, String title, String subTitle,String content, String memo_type, String input_time){
         this.index = index;
         this.title = title;
         this.subTitle = subTitle;
+        this.content = content;
         this.memo_type = memo_type;
         this. input_time = input_time;
 
