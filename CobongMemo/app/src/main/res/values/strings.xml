@@ -7,6 +7,11 @@
     <string name="writeMemoSub">SubTitle</string>
     <string name="writeMemoContent">Enter Your Content</string>
 
+    <string name="viewpagerMemo">Memo</string>
+    <string name="viewpagerAlarm">Alarm</string>
+    <string name="viewpagerSchedule">Schedule</string>
+
+
     <!-- copy string -->
     <string name="main_title">MultiMemo</string>
     <string name="new_title">New Memo</string>

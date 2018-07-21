@@ -13,9 +13,7 @@ public class DBHelper extends SQLiteOpenHelper{
     //table name for VOICE
     public static String TABLE_VOICE = "VOICE";
 
-    //table name for HANDWRITING
     public static String TABLE_HANDWRITING = "HANDWRITING";
-
 
     public static final int DATABASE_VERSION = 1;
 
@@ -44,7 +42,7 @@ public class DBHelper extends SQLiteOpenHelper{
                 "  INPUT_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "+
                 "TITLE not null,"+
                 "SUBTITLE TEXT DEFAULT '',"+
-                "CONTENT not null , " +
+                "CONTENT DEFAULT '' , " +
                 " MEMO_TYPE text default '', "+
                 " ID_VOICE INTEGER, "+
                 " ID_HANDWRITING INTEGER "+
@@ -92,14 +90,15 @@ public class DBHelper extends SQLiteOpenHelper{
         //END OF SETTING VOICE TABLE
 
 
+
+
         // TABLE_HANDWRITING
         // drop existing table
-
         drop_sql = "drop table if exists " + TABLE_HANDWRITING;
         try {
             db.execSQL(drop_sql);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(Exception ex) {
+           ex.printStackTrace();
         }
 
         // create table
@@ -110,19 +109,19 @@ public class DBHelper extends SQLiteOpenHelper{
                 + ")";
         try {
             db.execSQL(CREATE_SQL);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(Exception ex) {
+           ex.printStackTrace();
         }
+
         // create index
         CREATE_INDEX_SQL = "create index " + TABLE_HANDWRITING + "_IDX ON " + TABLE_HANDWRITING + "("
                 + "URI"
                 + ")";
         try {
             db.execSQL(CREATE_INDEX_SQL);
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(Exception ex) {
+            ex.printStackTrace();
         }
-        //END OF SETTING HANDWRITING TABLE
 
 
     }

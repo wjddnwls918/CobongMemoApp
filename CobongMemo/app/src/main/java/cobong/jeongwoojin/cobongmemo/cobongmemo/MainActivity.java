@@ -2,6 +2,7 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -32,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private NavigationTabStrip mTopNavigationTabStrip;
 
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         initUI();
         setUI();
@@ -151,5 +156,10 @@ public class MainActivity extends AppCompatActivity {
             return fragments.get(position);
         }
     }
+
+
+
+
+
 
 }

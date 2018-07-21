@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -26,6 +27,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -36,11 +39,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+
 public class MemoListFragment extends Fragment implements View.OnClickListener {
 
     public static final String TAG = "MultiMemoActivity";
 
-    ImageView add;
+    /**
+     * table name for MEMO
+     */
+    public static String TABLE_MEMO = "MEMO";
+
+    /**
+     * table name for VOICE
+     */
+    public static String TABLE_VOICE = "VOICE";
+
 
     DBHelper helper;
     SQLiteDatabase db;
@@ -48,6 +63,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
     TextView main_text;
 
     RecyclerView recyclerView;
+    FloatingActionButton fab;
 
     List<MyListItem> list;
 
@@ -82,7 +98,9 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                     String temcontent = cursor.getString(4);
                     String temMemoType = cursor.getString(5);
                     String temInputTime = cursor.getString(1);
-                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime));
+                    String temVoiceId = cursor.getString(6);
+                    String temHandwriteId = cursor.getString(7);
+                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime,temVoiceId,temHandwriteId));
                 }
             }
 
@@ -115,9 +133,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-
     }
 
     @Override
@@ -126,11 +141,39 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_memo_list, container, false);
 
-
-        add = (ImageView)v.findViewById(R.id.addMemo);
-
+        fab = (FloatingActionButton) v.findViewById(R.id.addMemo);
         recyclerView = (RecyclerView)v.findViewById(R.id.main_recycler);
-        //view pager init, uit se
+        //스크롤시 fab 없애기
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+           //개천재임 나 ;;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if(newState == SCROLL_STATE_DRAGGING){
+                    fab.hide();
+                }else if(newState == SCROLL_STATE_IDLE){
+
+                    Animation anim = AnimationUtils.loadAnimation(getContext(),R.anim.delay);
+                    fab.setAnimation(anim);
+                    fab.show();
+                }
+            }
+
+            /*@Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+
+                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
+                    fab.hide();
+                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
+                    fab.show();
+                }
+            }*/
+        });
+
 
 
         //set current locale
@@ -172,8 +215,9 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
         //권한
         checkDangerousPermissions();
+        checkDangerousPermissions();
 
-        add.setOnClickListener(this);
+        fab.setOnClickListener(this);
 
        /* ImageView test = v.findViewById(R.id.test);
         test.setOnClickListener(new View.OnClickListener() {
@@ -237,7 +281,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.addMemo:
 
-                CharSequence memoType[] = new CharSequence[]{"글","음성","손글씨"};
+                CharSequence memoType[] = new CharSequence[]{"글","음성"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("메모 타입 선택");
                 builder.setItems(memoType, new DialogInterface.OnClickListener() {
@@ -253,14 +297,14 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
                                 break;
 
-
                             //음성
                             case 1:
+
+                                Toast.makeText(getContext(),"음성 메모",Toast.LENGTH_SHORT).show();
                                 break;
 
-                            //손글씨
-                            case 2:
-                                break;
+
+
 
 
                         }
@@ -305,7 +349,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
             text_type = (ImageView)itemView.findViewById(R.id.text_type);
             voice_type = (ImageView)itemView.findViewById(R.id.voice_type);
-            handwriting_type = (ImageView)itemView.findViewById(R.id.handwriting_type);
+
 
 
         }
@@ -358,6 +402,10 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
             if(resultMemoType.equals("text")){
                 holder.text_type.setVisibility(View.VISIBLE);
+            }else if(resultMemoType.equals("handwrite")){
+                holder.handwriting_type.setVisibility(View.VISIBLE);
+            }else{
+                holder.voice_type.setVisibility(View.VISIBLE);
             }
 
             holder.edit.setOnClickListener(new View.OnClickListener() {
@@ -366,13 +414,19 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                     // Toast.makeText(getApplicationContext(),"edit 입니다.",Toast.LENGTH_SHORT).show();
                     //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
 
-                    Intent intent1 = new Intent(getActivity(),WriteMemoActivity.class);
-                    intent1.putExtra("index",list.get(position).index);
-                    intent1.putExtra("type","editmemo");
-                    intent1.putExtra("title",list.get(position).title);
-                    intent1.putExtra("subtitle",list.get(position).subTitle);
-                    intent1.putExtra("content",list.get(position).content);
-                    startActivity(intent1);
+                    if(list.get(position).memo_type.equals("text")) {
+                        Intent intent1 = new Intent(getActivity(), WriteMemoActivity.class);
+                        intent1.putExtra("index", list.get(position).index);
+                        intent1.putExtra("type", "editmemo");
+                        intent1.putExtra("title", list.get(position).title);
+                        intent1.putExtra("subtitle", list.get(position).subTitle);
+                        intent1.putExtra("content", list.get(position).content);
+                        startActivity(intent1);
+                    }else if(list.get(position).memo_type.equals("handwrite")){
+
+                    }else{
+
+                    }
 
 
                 }
@@ -419,19 +473,26 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                 public void onClick(View v) {
                     //Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
 
-                    Intent intent = new Intent(getContext(),TextMemoView.class);
+                    if(list.get(position).memo_type.equals("text")) {
+                        Intent intent = new Intent(getContext(), TextMemoView.class);
 
-                    //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
 
-                    intent.putExtra("index",list.get(position).index);
-                    intent.putExtra("title",list.get(position).title);
-                    intent.putExtra("subtitle",list.get(position).subTitle);
-                    intent.putExtra("content",list.get(position).content);
-                    startActivity(intent);
+                        intent.putExtra("index", list.get(position).index);
+                        intent.putExtra("title", list.get(position).title);
+                        intent.putExtra("subtitle", list.get(position).subTitle);
+                        intent.putExtra("content", list.get(position).content);
+                        startActivity(intent);
+                    }else{
+
+                    }
 
                 }
             });
         }
+
+
+
 
         @Override
         public int getItemCount() {
@@ -490,4 +551,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
 
     }
+
+
+
 }

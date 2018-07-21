@@ -33,10 +33,9 @@
             android:theme="@style/myTheme" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".TextMemoView" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity" />
 
 
-        </activity>
     </application>
 
 </manifest>
