@@ -99,8 +99,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                     String temMemoType = cursor.getString(5);
                     String temInputTime = cursor.getString(1);
                     String temVoiceId = cursor.getString(6);
-                    String temHandwriteId = cursor.getString(7);
-                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime,temVoiceId,temHandwriteId));
+                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime,temVoiceId));
                 }
             }
 

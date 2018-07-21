@@ -4,7 +4,6 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
@@ -34,8 +33,7 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".TextMemoView" />
         <activity android:name=".MainActivity" />
-
-
+        <activity android:name=".VoiceRecordingActivity"></activity>
     </application>
 
 </manifest>

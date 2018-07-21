@@ -8,9 +8,9 @@ public class MyListItem {
     String input_time;
     String content;
     String voiceId;
-    String handwriteId;
 
-    public MyListItem(int index, String title, String subTitle,String content, String memo_type, String input_time,String voiceId, String handwriteId){
+
+    public MyListItem(int index, String title, String subTitle,String content, String memo_type, String input_time,String voiceId){
         this.index = index;
         this.title = title;
         this.subTitle = subTitle;
@@ -18,7 +18,7 @@ public class MyListItem {
         this.memo_type = memo_type;
         this. input_time = input_time;
         this.voiceId = voiceId;
-        this.handwriteId = handwriteId;
+
     }
 
     public String getContent() {
@@ -37,14 +37,6 @@ public class MyListItem {
         this.voiceId = voiceId;
     }
 
-
-    public String getHandwriteId() {
-        return handwriteId;
-    }
-
-    public void setHandwriteId(String handwriteId) {
-        this.handwriteId = handwriteId;
-    }
 
     public int getIndex() {
         return index;
