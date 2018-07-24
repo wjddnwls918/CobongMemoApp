@@ -12,8 +12,13 @@
     <string name="viewpagerMemo">메모</string>
     <string name="viewpagerAlarm">알람</string>
     <string name="viewpagerSchedule">일정</string>
+    <string name="record">녹음 중..</string>
+    <string name="trans">텍스트 변환</string>
 
-
+    <string name="play">재생</string>
+    <string name="pause">정지</string>
+    <string name="playing">녹음 재생 중.. </string>
+    <string name="colorSelectTitle">색상 선택</string>
 
     <!-- -->
     <string name="main_title">멀티메모</string>

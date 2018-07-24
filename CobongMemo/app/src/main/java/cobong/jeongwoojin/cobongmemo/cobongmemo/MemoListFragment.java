@@ -16,10 +16,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -34,10 +38,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
 import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
@@ -99,7 +105,8 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                     String temMemoType = cursor.getString(5);
                     String temInputTime = cursor.getString(1);
                     String temVoiceId = cursor.getString(6);
-                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime,temVoiceId));
+                    String temHandwriteId = cursor.getString(7);
+                    list.add(new MyListItem(index, temTitle, temSubTitle, temcontent, temMemoType, temInputTime,temVoiceId,temHandwriteId));
                 }
             }
 
@@ -132,6 +139,9 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
     }
 
     @Override
@@ -175,35 +185,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
 
 
-        //set current locale
-        Locale curLocale = getResources().getConfiguration().locale;
-        BasicInfo.language = curLocale.getLanguage();
-        //Log.d(TAG, "current language : " + BasicInfo.language);
-
-
-
-
-        // SD Card checking
-        if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-            Toast.makeText(getContext(), R.string.no_sdcard_message, Toast.LENGTH_LONG).show();
-            return null;
-        } else {
-            String externalPath = Environment.getExternalStorageDirectory().getAbsolutePath();
-            if (!BasicInfo.ExternalChecked && externalPath != null) {
-                BasicInfo.ExternalPath = externalPath + File.separator;
-                Log.d(TAG, "ExternalPath : " + BasicInfo.ExternalPath);
-
-                BasicInfo.FOLDER_PHOTO = BasicInfo.ExternalPath + BasicInfo.FOLDER_PHOTO;
-                BasicInfo.FOLDER_VIDEO = BasicInfo.ExternalPath + BasicInfo.FOLDER_VIDEO;
-                BasicInfo.FOLDER_VOICE = BasicInfo.ExternalPath + BasicInfo.FOLDER_VOICE;
-                BasicInfo.FOLDER_HANDWRITING = BasicInfo.ExternalPath + BasicInfo.FOLDER_HANDWRITING;
-                BasicInfo.DATABASE_NAME = BasicInfo.ExternalPath + BasicInfo.DATABASE_NAME;
-
-                BasicInfo.ExternalChecked = true;
-            }
-        }
-
-
         loadList();
 
 
@@ -212,67 +193,23 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         recyclerView.setAdapter(myAdapter);
         recyclerView.addItemDecoration(new MyItemDecoration());
 
-        //권한
-        checkDangerousPermissions();
-        checkDangerousPermissions();
+
+
 
         fab.setOnClickListener(this);
 
-       /* ImageView test = v.findViewById(R.id.test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(),MainActivity.class);
-                startActivity(intent);
-            }
-        });*/
+
 
         // Inflate the layout for this fragment
         return v;
     }
 
-    //권한 부여 함수
-    private void checkDangerousPermissions() {
-        String[] permissions = {
-                android.Manifest.permission.READ_EXTERNAL_STORAGE,
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                android.Manifest.permission.RECORD_AUDIO
-        };
 
-        int permissionCheck = PackageManager.PERMISSION_GRANTED;
-        for (int i = 0; i < permissions.length; i++) {
-            permissionCheck = ContextCompat.checkSelfPermission(getContext(), permissions[i]);
-            if (permissionCheck == PackageManager.PERMISSION_DENIED) {
-                break;
-            }
-        }
-
-        if (permissionCheck == PackageManager.PERMISSION_GRANTED) {
-            //Toast.makeText(this, "권한 있음", Toast.LENGTH_LONG).show();
-        } else {
-            //Toast.makeText(this, "권한 없음", Toast.LENGTH_LONG).show();
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), permissions[0])) {
-                //Toast.makeText(this, "권한 설명 필요함.", Toast.LENGTH_LONG).show();
-            } else {
-                ActivityCompat.requestPermissions(getActivity(), permissions, 1);
-            }
-        }
-    }
-    //권한 허용, 비허용
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == 1) {
-            for (int i = 0; i < permissions.length; i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                    //Toast.makeText(this, permissions[i] + " 권한이 승인됨.", Toast.LENGTH_LONG).show();
-                } else {
-                    //Toast.makeText(this, permissions[i] + " 권한이 승인되지 않음.", Toast.LENGTH_LONG).show();
-                }
-            }
-        }
-    }
+    public void onDestroy() {
 
+        super.onDestroy();
+    }
 
     //클릭 이벤트
     @Override
@@ -280,7 +217,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()){
             case R.id.addMemo:
 
-                CharSequence memoType[] = new CharSequence[]{"글","음성"};
+                CharSequence memoType[] = new CharSequence[]{"글","음성","손글씨"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle("메모 타입 선택");
                 builder.setItems(memoType, new DialogInterface.OnClickListener() {
@@ -299,9 +236,48 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                             //음성
                             case 1:
 
-                                Toast.makeText(getContext(),"음성 메모",Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(getContext(),"음성 메모",Toast.LENGTH_SHORT).show();
+                                /*VoiceRecordFragment voicedialog = new VoiceRecordFragment();
+                                voicedialog.show(getActivity().getSupportFragmentManager(),"tag");*/
+                                /*DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
+                                int width = dm.widthPixels;
+                                int height = dm.heightPixels;
+
+
+                                VoiceRecord dial = new VoiceRecord(getContext());
+                                WindowManager.LayoutParams wm = dial.getWindow().getAttributes();
+                                wm.copyFrom(dial.getWindow().getAttributes());
+                                wm.width = width;
+                                wm.height = height/3;
+                                dial.setCanceledOnTouchOutside(false);
+                                dial.show();*/
+
+
+
+
+
+                                VoiceRecordFragment dialogFragment = new VoiceRecordFragment();
+                                dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        onStart();
+                                    }
+                                });
+                                dialogFragment.show(getActivity().getSupportFragmentManager(),"tag");
+
+
+                                //Toast.makeText(getContext(),"check out",Toast.LENGTH_LONG).show();
+
+
+
+
+
                                 break;
 
+                            case 2:
+                                Intent intent3 = new Intent(getActivity(),HandWritingActivity.class);
+                                startActivity(intent3);
+                                break;
 
 
 
@@ -314,8 +290,12 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                 alertDialog.show();
 
 
+
                 break;
         }
+
+
+
     }
 
 
@@ -348,7 +328,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
             text_type = (ImageView)itemView.findViewById(R.id.text_type);
             voice_type = (ImageView)itemView.findViewById(R.id.voice_type);
-
+            handwriting_type = (ImageView)itemView.findViewById(R.id.handwrite_type);
 
 
         }
@@ -395,6 +375,11 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
             String resultInputTime = list.get(position).input_time;
 
 
+            if(resultMemoType.equals("voice")){
+                holder.memoSubTitle.setVisibility(View.INVISIBLE);
+            }
+
+
             holder.title.setText("제목 : "+resultTitle);
             holder.memoSubTitle.setText(resultSubTitle);
             holder.memoInputTime.setText(resultInputTime);
@@ -435,6 +420,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                 public void onClick(View v) {
                     //Toast.makeText(getApplicationContext(),"remove 입니다.",Toast.LENGTH_SHORT).show();
 
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("경고")
                             .setMessage("메모를 지우시겠습니까?")
@@ -461,6 +447,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                             });
 
                     AlertDialog alertDialog = builder.create();
+                    alertDialog.setCanceledOnTouchOutside(false);
                     alertDialog.show();
 
 
@@ -482,8 +469,36 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                         intent.putExtra("subtitle", list.get(position).subTitle);
                         intent.putExtra("content", list.get(position).content);
                         startActivity(intent);
-                    }else{
+                    }else if(list.get(position).memo_type.equals("voice")){
+                        /*DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
+                        int width = dm.widthPixels;
+                        int height = dm.heightPixels;
 
+
+
+                        VoicePlay dial = new VoicePlay(getContext(),list.get(position).voiceId);
+                        //Toast.makeText(getContext(),"MemoListFragment : "+list.get(position).voiceId+ " title : "+list.get(position).title,Toast.LENGTH_SHORT).show();
+                        WindowManager.LayoutParams wm = dial.getWindow().getAttributes();
+                        wm.copyFrom(dial.getWindow().getAttributes());
+                        wm.width = width;
+                        wm.height = height/3;
+                        dial.setCanceledOnTouchOutside(false);
+                        dial.show();*/
+
+
+                        VoicePlayFragment dialogFragment = new VoicePlayFragment();
+                        Bundle inputdate = new Bundle();
+                        inputdate.putString("inputdate",list.get(position).voiceId);
+                        dialogFragment.setArguments(inputdate);
+                        dialogFragment.show(getActivity().getSupportFragmentManager(),"tag");
+
+                    }else{
+                        Intent intent = new Intent(getContext(), HandwriteViewActivity.class);
+
+                        intent.putExtra("title",list.get(position).title);
+                        intent.putExtra("subtitle",list.get(position).subTitle);
+                        intent.putExtra("handwriteId",list.get(position).handwriteId);
+                        startActivity(intent);
                     }
 
                 }
@@ -550,6 +565,8 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
 
     }
+
+
 
 
 

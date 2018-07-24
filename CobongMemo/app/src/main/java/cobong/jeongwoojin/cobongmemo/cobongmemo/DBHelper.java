@@ -38,11 +38,12 @@ public class DBHelper extends SQLiteOpenHelper{
         String memoSQL = "create table "+ TABLE_MEMO +
                 "(idx integer not null primary key autoincrement,"+
                 "  INPUT_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "+
-                "TITLE not null,"+
+                "TITLE TEXT not null,"+
                 "SUBTITLE TEXT DEFAULT '',"+
-                "CONTENT DEFAULT '' , " +
+                "CONTENT TEXT DEFAULT '' , " +
                 " MEMO_TYPE text default '', "+
-                " ID_VOICE INTEGER "+
+                " ID_VOICE TEXT , "+
+                " ID_HANDWRITING TEXT "+
                 ")";
 
         try {

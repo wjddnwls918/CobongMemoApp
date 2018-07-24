@@ -64,6 +64,7 @@ public class WriteMemoActivity extends Activity implements View.OnClickListener 
         builder.setPositiveButton("확인", dialogListener);
         builder.setNegativeButton("취소", null);
         AlertDialog dialog=builder.create();
+        dialog.setCanceledOnTouchOutside(false);
         dialog.show();
     }
 

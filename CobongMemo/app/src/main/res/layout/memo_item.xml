@@ -70,6 +70,15 @@
                android:layout_margin="5dp"
                />
 
+           <ImageView
+               android:id="@+id/handwrite_type"
+               android:layout_marginTop="7dp"
+               android:layout_width="25dp"
+               android:layout_height="25dp"
+               android:src="@drawable/handwriting"
+               android:visibility="invisible"
+               android:layout_margin="5dp"
+               />
 
            <TextView
                android:id="@+id/memo_inputTime"

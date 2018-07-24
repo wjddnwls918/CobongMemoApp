@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cobong.jeongwoojin.cobongmemo.cobongmemo">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -33,7 +33,12 @@
         <activity android:name=".SettingsActivity" />
         <activity android:name=".TextMemoView" />
         <activity android:name=".MainActivity" />
-        
+        <activity
+            android:name=".HandWritingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".HandwriteViewActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
