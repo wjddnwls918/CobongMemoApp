@@ -26,6 +26,8 @@ SW
 
 ------------------------------------------
 
+[[2018-07-26]](https://youtu.be/2yICxRnV6IM)
+
 ------------------------------------------
 - KOREATECH
 - Computer Science Engineering
