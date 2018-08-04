@@ -93,11 +93,23 @@
 
 
 
-                    <me.panavtec.drawableview.DrawableView
-                        android:id="@+id/paintView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
+
+        <LinearLayout
+            android:id="@+id/handwriteLinear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <me.panavtec.drawableview.DrawableView
+                android:id="@+id/paintView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                />
+
+        </LinearLayout>
+
+
+
+
 
 
 
@@ -125,7 +137,7 @@
                 android:id="@+id/handwriteColor"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:src="@drawable/palette"
+                android:src="@drawable/palette2"
                 android:layout_margin="5dp"
                 />
 

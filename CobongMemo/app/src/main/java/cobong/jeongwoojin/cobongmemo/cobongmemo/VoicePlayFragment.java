@@ -41,7 +41,7 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
 
     final private static File RECORDED_FILE = Environment.getExternalStorageDirectory();
 
-
+    int length;
 
     @Override
     public void onComplete() {
@@ -174,8 +174,9 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
     public void onPause() {
         super.onPause();
         if(player != null){
-            player.release();
+            //player.release();
             player.pause();
+            length = player.getCurrentPosition();
         }
 
     }
@@ -184,6 +185,7 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
     public void onResume() {
         super.onResume();
         if(player != null){
+            player.seekTo(length);
             player.start();
         }
 

@@ -4,7 +4,7 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "cobong.jeongwoojin.cobongmemo.cobongmemo"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -38,5 +38,7 @@ dependencies {
     implementation 'com.victor:lib:1.0.4'
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'me.panavtec:drawableview:0.6.0'
+
+    implementation 'com.github.skydoves:colorpickerpreference:1.0.2'
 
 }

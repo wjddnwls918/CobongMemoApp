@@ -30,7 +30,7 @@ import java.util.Date;
 
 public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener{
 
-    private static final String TABLE_MEMO = "MEMO" ;
+
     ProgressGenerator progressGenerator ;
     ActionProcessButton btnRecord ;
     ActionProcessButton btnStop ;
@@ -193,10 +193,10 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         String args[] = {resultDate, "voice", resultDate};
         try {
             db.execSQL(insertVoice,args);
-            Toast.makeText(getContext(),"입력 완료",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"입력 완료",Toast.LENGTH_SHORT).show();
         }catch (Exception e){
             e.printStackTrace();
-            Toast.makeText(getContext(),"입력 실패",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getContext(),"입력 실패",Toast.LENGTH_SHORT).show();
         }
 
     }

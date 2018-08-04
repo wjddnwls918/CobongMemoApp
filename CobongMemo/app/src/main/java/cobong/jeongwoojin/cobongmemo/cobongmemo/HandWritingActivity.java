@@ -4,8 +4,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -13,17 +16,19 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+
+import com.skydoves.colorpickerpreference.ColorEnvelope;
+import com.skydoves.colorpickerpreference.ColorListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Random;
 
 import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
@@ -48,12 +53,17 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
     ImageView eraser;
     ImageView undo;
 
+
     String handwriteId;
 
     boolean erase;
 
     int canHeight,canWidth;
     int temcol;
+
+    LinearLayout linearImage;
+
+    String type;
 
     final private static String root = Environment.getExternalStorageDirectory().toString();
 
@@ -83,7 +93,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         int height = dm.heightPixels;
 
 
-        Toast.makeText(this,"canHeight : "+height+" canWidth : "+width,Toast.LENGTH_LONG).show();
+        //Toast.makeText(this,"canHeight : "+height+" canWidth : "+width,Toast.LENGTH_LONG).show();
 
 
         config = new DrawableViewConfig();
@@ -94,9 +104,41 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         config.setMaxZoom(3.0f);
         config.setCanvasHeight(1000);
         config.setCanvasWidth(width-20);
+
+
+
         drawableView.setConfig(config);
 
-        //java drawableView.obtainBitmap()
+
+        Intent intent = getIntent();
+        type = intent.getStringExtra("type");
+        if(!type.equals("insert")){
+
+            //drawableView.set
+            Toast.makeText(this,intent.getStringExtra("type"),Toast.LENGTH_LONG).show();
+            handwriteId = intent.getStringExtra("handwriteId");
+
+            Bitmap bitmap = BitmapFactory.decodeFile(root+"/saved_images/"+handwriteId+".jpg");
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+
+            drawableView.setBackground(bitmapDrawable);
+
+            Canvas canvas = new Canvas();
+            canvas.drawBitmap(bitmap,0,0,null);
+
+            //drawableView.draw(canvas);
+            //drawableView.add
+
+            //drawableView.draw(myCanvas);
+
+           // drawableView.
+
+            title.setText(intent.getStringExtra("title"));
+            subTitle.setText(intent.getStringExtra("subTitle"));
+
+        }
+
+
 
         exit.setOnClickListener(this);
         insert.setOnClickListener(this);
@@ -128,13 +170,46 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
                     Toast.makeText(this, "소제목을 입력하세요", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    writeDBvoice();
+
+                    if(!type.equals("insert")) {
+                        writeSDCARD();
+                    }else {
+                        writeDBhandwrite();
+
+                    }
                     finish();
                 }
 
                 break;
 
             case R.id.handwriteColor:
+
+
+                ColorPickerDialog.Builder builder = new ColorPickerDialog.Builder(this);
+                builder.setTitle(R.string.colorSelect);
+                builder.setPreferenceName("MyColorPickerDialog");
+                builder.setFlagView(new CustomFlag(this, R.layout.layout_flag));
+                builder.setPositiveButton(getString(R.string.confirm), new ColorListener() {
+                    @Override
+                    public void onColorSelected(ColorEnvelope colorEnvelope) {
+                     /*   TextView textView = findViewById(R.id.textView);
+                        textView.setText("#" + colorEnvelope.getHtmlCode());
+
+                        LinearLayout linearLayout = findViewById(R.id.linearLayout);
+                        linearLayout.setBackgroundColor(colorEnvelope.getColor());*/
+                     temcol = colorEnvelope.getColor();
+                     config.setStrokeColor(temcol);
+                    }
+                });
+                builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.show();
+
+
 
                 /*config.setStrokeColor(
                         Color.argb(255, random.nextInt(256), random.nextInt(256), random.nextInt(256)));*/
@@ -179,7 +254,39 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void writeDBvoice(){
+    public void writeSDCARD(){
+        File editFile = new File(root+"/saved_images/"+handwriteId+".jpg");
+        try {
+            FileOutputStream out;
+            Bitmap back = ((BitmapDrawable)drawableView.getBackground().getCurrent()).getBitmap();
+            Bitmap image = drawableView.obtainBitmap();
+
+
+            //merge bitmap
+            //아 .. 진ㅉ ㅏ오래 걸림
+            Bitmap result = Bitmap.createBitmap(back.getWidth(), back.getHeight(), back.getConfig());
+            Canvas canvas2 = new Canvas(result);
+            int widthBack = back.getWidth();
+            int widthFront = image.getWidth();
+            float move = (widthBack - widthFront) / 2;
+            canvas2.drawBitmap(back, 0f, 0f, null);
+            canvas2.drawBitmap(image, move, move, null);
+
+
+            out = new FileOutputStream(editFile,false);
+            result.compress(Bitmap.CompressFormat.JPEG,100,out);
+
+            out.flush();
+            out.close();
+
+                Toast.makeText(this,"이미지 저장 완료",Toast.LENGTH_LONG).show();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public void writeDBhandwrite(){
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 

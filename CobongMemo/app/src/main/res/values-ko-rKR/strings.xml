@@ -20,6 +20,8 @@
     <string name="playing">녹음 재생 중.. </string>
     <string name="colorSelectTitle">색상 선택</string>
 
+    <string name="colorSelect">색상 선택</string>
+
     <!-- -->
     <string name="main_title">멀티메모</string>
     <string name="new_title">새 메모</string>

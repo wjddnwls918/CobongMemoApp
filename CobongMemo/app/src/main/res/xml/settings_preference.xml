@@ -7,7 +7,7 @@
             android:title="일정 알림"/>
         <PreferenceScreen
             android:key="keyword_screen"
-            android:title="키워드 알림"
+            android:title="추가 예정"
             android:summary="사용안함">
 
             <SwitchPreference
@@ -30,12 +30,7 @@
         <SwitchPreference
             android:key="sound"
             android:title="소리"/>
-        <ListPreference
-            android:entries="@array/array_voice"
-            android:entryValues="@array/array_voice"
-            android:key="sound_list"
-            android:summary="카톡"
-            android:title="알림음"/>
+
 
 
     </PreferenceCategory>

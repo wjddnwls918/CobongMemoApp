@@ -18,6 +18,8 @@
     <string name="playing">Audio is playing.. </string>
     <string name="colorSelectTitle">Select color</string>
 
+    <string name="colorSelect">Select color</string>
+
     <!-- copy string -->
     <string name="main_title">MultiMemo</string>
     <string name="new_title">New Memo</string>
@@ -74,5 +76,11 @@
     <string name="Beautiful_Picture">Beautiful Picture</string>
     <string name="Uploading">Uploading</string>
     <string name="Loading_Complete">Loading Complete, button is disabled</string>
+
+    <!-- color picker -->
+    <string name="confirm">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="ToolbarColorPickerPreference">ToolbarColorPickerPreference</string>
+    <string name="BackgroundColorPickerPreference">BackgroundColorPickerPreference</string>
 
 </resources>

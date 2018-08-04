@@ -75,6 +75,8 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
     MyAdapter myAdapter;
 
+    final private static String root = Environment.getExternalStorageDirectory().toString();
+
 
     public MemoListFragment() {
         // Required empty public constructor
@@ -276,6 +278,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
                             case 2:
                                 Intent intent3 = new Intent(getActivity(),HandWritingActivity.class);
+                                intent3.putExtra("type","insert");
                                 startActivity(intent3);
                                 break;
 
@@ -407,7 +410,12 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                         intent1.putExtra("content", list.get(position).content);
                         startActivity(intent1);
                     }else if(list.get(position).memo_type.equals("handwrite")){
-
+                        Intent intent = new Intent(getActivity(),HandWritingActivity.class);
+                        intent.putExtra("handwriteId",list.get(position).handwriteId);
+                        intent.putExtra("type","edit");
+                        intent.putExtra("title",list.get(position).title);
+                        intent.putExtra("subTitle",list.get(position).subTitle);
+                        startActivity(intent);
                     }else{
 
                     }
@@ -428,7 +436,28 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                             .setNegativeButton("확인", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    deleteData(list.get(position).index);
+
+
+                                    int index = list.get(position).index;
+                                    helper = new DBHelper(getContext());
+                                    db = helper.getWritableDatabase();
+
+                                    String del = "delete from memo where `idx`="+index;
+                                    db.execSQL(del);
+
+
+                                    //저장 파일 삭제
+                                    File file;
+                                    boolean deleted;
+                                    if(list.get(position).memo_type.equals("voice")){
+                                        file = new File(root+"/"+list.get(position).voiceId+".mp3");
+                                        deleted = file.delete();
+                                        //Toast.makeText(getContext(),"voice : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
+                                    }else if(list.get(position).memo_type.equals("handwrite")){
+                                        file = new File(root+"/saved_images/"+list.get(position).handwriteId+".jpg");
+                                        deleted = file.delete();
+                                        //Toast.makeText(getContext(),"handwrite : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
+                                    }
 
 
 
@@ -554,17 +583,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    public void deleteData(int index){
 
-        helper = new DBHelper(getContext());
-        db = helper.getWritableDatabase();
-
-        String del = "delete from memo where `idx`="+index;
-        db.execSQL(del);
-
-
-
-    }
 
 
 
