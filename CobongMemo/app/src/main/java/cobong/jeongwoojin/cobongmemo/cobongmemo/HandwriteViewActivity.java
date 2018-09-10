@@ -1,5 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,8 +21,8 @@ import android.widget.TextView;
 public class HandwriteViewActivity extends AppCompatActivity implements View.OnClickListener {
 
     ImageView handwriteViewExit;
-
     ImageView handwriteViewImage;
+    ImageView deleteHandwrite;
 
     String handwriteId;
 
@@ -29,6 +31,10 @@ public class HandwriteViewActivity extends AppCompatActivity implements View.OnC
     TextView handwriteTitle;
     TextView handwriteSubtitle;
 
+    DBHelper helper;
+    SQLiteDatabase db;
+
+    Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +47,10 @@ public class HandwriteViewActivity extends AppCompatActivity implements View.OnC
         handwriteSubtitle = (TextView)findViewById(R.id.handwriteSubtitle);
 
 
+        deleteHandwrite = (ImageView)findViewById(R.id.deletehandwrite);
 
-        Intent intent = getIntent();
+
+        intent = getIntent();
         handwriteId = intent.getStringExtra("handwriteId");
         handwriteTitle.setText(intent.getStringExtra("title"));
         handwriteSubtitle.setText(intent.getStringExtra("subtitle"));
@@ -54,6 +62,7 @@ public class HandwriteViewActivity extends AppCompatActivity implements View.OnC
 
 
 
+        deleteHandwrite.setOnClickListener(this);
 
         handwriteViewExit.setOnClickListener(this);
     }
@@ -66,6 +75,42 @@ public class HandwriteViewActivity extends AppCompatActivity implements View.OnC
             case R.id.handwriteViewExit:
                 finish();
                 break;
+
+
+            case R.id.deletehandwrite:
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(HandwriteViewActivity.this);
+                builder.setTitle("확인")
+                        .setMessage("메모를 지우시겠습니까?")
+                        .setNegativeButton("확인", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                delHandwrite(intent);
+                            }
+                        })
+                        .setPositiveButton("취소",null);
+
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                break;
+
         }
+    }
+
+
+    public void delHandwrite(Intent intent){
+
+        helper = new DBHelper(this);
+        db = helper.getWritableDatabase();
+
+        int index = intent.getIntExtra("index",-1);
+        if(index == -1)
+            finish();
+
+        String del = "delete from memo where `idx`="+index;
+        db.execSQL(del);
+        finish();
+
     }
 }

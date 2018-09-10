@@ -523,7 +523,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
                     }else{
                         Intent intent = new Intent(getContext(), HandwriteViewActivity.class);
-
+                        intent.putExtra("index",list.get(position).index);
                         intent.putExtra("title",list.get(position).title);
                         intent.putExtra("subtitle",list.get(position).subTitle);
                         intent.putExtra("handwriteId",list.get(position).handwriteId);

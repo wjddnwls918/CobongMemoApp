@@ -37,6 +37,18 @@
                     android:layout_centerVertical="true"
                     android:hint="@string/writeMemoTextView"/>
 
+
+                <ImageView
+                    android:id="@+id/deletehandwrite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="30dp"
+                    android:maxWidth="30dp"
+                    android:src="@drawable/trash"
+                    />
+
             </RelativeLayout>
 
             <View

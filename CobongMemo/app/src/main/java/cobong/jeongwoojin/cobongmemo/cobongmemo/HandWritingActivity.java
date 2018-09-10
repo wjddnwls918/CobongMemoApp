@@ -123,8 +123,6 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
 
             drawableView.setBackground(bitmapDrawable);
 
-            Canvas canvas = new Canvas();
-            canvas.drawBitmap(bitmap,0,0,null);
 
             //drawableView.draw(canvas);
             //drawableView.add
