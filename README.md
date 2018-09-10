@@ -9,6 +9,7 @@ SW
 
 [[2018-07-26]](https://youtu.be/2yICxRnV6IM)
 
+[[2018-09-10]](https://youtu.be/kTfF_A4JfCQ)
 ------------------------------------------
 - KOREATECH
 - Computer Science Engineering
