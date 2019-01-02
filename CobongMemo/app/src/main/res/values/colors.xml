@@ -26,6 +26,16 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
 
+    <color name="c_accent">#325C80</color>
+
+    <color name="c_primary">#2B4F6F</color>
+
+    <color name="c_primary_dark">#24435D</color>
+
+    <color name="floating_action_button_bg">@color/c_accent</color>
+    <color name="floating_action_button_pressed_bg">#212121</color>
+
+
     <array name="demo_colors">
         <item>@color/md_red_500</item>
         <item>@color/md_pink_500</item>

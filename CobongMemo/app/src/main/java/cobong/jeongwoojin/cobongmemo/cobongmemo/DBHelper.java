@@ -7,11 +7,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper{
 
-    //
-    public static String TABLE_MEMO = "MEMO";
 
-    //table name for VOICE
+    public static String TABLE_MEMO = "MEMO";
     public static String TABLE_VOICE = "VOICE";
+    public static String TABLE_ALARM = "ALARM";
 
     public static final int DATABASE_VERSION = 1;
 
@@ -87,6 +86,35 @@ public class DBHelper extends SQLiteOpenHelper{
         }
         //END OF SETTING VOICE TABLE
 
+
+
+        //알람 테이블
+
+        drop_sql = "drop table if exists " + TABLE_ALARM;
+        try {
+            db.execSQL(drop_sql);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // create table
+        //tempText.setText("mSelectedDate : "+mSelectedDate +" mHour : "+mHour +" mMinute : "+mMinute + "mRecurrenceOption : "+ recurrenceOption +" mRecuurenceRule : "+recurrenceRule);
+
+        CREATE_SQL = "create table " + TABLE_ALARM + "("
+                + "  _id INTEGER  NOT NULL PRIMARY KEY AUTOINCREMENT, "
+                + "  hour TEXT, "
+                + "  minute TEXT, "
+                + "  recurOption TEXT, "
+                + "  recurRule TEXT "
+                + ")";
+        try {
+            db.execSQL(CREATE_SQL);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        //END OF SETTING VOICE TABLE
 
 
     }

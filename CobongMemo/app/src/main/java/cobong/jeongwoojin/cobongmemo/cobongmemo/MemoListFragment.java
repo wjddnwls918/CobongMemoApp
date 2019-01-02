@@ -259,6 +259,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
 
                                 VoiceRecordFragment dialogFragment = new VoiceRecordFragment();
+                                //Fragment 종료시 화면 새로고침
                                 dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
                                     @Override
                                     public void onDismiss(DialogInterface dialog) {
@@ -393,6 +394,8 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                 holder.handwriting_type.setVisibility(View.VISIBLE);
             }else{
                 holder.voice_type.setVisibility(View.VISIBLE);
+                //음성 편집 불가
+                holder.edit.setVisibility(View.INVISIBLE);
             }
 
             holder.edit.setOnClickListener(new View.OnClickListener() {

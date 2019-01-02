@@ -8,4 +8,8 @@
     <dimen name="demo_button_min_height">50dp</dimen>
 
 
+    <!-- open source add-->
+    <dimen name="sampler_text_size">16sp</dimen>
+
+
 </resources>

@@ -1,17 +1,22 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +25,10 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.appeaser.sublimepickerlibrary.datepicker.SelectedDate;
+import com.appeaser.sublimepickerlibrary.helpers.SublimeOptions;
+import com.appeaser.sublimepickerlibrary.recurrencepicker.SublimeRecurrencePicker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +41,67 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
     FloatingActionButton fab;
     RecyclerView recyclerView;
-    List<AlarmItem> list;
+    List<AlarmListItem> list;
     MyAlarmAdapter myAlarmAdapter;
+
+    // Chosen values
+    SelectedDate mSelectedDate;
+    int mHour, mMinute;
+    String mRecurrenceOption, mRecurrenceRule;
+
+    TextView tempText;
+
+    //Database
+    DBHelper helper;
+    SQLiteDatabase db;
+
+
+    SublimePickerFragment.Callback mFragmentCallback = new SublimePickerFragment.Callback() {
+        @Override
+        public void onCancelled() {
+            //rlDateTimeRecurrenceInfo.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onDateTimeRecurrenceSet(SelectedDate selectedDate,
+                                            int hourOfDay, int minute,
+                                            SublimeRecurrencePicker.RecurrenceOption recurrenceOption,
+                                            String recurrenceRule) {
+
+            mSelectedDate = selectedDate;
+            mHour = hourOfDay;
+            mMinute = minute;
+            mRecurrenceOption = recurrenceOption != null ?
+                    recurrenceOption.name() : "n/a";
+            mRecurrenceRule = recurrenceRule != null ?
+                    recurrenceRule : "n/a";
+
+            /*Toast.makeText(getContext(),"mSelectedDate : "+mSelectedDate +" mHour : "+mHour +" mMinute : "+mMinute + "mRecurrenceOption : "+ recurrenceOption +" mRecuurenceRule : "+recurrenceRule
+            ,Toast.LENGTH_LONG).show();*/
+
+
+
+            Toast.makeText(getContext()," mRecuurenceRule : "+recurrenceRule   ,Toast.LENGTH_LONG).show();
+            tempText.setText("mSelectedDate : "+mSelectedDate +" mHour : "+mHour +" mMinute : "+mMinute + "mRecurrenceOption : "+ recurrenceOption +" mRecuurenceRule : "+recurrenceRule);
+
+            DBHelper helper = new DBHelper(getContext());
+            db = helper.getWritableDatabase();
+
+            String insertAlarm;
+            insertAlarm = "insert into alarm(hour,minute,recurOption,recurRule) values(?,?,?,?)";
+            String args[] = {Integer.toString(mHour), Integer.toString(mMinute), mRecurrenceOption, mRecurrenceRule};
+            db.execSQL(insertAlarm, args);
+            //finish();
+
+            Toast.makeText(getContext(), "디비 입력 완료", Toast.LENGTH_LONG).show();
+
+
+            //새로고침
+            onStart();
+
+        }
+    };
+
 
     public AlarmFragment() {
         // Required empty public constructor
@@ -52,12 +120,11 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
         super.onStart();
 
         //리스트 새로고침 해줘야됨
-        /*loadList();
+        loadList();
 
-        myAdapter = new MyAdapter(list);
+        myAlarmAdapter = new MyAlarmAdapter(list);
         recyclerView.setLayoutManager(new LinearLayoutManager( getContext() ));
-        recyclerView.setAdapter(myAdapter);*/
-
+        recyclerView.setAdapter(myAlarmAdapter);
     }
 
     @Override
@@ -65,6 +132,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
 
         ViewGroup v = (ViewGroup)inflater.inflate(R.layout.fragment_alarm, container, false);
+        tempText = (TextView)v.findViewById(R.id.tempText);
         fab = (FloatingActionButton) v.findViewById(R.id.addAlarm);
         recyclerView = (RecyclerView)v.findViewById(R.id.alarm_recycler);
         //스크롤시 fab 없애기
@@ -97,9 +165,12 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
             }*/
         });
 
-        list = new ArrayList<>();
+        loadList();
 
-        list.add(new AlarmItem(8,45,new boolean[7]));
+
+        //list = new ArrayList<>();
+
+        //list.add(new AlarmItem(8,45,new boolean[7]));
 
         myAlarmAdapter = new MyAlarmAdapter(list);
         recyclerView.setLayoutManager(new LinearLayoutManager( getContext() ));
@@ -121,7 +192,82 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.addAlarm:
-                Toast.makeText(getContext(), "this is fab", Toast.LENGTH_SHORT).show();
+                //알람 추가 부분
+                //Toast.makeText(getContext(), "this is Alarm Set", Toast.LENGTH_SHORT).show();
+               /* Intent intent = new Intent(getContext(),SetAlarm.class);
+                startActivity(intent);*/
+
+                SublimePickerFragment pickerFrag = new SublimePickerFragment();
+                pickerFrag.setCallback(mFragmentCallback);
+
+
+
+                // Options
+                Pair<Boolean, SublimeOptions> optionsPair = getOptions();
+
+                if (!optionsPair.first) { // If options are not valid
+                    Toast.makeText(getContext(), "No pickers activated",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                // Valid options
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("SUBLIME_OPTIONS", optionsPair.second);
+                pickerFrag.setArguments(bundle);
+
+                pickerFrag.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                pickerFrag.show(getFragmentManager(), "SUBLIME_PICKER");
+
+
+
+                break;
+        }
+    }
+
+    Pair<Boolean, SublimeOptions> getOptions() {
+        SublimeOptions options = new SublimeOptions();
+        int displayOptions = 0;
+
+        displayOptions |= SublimeOptions.ACTIVATE_TIME_PICKER;
+        displayOptions |= SublimeOptions.ACTIVATE_RECURRENCE_PICKER;
+        options.setPickerToShow(SublimeOptions.Picker.TIME_PICKER);
+        options.setPickerToShow(SublimeOptions.Picker.REPEAT_OPTION_PICKER);
+        options.setDisplayOptions(displayOptions);
+
+        // If 'displayOptions' is zero, the chosen options are not valid
+        return new Pair<>(displayOptions != 0 ? Boolean.TRUE : Boolean.FALSE, options);
+    }
+
+    public void loadList(){
+
+
+        list = new ArrayList<>();
+
+
+        helper = new DBHelper(getContext());
+        db = helper.getWritableDatabase();
+
+        Cursor cursor;
+        String sel = "select * from alarm order by _id asc";
+        try {
+            cursor = db.rawQuery(sel, null);
+
+
+            if(cursor != null) {
+                while (cursor.moveToNext()) {
+                    int index = cursor.getInt(0);
+                    String temHour = cursor.getString(1);
+                    String temMinute = cursor.getString(2);
+                    String temrecurOption = cursor.getString(3);
+                    String temrecurRule = cursor.getString(4);
+
+                    list.add(new AlarmListItem(index, temHour, temMinute, temrecurOption, temrecurRule));
+                }
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -139,14 +285,17 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
     }
 
+
+
+
     public class MyAlarmAdapter extends RecyclerView.Adapter<MyAlarmViewHolder>{
 
 
 
 
-        private List<AlarmItem> list;
+        private List<AlarmListItem> list;
 
-        public MyAlarmAdapter(List<AlarmItem> list){
+        public MyAlarmAdapter(List<AlarmListItem> list){
             this.list = list;
 
 
@@ -161,191 +310,19 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
             return new MyAlarmViewHolder(view);
         }
-/*
-
-        @Override
-        public WrittingAdapter.MyViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);//뷰 생성(아이템 레이아웃을 기반으로)
-            MyViewholder viewholder1 = new MyViewholder(view);//아이템레이아웃을 기반으로 생성된 뷰를 뷰홀더에 인자로 넣어줌
-
-
-            return viewholder1;
-        }
-*/
 
 
 
         @Override
         public void onBindViewHolder(@NonNull MyAlarmViewHolder holder, final int position) {
 
-            int hour = list.get(position).hour;
-            int minute = list.get(position).minute;
+            String hour = list.get(position).hour;
+            String minute = list.get(position).minute;
 
             holder.alarmText.setText(hour+" : "+minute);
 
-            /*String resultTitle = list.get(position).title;
-            String resultSubTitle = list.get(position).subTitle;
-            String resultMemoType = list.get(position).memo_type;
-            String resultInputTime = list.get(position).input_time;
 
-
-            if(resultMemoType.equals("voice")){
-                holder.memoSubTitle.setVisibility(View.INVISIBLE);
-            }
-
-
-            holder.title.setText("제목 : "+resultTitle);
-            holder.memoSubTitle.setText(resultSubTitle);
-            holder.memoInputTime.setText(resultInputTime);
-
-            if(resultMemoType.equals("text")){
-                holder.text_type.setVisibility(View.VISIBLE);
-            }else if(resultMemoType.equals("handwrite")){
-                holder.handwriting_type.setVisibility(View.VISIBLE);
-            }else{
-                holder.voice_type.setVisibility(View.VISIBLE);
-            }
-
-            holder.edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Toast.makeText(getApplicationContext(),"edit 입니다.",Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
-
-                    if(list.get(position).memo_type.equals("text")) {
-                        Intent intent1 = new Intent(getActivity(), WriteMemoActivity.class);
-                        intent1.putExtra("index", list.get(position).index);
-                        intent1.putExtra("type", "editmemo");
-                        intent1.putExtra("title", list.get(position).title);
-                        intent1.putExtra("subtitle", list.get(position).subTitle);
-                        intent1.putExtra("content", list.get(position).content);
-                        startActivity(intent1);
-                    }else if(list.get(position).memo_type.equals("handwrite")){
-                        Intent intent = new Intent(getActivity(),HandWritingActivity.class);
-                        intent.putExtra("handwriteId",list.get(position).handwriteId);
-                        intent.putExtra("type","edit");
-                        intent.putExtra("title",list.get(position).title);
-                        intent.putExtra("subTitle",list.get(position).subTitle);
-                        startActivity(intent);
-                    }else{
-
-                    }
-
-
-                }
-            });
-            holder.remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getApplicationContext(),"remove 입니다.",Toast.LENGTH_SHORT).show();
-
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("경고")
-                            .setMessage("메모를 지우시겠습니까?")
-                            .setPositiveButton("닫기",null)
-                            .setNegativeButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-
-                                    int index = list.get(position).index;
-                                    helper = new DBHelper(getContext());
-                                    db = helper.getWritableDatabase();
-
-                                    String del = "delete from memo where `idx`="+index;
-                                    db.execSQL(del);
-
-
-                                    //저장 파일 삭제
-                                    File file;
-                                    boolean deleted;
-                                    if(list.get(position).memo_type.equals("voice")){
-                                        file = new File(root+"/"+list.get(position).voiceId+".mp3");
-                                        deleted = file.delete();
-                                        //Toast.makeText(getContext(),"voice : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
-                                    }else if(list.get(position).memo_type.equals("handwrite")){
-                                        file = new File(root+"/saved_images/"+list.get(position).handwriteId+".jpg");
-                                        deleted = file.delete();
-                                        //Toast.makeText(getContext(),"handwrite : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
-                                    }
-
-
-
-                                    loadList();
-                                    list.remove(position);
-                                    recyclerView.removeViewAt(position);
-                                    myAdapter.notifyItemRemoved(position);
-                                    myAdapter.notifyItemRangeChanged(position,list.size());
-
-
-                                     *//*recyclerView.setLayoutManager(new LinearLayoutManager( MultiMemoActivity.this ));
-                                    recyclerView.setAdapter(new MyAdapter(list));
-                                    recyclerView.addItemDecoration(new MyItemDecoration());*//*
-
-                                }
-                            });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.show();
-
-
-                }
-            });
-
-            holder.showContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
-
-                    if(list.get(position).memo_type.equals("text")) {
-                        Intent intent = new Intent(getContext(), TextMemoView.class);
-
-                        //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
-
-                        intent.putExtra("index", list.get(position).index);
-                        intent.putExtra("title", list.get(position).title);
-                        intent.putExtra("subtitle", list.get(position).subTitle);
-                        intent.putExtra("content", list.get(position).content);
-                        startActivity(intent);
-                    }else if(list.get(position).memo_type.equals("voice")){
-                        *//*DisplayMetrics dm = getActivity().getResources().getDisplayMetrics();
-                        int width = dm.widthPixels;
-                        int height = dm.heightPixels;
-
-
-
-                        VoicePlay dial = new VoicePlay(getContext(),list.get(position).voiceId);
-                        //Toast.makeText(getContext(),"MemoListFragment : "+list.get(position).voiceId+ " title : "+list.get(position).title,Toast.LENGTH_SHORT).show();
-                        WindowManager.LayoutParams wm = dial.getWindow().getAttributes();
-                        wm.copyFrom(dial.getWindow().getAttributes());
-                        wm.width = width;
-                        wm.height = height/3;
-                        dial.setCanceledOnTouchOutside(false);
-                        dial.show();*//*
-
-
-                        VoicePlayFragment dialogFragment = new VoicePlayFragment();
-                        Bundle inputdate = new Bundle();
-                        inputdate.putString("inputdate",list.get(position).voiceId);
-                        dialogFragment.setArguments(inputdate);
-                        dialogFragment.show(getActivity().getSupportFragmentManager(),"tag");
-
-                    }else{
-                        Intent intent = new Intent(getContext(), HandwriteViewActivity.class);
-                        intent.putExtra("index",list.get(position).index);
-                        intent.putExtra("title",list.get(position).title);
-                        intent.putExtra("subtitle",list.get(position).subTitle);
-                        intent.putExtra("handwriteId",list.get(position).handwriteId);
-                        startActivity(intent);
-                    }
-
-                }
-            });*/
         }
-
-
 
 
         @Override
@@ -378,21 +355,11 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
             int width = parent.getWidth();
             int height = parent.getHeight();
-/*
 
-            Drawable dr = ResourcesCompat.getDrawable(getResources(), R.drawable.android, null);
-            int drWidth = dr.getIntrinsicWidth();
-            int drHeight = dr.getIntrinsicHeight();
-
-            int left = width/2 - drWidth/2;
-            int top = height/2 - drHeight/2;
-
-            c.drawBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.android),left, top, null);
-
-*/
 
         }
     }
+
 
 
 }

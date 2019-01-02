@@ -52,7 +52,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
     ImageView widthDown;
     ImageView eraser;
     ImageView undo;
-
+    ImageView blackpencil;
 
     String handwriteId;
 
@@ -87,6 +87,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         widthDown = (ImageView)findViewById(R.id.widthDown);
         eraser = (ImageView)findViewById(R.id.eraser);
         undo = (ImageView)findViewById(R.id.undo);
+        blackpencil = (ImageView)findViewById(R.id.blackPencil);
 
         DisplayMetrics dm = getResources().getDisplayMetrics();
         int width = dm.widthPixels;
@@ -145,7 +146,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         widthDown.setOnClickListener(this);
         eraser.setOnClickListener(this);
         undo.setOnClickListener(this);
-
+        blackpencil.setOnClickListener(this);
 
 
     }
@@ -249,6 +250,10 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
             case R.id.undo:
                 drawableView.undo();
                 break;
+
+
+            case R.id.blackPencil:
+                config.setStrokeColor(Color.argb(255,0,0,0));
         }
     }
 
