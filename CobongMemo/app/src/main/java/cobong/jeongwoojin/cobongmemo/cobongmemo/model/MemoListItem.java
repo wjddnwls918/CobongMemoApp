@@ -1,6 +1,6 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model;
 
-public class MyListItem {
+public class MemoListItem {
 
     int index;
     String title, subTitle;
@@ -10,7 +10,7 @@ public class MyListItem {
     String voiceId;
     String handwriteId;
 
-    public MyListItem(int index, String title, String subTitle, String memoType, String inputTime, String content, String voiceId, String handwriteId) {
+    public MemoListItem(int index, String title, String subTitle, String memoType, String inputTime, String content, String voiceId, String handwriteId) {
         this.index = index;
         this.title = title;
         this.subTitle = subTitle;

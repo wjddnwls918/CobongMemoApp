@@ -67,7 +67,7 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
 
         inputDate = getArguments().getString("inputdate");
 
-        Toast.makeText(getContext(),"VoicePlay : "+inputDate,Toast.LENGTH_LONG).show();
+        //Toast.makeText(getContext(),"VoicePlay : "+inputDate,Toast.LENGTH_LONG).show();
 
 
         filename = RECORDED_FILE+"/"+this.inputDate +".mp3";
@@ -105,7 +105,7 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
                     player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
-                            Toast.makeText(getContext(), "재생이 완료됐습니다.",Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getContext(), "재생이 완료됐습니다.",Toast.LENGTH_LONG).show();
 
                             rotateLoading.stop();
                             btnPlay.setProgress(100);
@@ -144,7 +144,7 @@ public class VoicePlayFragment extends DialogFragment implements ProgressGenerat
                 rotateLoading.stop();
                 btnPlay.setProgress(100);
 
-                Toast.makeText(getContext(), "재생이 중지되었습니다.", Toast.LENGTH_LONG).show();
+                //Toast.makeText(getContext(), "재생이 중지되었습니다.", Toast.LENGTH_LONG).show();
 
 
                 // 오디오 재생 중지

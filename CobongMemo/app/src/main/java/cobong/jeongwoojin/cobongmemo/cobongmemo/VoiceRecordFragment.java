@@ -1,24 +1,16 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.dd.processbutton.iml.ActionProcessButton;
 import com.victor.loading.rotate.RotateLoading;
@@ -177,18 +169,8 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         helper = new DBHelper(getContext());
         db = helper.getWritableDatabase();
 
-         /*      String memoSQL = "create table "+ TABLE_MEMO +
-                "(idx integer not null primary key autoincrement,"+
-                "  INPUT_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, "+
-                "TITLE not null,"+
-                "SUBTITLE TEXT DEFAULT '',"+
-                "CONTENT DEFAULT '' , " +
-                " MEMO_TYPE text default '', "+
-                " ID_HANDWRITING TEXT, "+
-                " ID_VOICE TEXT "+
-                ")";*/
         String insertVoice;
-        Toast.makeText(getContext(),resultDate,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getContext(),resultDate,Toast.LENGTH_SHORT).show();
         insertVoice = "insert into memo(title,memo_type,ID_VOICE) values(?,?,?)";
         String args[] = {resultDate, "voice", resultDate};
         try {
