@@ -1,269 +1,427 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo
+package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.Intent
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
-import android.databinding.DataBindingUtil
-import android.os.Bundle
-import android.os.Environment
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
+import android.app.AlertDialog;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
-import java.util.ArrayList
+import java.util.ArrayList;
+import java.util.List;
 
-import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoAdapter;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel;
 
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING
-import android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
 
-class MemoListFragment : Fragment(), View.OnClickListener {
+public class MemoListFragment extends Fragment implements View.OnClickListener {
+
+    //TAG
+    public static final String TAG = "MultiMemoActivity";
+    public static String TABLE_MEMO = "MEMO";
+    public static String TABLE_VOICE = "VOICE";
 
     //DB
-    private var helper: DBHelper? = null
-    private var db: SQLiteDatabase? = null
+    private DBHelper helper;
+    private SQLiteDatabase db;
 
-    private var list: MutableList<MyListItem>? = null
-    private var myAdapter: MemoAdapter? = null
+    //private List<MemoListItem> list;
 
-    private var binding: FragmentMemoListBinding? = null
+    final private static String root = Environment.getExternalStorageDirectory().toString();
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false)
+    private FragmentMemoListBinding binding;
 
-        //스크롤시 fab 없애기
-        binding!!.rcvMemoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+    private MemoViewModel viewModel;
+    private MemoAdapter memoAdapter;
+    //MemoDatabase database = MemoDatabase.Companion.getDatabase(getContext().getApplicationContext());
 
-            //개천재임 나 ;;
-            override fun onScrollStateChanged(recyclerView: RecyclerView?, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-
-                if (newState == SCROLL_STATE_DRAGGING) {
-                    binding!!.fabAdd.hide()
-                } else if (newState == SCROLL_STATE_IDLE) {
-
-                    val anim = AnimationUtils.loadAnimation(context, R.anim.delay)
-                    binding!!.fabAdd.animation = anim
-                    binding!!.fabAdd.show()
-                }
-            }
-
-            /*@Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-
-                if (dy > 0 && fab.getVisibility() == View.VISIBLE) {
-                    fab.hide();
-                } else if (dy < 0 && fab.getVisibility() != View.VISIBLE) {
-                    fab.show();
-                }
-            }*/
-        })
-
-
-        loadList()
-
-        initRecyclerView()
-
-
-        binding!!.fabAdd.setOnClickListener(this)
-
-
-        // Inflate the layout for this fragment
-        return binding!!.root
+    public MemoListFragment() {
+        // Required empty public constructor
     }
 
-    fun initRecyclerView() {
-        myAdapter = MemoAdapter(list)
-        binding!!.rcvMemoList.layoutManager = LinearLayoutManager(context)
-        binding!!.rcvMemoList.adapter = myAdapter
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        initRecyclerView();
+        loadList();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false);
+
+        viewModel = ViewModelProviders.of(getActivity()).get(MemoViewModel.class);
+
+        //스크롤시 fab 없애기
+        binding.rcvMemoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            //개천재임 나 ;;
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                if (newState == SCROLL_STATE_DRAGGING) {
+                    binding.fabAdd.hide();
+                } else if (newState == SCROLL_STATE_IDLE) {
+
+                    Animation anim = AnimationUtils.loadAnimation(getContext(), R.anim.delay);
+                    binding.fabAdd.setAnimation(anim);
+                    binding.fabAdd.show();
+                }
+            }
+        });
+
+
+        binding.fabAdd.setOnClickListener(this);
+
+
+        return binding.getRoot();
+    }
+
+    public void initRecyclerView() {
+        memoAdapter = new MemoAdapter(new ArrayList<>(),viewModel);
+        binding.rcvMemoList.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rcvMemoList.setAdapter(memoAdapter);
     }
 
 
     //load List or refresh List
-    fun loadList() {
+    public void loadList() {
 
 
-        list = ArrayList()
+        List list = new ArrayList<>();
 
 
-        helper = DBHelper(context)
-        db = helper!!.writableDatabase
+        helper = new DBHelper(getContext());
+        db = helper.getWritableDatabase();
 
-        val cursor: Cursor?
-        val sel = "select * from memo order by idx desc"
+        //list = database.memolistDao().getAllMemos();
+
+        Cursor cursor;
+        String sel = "select * from memo order by idx desc";
         try {
-            cursor = db!!.rawQuery(sel, null)
+            cursor = db.rawQuery(sel, null);
 
-
+            Log.d("dbarrive", "hello");
             if (cursor != null) {
                 while (cursor.moveToNext()) {
-                    val index = cursor.getInt(0)
-                    val temTitle = cursor.getString(2)
-                    val temSubTitle = cursor.getString(3)
-                    val temcontent = cursor.getString(4)
-                    val temMemoType = cursor.getString(5)
-                    val temInputTime = cursor.getString(1)
-                    val temVoiceId = cursor.getString(6)
-                    val temHandwriteId = cursor.getString(7)
-                    list!!.add(
-                        MyListItem(
-                            index,
-                            temTitle,
-                            temSubTitle,
-                            temcontent,
-                            temMemoType,
-                            temInputTime,
-                            temVoiceId,
-                            temHandwriteId
-                        )
-                    )
+                    int index = cursor.getInt(0);
+                    String temTitle = cursor.getString(2);
+                    String temSubTitle = cursor.getString(3);
+                    String temcontent = cursor.getString(4);
+                    String temMemoType = cursor.getString(5);
+                    String temInputTime = cursor.getString(1);
+                    String temVoiceId = cursor.getString(6);
+                    String temHandwriteId = cursor.getString(7);
+                    list.add(new MemoListItem(index, temTitle, temSubTitle, temMemoType, temInputTime, temcontent, temVoiceId, temHandwriteId));
                 }
             }
 
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
-
+        memoAdapter.setItem(list);
 
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        loadList()
-
-        initRecyclerView()
-
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
-
-    override fun onDestroy() {
-
-        super.onDestroy()
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     //클릭 이벤트
-    override fun onClick(v: View) {
-        when (v.id) {
-            R.id.fab_add -> {
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab_add:
 
-                val memoType = arrayOf<CharSequence>("글", "음성", "손글씨")
-                val builder = AlertDialog.Builder(context)
-                builder.setTitle("메모 타입 선택")
-                builder.setItems(memoType) { dialog, which ->
-                    when (which) {
+                CharSequence memoType[] = new CharSequence[]{"글", "음성", "손글씨"};
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                builder.setTitle("메모 타입 선택");
+                builder.setItems(memoType, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
 
-                        //글
-                        0 -> {
-                            val intent = Intent(activity, WriteMemoActivity::class.java)
-                            intent.putExtra("type", "addmemo")
-                            startActivity(intent)
-                        }
+                            //글
+                            case 0:
+                                Intent intent = new Intent(getActivity(), WriteMemoActivity.class);
+                                intent.putExtra("type", "addmemo");
+                                startActivity(intent);
 
-                        //음성
-                        1 -> {
+                                break;
 
-                            val dialogFragment = VoiceRecordFragment()
-                            //Fragment 종료시 화면 새로고침
-                            dialogFragment.setOnDismissListener { onStart() }
-                            dialogFragment.show(activity!!.supportFragmentManager, "tag")
-                        }
+                            //음성
+                            case 1:
 
-                        2 -> {
-                            val intent3 = Intent(activity, HandWritingActivity::class.java)
-                            intent3.putExtra("type", "insert")
-                            startActivity(intent3)
+                                VoiceRecordFragment dialogFragment = new VoiceRecordFragment();
+                                //Fragment 종료시 화면 새로고침
+                                dialogFragment.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                    @Override
+                                    public void onDismiss(DialogInterface dialog) {
+                                        onStart();
+                                    }
+                                });
+                                dialogFragment.show(getActivity().getSupportFragmentManager(), "tag");
+
+                                break;
+
+                            case 2:
+                                Intent intent3 = new Intent(getActivity(), HandWritingActivity.class);
+                                intent3.putExtra("type", "insert");
+                                startActivity(intent3);
+                                break;
+
+
                         }
                     }
-                }
+                });
 
-                val alertDialog = builder.create()
-                alertDialog.show()
-            }
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+
+                break;
         }
 
 
     }
 
+/*
 
-    inner class MemoAdapter(private val list: List<MyListItem>) :
-        RecyclerView.Adapter<MemoAdapter.MemoViewHolder>() {
+    public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem,MemoAdapter.MemoViewHolder> {
 
-        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
+        //private List<MemoListItem> dataSet;
 
-            val binding = MemoItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent, false
-            )
-
-            return MemoViewHolder(binding)
+        public MemoAdapter(List<MemoListItem> list) {
+            super(list);
+            //this.dataSet = list;
         }
 
-        override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
-            val resultTitle = list[position].title
-            val resultSubTitle = list[position].subTitle
-            val resultMemoType = list[position].memo_type
-            val resultInputTime = list[position].input_time
+
+        @NonNull
+        @Override
+        public MemoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
+            MemoItemBinding binding = MemoItemBinding.inflate(LayoutInflater.from(parent.getContext()),
+                    parent, false);
+
+            return new MemoViewHolder(binding);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return getItem(position).hashCode();
+        }
+
+        @Override
+        public void onBindView(MemoViewHolder holder, int position) {
+            holder.binding.setMemo(getItem(position));
+        }
 
 
-            if (resultMemoType == "voice") {
-                holder.binding.memoSubtitle.visibility = View.INVISIBLE
+        @Override
+        public void onBindViewHolder(@NonNull MemoViewHolder holder, final int position) {
+
+
+             String resultTitle = dataSet.get(position).getTitle();
+            String resultSubTitle = dataSet.get(position).getSubTitle();
+            String resultMemoType = dataSet.get(position).getMemoType();
+            String resultInputTime = dataSet.get(position).getInputTime();
+
+
+            if (resultMemoType.equals("voice")) {
+                holder.binding.memoSubtitle.setVisibility(View.INVISIBLE);
             }
 
 
-            holder.binding.memoTitle.text = "제목 : $resultTitle"
-            holder.binding.memoSubtitle.text = resultSubTitle
-            holder.binding.memoInputTime.text = resultInputTime
+            holder.binding.memoTitle.setText("제목 : " + resultTitle);
+            holder.binding.memoSubtitle.setText(resultSubTitle);
+            holder.binding.memoInputTime.setText(resultInputTime);
 
-            if (resultMemoType == "text") {
-                holder.binding.memoType.setImageDrawable(resources.getDrawable(R.drawable.text))
-            } else if (resultMemoType == "handwrite") {
+            if (resultMemoType.equals("text")) {
+                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.text));
+            } else if (resultMemoType.equals("handwrite")) {
 
-                holder.binding.memoType.setImageDrawable(resources.getDrawable(R.drawable.handwriting))
+                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.handwriting));
             } else {
-                holder.binding.memoType.setImageDrawable(resources.getDrawable(R.drawable.voice))
+                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.voice));
             }
 
 
+
+             holder.binding.edit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toast.makeText(getApplicationContext(),"edit 입니다.",Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
+
+                    if (dataSet.get(position).getMemoType().equals("text")) {
+                        Intent intent1 = new Intent(getActivity(), WriteMemoActivity.class);
+                        intent1.putExtra("index", dataSet.get(position).getIndex());
+                        intent1.putExtra("type", "editmemo");
+                        intent1.putExtra("title", dataSet.get(position).getTitle());
+                        intent1.putExtra("subtitle", dataSet.get(position).getSubTitle());
+                        intent1.putExtra("content", dataSet.get(position).getContent());
+                        startActivity(intent1);
+                    } else if (dataSet.get(position).getMemoType().equals("handwrite")) {
+                        Intent intent = new Intent(getActivity(), HandWritingActivity.class);
+                        intent.putExtra("handwriteId", dataSet.get(position).getHandwriteId());
+                        intent.putExtra("type", "edit");
+                        intent.putExtra("title", dataSet.get(position).getTitle());
+                        intent.putExtra("subTitle", dataSet.get(position).getSubTitle());
+                        startActivity(intent);
+                    } else {
+                        Snackbar.make(getView(), "수정할 수 없습니다", Snackbar.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+
+            holder.remove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getApplicationContext(),"remove 입니다.",Toast.LENGTH_SHORT).show();
+
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("경고")
+                            .setMessage("메모를 지우시겠습니까?")
+                            .setPositiveButton("닫기",null)
+                            .setNegativeButton("확인", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+
+                                    int index = list.get(position).index;
+                                    helper = new DBHelper(getContext());
+                                    db = helper.getWritableDatabase();
+
+                                    String del = "delete from memo where `idx`="+index;
+                                    db.execSQL(del);
+
+
+                                    //저장 파일 삭제
+                                    File file;
+                                    boolean deleted;
+                                    if(list.get(position).memo_type.equals("voice")){
+                                        file = new File(root+"/"+list.get(position).voiceId+".mp3");
+                                        deleted = file.delete();
+                                        //Toast.makeText(getContext(),"voice : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
+                                    }else if(list.get(position).memo_type.equals("handwrite")){
+                                        file = new File(root+"/saved_images/"+list.get(position).handwriteId+".jpg");
+                                        deleted = file.delete();
+                                        //Toast.makeText(getContext(),"handwrite : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
+                                    }
+
+
+
+                                    loadList();
+                                    list.remove(position);
+                                    recyclerView.removeViewAt(position);
+                                    memoAdapter.notifyItemRemoved(position);
+                                    memoAdapter.notifyItemRangeChanged(position,list.size());
+
+
+                                     */
+/*recyclerView.setLayoutManager(new LinearLayoutManager( MultiMemoActivity.this ));
+                                    recyclerView.setAdapter(new memoAdapter(list));
+                                    recyclerView.addItemDecoration(new MyItemDecoration());*//*
+
+
+                                }
+                            });
+
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.setCanceledOnTouchOutside(false);
+                    alertDialog.show();
+
+
+                }
+            });
+
+
+            holder.binding.showContent.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
+
+                    if (dataSet.get(position).getMemoType().equals("text")) {
+                        Intent intent = new Intent(getContext(), TextMemoView.class);
+
+                        //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
+
+                        intent.putExtra("index", dataSet.get(position).getIndex());
+                        intent.putExtra("title", dataSet.get(position).getTitle());
+                        intent.putExtra("subtitle", dataSet.get(position).getSubTitle());
+                        intent.putExtra("content", dataSet.get(position).getContent());
+                        startActivity(intent);
+                    } else if (dataSet.get(position).getMemoType().equals("voice")) {
+
+
+                        VoicePlayFragment dialogFragment = new VoicePlayFragment();
+                        Bundle inputdate = new Bundle();
+                        inputdate.putString("inputdate", dataSet.get(position).getVoiceId());
+                        dialogFragment.setArguments(inputdate);
+                        dialogFragment.show(getActivity().getSupportFragmentManager(), "tag");
+
+                    } else {
+                        Intent intent = new Intent(getContext(), HandwriteViewActivity.class);
+                        intent.putExtra("index", dataSet.get(position).getIndex());
+                        intent.putExtra("title", dataSet.get(position).getTitle());
+                        intent.putExtra("subtitle", dataSet.get(position).getSubTitle());
+                        intent.putExtra("handwriteId", dataSet.get(position).getHandwriteId());
+                        startActivity(intent);
+                    }
+
+                }
+            });
+
         }
 
 
-        override fun getItemCount(): Int {
-            return list.size
+
+
+        class MemoViewHolder extends RecyclerView.ViewHolder {
+
+            MemoItemBinding binding;
+
+            public MemoViewHolder(MemoItemBinding binding) {
+                super(binding.getRoot());
+                this.binding = binding;
+            }
+
         }
 
-
-        internal inner class MemoViewHolder(var binding: MemoItemBinding) :
-            RecyclerView.ViewHolder(binding.root)
-
     }
 
-    companion object {
+*/
 
-        //TAG
-        val TAG = "MultiMemoActivity"
-        var TABLE_MEMO = "MEMO"
-        var TABLE_VOICE = "VOICE"
-        private val root = Environment.getExternalStorageDirectory().toString()
-    }
-
-
-}// Required empty public constructor
+}
