@@ -11,5 +11,11 @@
     <!-- open source add-->
     <dimen name="sampler_text_size">16sp</dimen>
 
+    <!-- common -->
+    <dimen name="space_large_margin">30dp</dimen>
+    <dimen name="space_medium_margin">15dp</dimen>
+    <dimen name="space_small_margin">8dp</dimen>
+
+    <dimen name="common_elevation">3dp</dimen>
 
 </resources>

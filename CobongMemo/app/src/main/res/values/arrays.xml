@@ -10,7 +10,6 @@
 
     <string-array name="titles">
         <item>@string/viewpagerMemo</item>
-        <item>@string/viewpagerAlarm</item>
         <item>@string/viewpagerSchedule</item>
     </string-array>
 
