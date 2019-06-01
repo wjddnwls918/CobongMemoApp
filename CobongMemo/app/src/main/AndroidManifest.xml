@@ -39,7 +39,6 @@
         <activity
             android:name=".HandwriteViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".SetAlarm"></activity>
     </application>
 
 </manifest>
