@@ -1,17 +1,19 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo;
 
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 
 
 //Style 적용하는데 AppCompatActivity가 안되는데 ??
@@ -127,7 +129,7 @@ public class WriteMemoActivity extends Activity implements View.OnClickListener 
 
 
                             //결과 반환
-                            Intent result = new Intent(this,TextMemoView.class);
+                            Intent result = new Intent(this, TextMemoView.class);
                             result.putExtra("title",title.getText().toString());
                             result.putExtra("subtitle",subTitle.getText().toString());
                             result.putExtra("content",content.getText().toString());

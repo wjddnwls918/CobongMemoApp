@@ -5,12 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextMemoViewBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
 
 
 public class TextMemoView extends AppCompatActivity {
@@ -21,6 +22,8 @@ public class TextMemoView extends AppCompatActivity {
     Intent intent;
 
     private ActivityTextMemoViewBinding binding;
+
+    private MemoListItem item;
 
     @Override
     protected void onResume() {
@@ -34,6 +37,8 @@ public class TextMemoView extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_text_memo_view);
 
         intent = getIntent();
+
+        item = intent.getParcelableExtra("textItem");
 
         setView(intent);
 
