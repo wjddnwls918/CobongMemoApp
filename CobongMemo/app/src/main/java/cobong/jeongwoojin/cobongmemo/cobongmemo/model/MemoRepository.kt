@@ -1,6 +1,6 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.model
 
-import android.support.annotation.WorkerThread
+import androidx.annotation.WorkerThread
 
 class MemoRepository(private val memolistDao: MemoListDao) {
 

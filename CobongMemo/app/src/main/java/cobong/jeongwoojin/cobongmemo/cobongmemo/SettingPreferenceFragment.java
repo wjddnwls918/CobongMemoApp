@@ -6,7 +6,7 @@ import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 
 public class SettingPreferenceFragment extends PreferenceFragment {
