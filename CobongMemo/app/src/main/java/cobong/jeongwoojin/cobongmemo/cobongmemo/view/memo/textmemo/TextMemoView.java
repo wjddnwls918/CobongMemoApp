@@ -1,8 +1,6 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo;
 
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -10,8 +8,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextMemoViewBinding;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
 
 
 public class TextMemoView extends AppCompatActivity {
@@ -23,7 +23,9 @@ public class TextMemoView extends AppCompatActivity {
 
     private ActivityTextMemoViewBinding binding;
 
-    private MemoListItem item;
+    //private MemoListItem item;
+
+    private TextMemoViewModel viewModel;
 
     @Override
     protected void onResume() {
@@ -35,12 +37,14 @@ public class TextMemoView extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_text_memo_view);
-
         intent = getIntent();
+        viewModel = ViewModelProviders.of(this).get(TextMemoViewModel.class);
+        viewModel.setItem(intent.getParcelableExtra("textItem"));
 
-        item = intent.getParcelableExtra("textItem");
 
-        setView(intent);
+        binding.setViewmodel(viewModel);
+
+        //setView(intent);
 
         //뒤로 가기
         binding.viewExit.setOnClickListener( (v) -> finish() );
@@ -51,7 +55,7 @@ public class TextMemoView extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(TextMemoView.this);
+                /*AlertDialog.Builder builder = new AlertDialog.Builder(TextMemoView.this);
                 builder.setTitle("확인")
                         .setMessage("메모를 지우시겠습니까?")
                         .setNegativeButton("확인", new DialogInterface.OnClickListener() {
@@ -63,7 +67,7 @@ public class TextMemoView extends AppCompatActivity {
                         .setPositiveButton("취소", null);
 
                 AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                alertDialog.show();*/
 
 
             }
@@ -74,13 +78,13 @@ public class TextMemoView extends AppCompatActivity {
         binding.editmemo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent1 = new Intent(TextMemoView.this, WriteMemoActivity.class);
+               /* Intent intent1 = new Intent(TextMemoView.this, TextMemoWriteActivity.class);
                 intent1.putExtra("index", intent.getIntExtra("index", -1));
                 intent1.putExtra("type", "editmemo");
                 intent1.putExtra("title", binding.viewtitle.getText().toString());
                 intent1.putExtra("subtitle", binding.viewsubtitle.getText().toString());
                 intent1.putExtra("content", binding.viewcontent.getText().toString());
-                startActivityForResult(intent1, 100);
+                startActivityForResult(intent1, 100);*/
             }
         });
 
@@ -90,24 +94,18 @@ public class TextMemoView extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null) {
+         if (data != null) {
 
             if (requestCode == 100 && resultCode == 101) {
                 Intent result = new Intent();
-                result.putExtra("title", data.getStringExtra("title"));
-                result.putExtra("subtitle", data.getStringExtra("subtitle"));
-                result.putExtra("content", data.getStringExtra("content"));
-
-                setView((result));
-
+                viewModel.setItem(result.getParcelableExtra("textItem"));
             }
-
         }
 
 
     }
 
-    public void setView(Intent intent) {
+   /* public void setView(Intent intent) {
         String title = intent.getStringExtra("title");
         String subtitle = intent.getStringExtra("subtitle");
         String content = intent.getStringExtra("content");
@@ -129,7 +127,7 @@ public class TextMemoView extends AppCompatActivity {
         } else {
             binding.viewcontent.setText(intent.getStringExtra("content"));
         }
-    }
+    }*/
 
     public void delMemo(Intent intent) {
 

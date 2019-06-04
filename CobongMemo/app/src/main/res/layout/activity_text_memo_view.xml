@@ -2,6 +2,15 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewModel" />
+
+
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -85,6 +94,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_margin="5dp"
+                            android:text="@{viewmodel.item.title}"
                             android:textColor="#737373"
                             android:textSize="20dp"
                             android:textStyle="bold" />
@@ -102,8 +112,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
+                        android:text="@{viewmodel.item.subTitle}"
                         android:textColor="#737373"
-                        android:textSize="18dp" />
+                    android:textSize="18dp" />
 
                     <View
                         android:layout_width="match_parent"
@@ -116,6 +127,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="5dp"
+                        android:text="@{viewmodel.item.content}"
                         android:textColor="#737373"
                         android:textSize="18dp" />
                 </LinearLayout>

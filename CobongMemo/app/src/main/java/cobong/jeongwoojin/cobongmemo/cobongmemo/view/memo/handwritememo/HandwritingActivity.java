@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -13,9 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
@@ -28,11 +25,13 @@ import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProviders;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding;
-import me.panavtec.drawableview.DrawableView;
 import me.panavtec.drawableview.DrawableViewConfig;
 
-public class HandWritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener {
+public class HandwritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener {
 
 
     DrawableViewConfig config;
@@ -72,13 +71,20 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
 
     private ActivityHandWritingBinding binding;
 
+    HandwriteViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hand_writing);
-        setContentView(R.layout.activity_hand_writing);
+        //setContentView(R.layout.activity_hand_writing);
+
+        viewModel = ViewModelProviders.of(this).get(HandwriteViewModel.class);
+
 
         erase = false;
+
+        binding.setViewmodel(viewModel);
 
        /* drawableView = (DrawableView) findViewById(R.id.paintView);
         title = (EditText) findViewById(R.id.handwriteTitle);
@@ -112,23 +118,27 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
 
 
         Intent intent = getIntent();
+        viewModel.setItem(intent.getParcelableExtra("handwriteItem"));
+
+
         type = intent.getStringExtra("type");
-        if (!type.equals("insert")) {
+        if (viewModel.getItem()!= null) {
 
             //drawableView.set
-            Toast.makeText(this, intent.getStringExtra("type"), Toast.LENGTH_LONG).show();
-            handwriteId = intent.getStringExtra("handwriteId");
+            //Toast.makeText(this, intent.getStringExtra("type"), Toast.LENGTH_LONG).show();
+            //handwriteId = intent.getStringExtra("handwriteId");
 
-            Bitmap bitmap = BitmapFactory.decodeFile(root + "/saved_images/" + handwriteId + ".jpg");
+            Bitmap bitmap = BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
 
             binding.paintView.setBackground(bitmapDrawable);
-
+/*
             title.setText(intent.getStringExtra("title"));
-            subTitle.setText(intent.getStringExtra("subTitle"));
+            subTitle.setText(intent.getStringExtra("subTitle"));*/
 
         }
 
+/*
 
         exit.setOnClickListener(this);
         insert.setOnClickListener(this);
@@ -138,6 +148,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         eraser.setOnClickListener(this);
         undo.setOnClickListener(this);
         blackpencil.setOnClickListener(this);
+*/
 
 
     }
@@ -152,7 +163,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
             case R.id.handwriteInsert:
 
 
-                if (title.getText().toString().trim().equals("") && subTitle.getText().toString().trim().equals("")) {
+              /*  if (title.getText().toString().trim().equals("") && subTitle.getText().toString().trim().equals("")) {
                     Toast.makeText(this, "제목과 소제목을 입력하세요", Toast.LENGTH_SHORT).show();
                 } else if (title.getText().toString().trim().equals("")) {
                     Toast.makeText(this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
@@ -168,7 +179,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
 
                     }
                     finish();
-                }
+                }*/
 
                 break;
 
@@ -209,7 +220,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.undo:
-                drawableView.undo();
+                binding.paintView.undo();
                 break;
 
 
@@ -235,8 +246,8 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         File editFile = new File(root + "/saved_images/" + handwriteId + ".jpg");
         try {
             FileOutputStream out;
-            Bitmap back = ((BitmapDrawable) drawableView.getBackground().getCurrent()).getBitmap();
-            Bitmap image = drawableView.obtainBitmap();
+            Bitmap back = ((BitmapDrawable) binding.paintView.getBackground().getCurrent()).getBitmap();
+            Bitmap image = binding.paintView.obtainBitmap();
 
 
             //merge bitmap
@@ -277,11 +288,11 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         FileOutputStream out = null;
         try {
 
-            Bitmap image = drawableView.obtainBitmap();
+            Bitmap image = binding.paintView.obtainBitmap();
 
             Canvas canvas = new Canvas(image);
             canvas.drawColor(Color.WHITE);
-            canvas.drawBitmap(drawableView.obtainBitmap(), 0, 0, null);
+            canvas.drawBitmap(binding.paintView.obtainBitmap(), 0, 0, null);
 
             out = new FileOutputStream(new File(myDir, fname), true);
             image.compress(Bitmap.CompressFormat.JPEG, 100, out);
@@ -295,7 +306,7 @@ public class HandWritingActivity extends AppCompatActivity implements View.OnCli
         String insertHandwrite;
         Toast.makeText(this, handwriteId, Toast.LENGTH_SHORT).show();
         insertHandwrite = "insert into memo(title,SUBTITLE,MEMO_TYPE,ID_HANDWRITING) values(?,?,?,?)";
-        String args[] = {title.getText().toString(), subTitle.getText().toString(), "handwrite", handwriteId};
+        String args[] = {binding.handwriteTitle.getText().toString(), binding.handwriteSubtitle.getText().toString(), "handwrite", handwriteId};
         try {
             db.execSQL(insertHandwrite, args);
         } catch (Exception e) {
