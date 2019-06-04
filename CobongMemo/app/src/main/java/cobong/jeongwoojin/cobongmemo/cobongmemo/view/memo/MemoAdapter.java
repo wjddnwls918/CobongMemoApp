@@ -1,12 +1,12 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo;
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import java.util.List;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerViewAdapter;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
@@ -27,6 +27,8 @@ public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem, MemoAdapt
         MemoItemBinding binding = MemoItemBinding.inflate(LayoutInflater.from(parent.getContext()),
                 parent, false);
 
+
+
         //선언하고
         listener = new ItemClickListener() {
             @Override
@@ -35,8 +37,10 @@ public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem, MemoAdapt
             }
         };
 
-        //xml에 등록
+        //아이템 레이아웃에 뷰모델,리스너 등록
         binding.setListener(listener);
+
+        binding.setViewmodel(viewModel);
         return new MemoAdapter.MemoViewHolder(binding);
     }
 

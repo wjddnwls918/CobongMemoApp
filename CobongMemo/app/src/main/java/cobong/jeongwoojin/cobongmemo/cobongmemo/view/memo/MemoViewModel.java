@@ -1,14 +1,29 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo;
 
-import android.arch.lifecycle.ViewModel;
-import android.util.Log;
-
+import androidx.lifecycle.ViewModel;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
 
 public class MemoViewModel extends ViewModel {
 
+    MemoNavigator navigator;
+
     public void sendMemo(MemoListItem item) {
-        Log.d("arrive check", "hi~");
+        navigator.sendMemo(item);
     }
 
+    public void onDeleteMemoClick(MemoListItem memo) {
+        navigator.deleteMemo(memo);
+    }
+
+    public void onEditMemoClick(MemoListItem memo) {
+        navigator.editMemo(memo);
+    }
+
+    public MemoNavigator getNavigator() {
+        return navigator;
+    }
+
+    public void setNavigator(MemoNavigator navigator) {
+        this.navigator = navigator;
+    }
 }

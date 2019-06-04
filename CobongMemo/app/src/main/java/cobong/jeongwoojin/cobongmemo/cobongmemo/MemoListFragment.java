@@ -1,17 +1,12 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
 import android.app.AlertDialog;
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +14,31 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoAdapter;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoNavigator;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoView;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoWriteActivity;
 
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
 
-public class MemoListFragment extends Fragment implements View.OnClickListener {
+public class MemoListFragment extends Fragment implements View.OnClickListener, MemoNavigator {
 
     //TAG
     public static final String TAG = "MultiMemoActivity";
@@ -55,12 +63,11 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         // Required empty public constructor
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
 
-        initRecyclerView();
+        //load data
         loadList();
     }
 
@@ -70,6 +77,10 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false);
 
         viewModel = ViewModelProviders.of(getActivity()).get(MemoViewModel.class);
+        viewModel.setNavigator(this);
+
+        //RecyclerView init
+        initRecyclerView();
 
         //스크롤시 fab 없애기
         binding.rcvMemoList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -98,7 +109,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
     }
 
     public void initRecyclerView() {
-        memoAdapter = new MemoAdapter(new ArrayList<>(),viewModel);
+        memoAdapter = new MemoAdapter(new ArrayList<>(), viewModel);
         binding.rcvMemoList.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rcvMemoList.setAdapter(memoAdapter);
     }
@@ -144,16 +155,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     //클릭 이벤트
     @Override
     public void onClick(View v) {
@@ -170,7 +171,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
                             //글
                             case 0:
-                                Intent intent = new Intent(getActivity(), WriteMemoActivity.class);
+                                Intent intent = new Intent(getActivity(), TextMemoWriteActivity.class);
                                 intent.putExtra("type", "addmemo");
                                 startActivity(intent);
 
@@ -192,7 +193,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                                 break;
 
                             case 2:
-                                Intent intent3 = new Intent(getActivity(), HandWritingActivity.class);
+                                Intent intent3 = new Intent(getActivity(), HandwritingActivity.class);
                                 intent3.putExtra("type", "insert");
                                 startActivity(intent3);
                                 break;
@@ -212,7 +213,112 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
 
     }
 
-/*
+    //메모 보기로 이동
+    @Override
+    public void sendMemo(MemoListItem item) {
+
+        Intent intent;
+
+        if (item.getMemoType().equals("text")) {
+            intent = new Intent(getContext(), TextMemoView.class);
+            intent.putExtra("textItem", item);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        } else if (item.getMemoType().equals("voice")) {
+
+
+            VoicePlayFragment dialogFragment = new VoicePlayFragment();
+            Bundle inputdate = new Bundle();
+            inputdate.putString("inputdate", item.getVoiceId());
+            dialogFragment.setArguments(inputdate);
+            dialogFragment.show(getActivity().getSupportFragmentManager(), "tag");
+
+        } else {
+            intent = new Intent(getContext(), HandwriteViewActivity.class);
+          /*  intent.putExtra("index", item.getIndex());
+            intent.putExtra("title", item.getTitle());
+            intent.putExtra("subtitle", item.getSubTitle());
+            intent.putExtra("handwriteId", item.getHandwriteId());*/
+            intent.putExtra("handwriteItem",item);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        }
+
+
+    }
+
+    @Override
+    public void deleteMemo(MemoListItem memo) {
+        Log.d("check arrive", "hihi " + memo.getIndex());
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("경고")
+                .setMessage("메모를 지우시겠습니까?")
+                .setPositiveButton("닫기", null)
+                .setNegativeButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+
+                        helper = new DBHelper(getContext());
+                        db = helper.getWritableDatabase();
+
+                        String del = "delete from memo where `idx`=" + memo.getIndex();
+                        db.execSQL(del);
+
+
+                        //저장 파일 삭제
+                        File file;
+                        boolean deleted;
+
+                        int curRealPos = memoAdapter.getItemPosition(memo);
+
+                        if (memoAdapter.getItem(curRealPos).getMemoType().equals("voice")) {
+                            file = new File(root + "/" + memoAdapter.getItem(curRealPos).getVoiceId() + ".mp3");
+                            deleted = file.delete();
+
+                        } else if (memoAdapter.getItem(curRealPos).getMemoType().equals("handwrite")) {
+                            file = new File(root + "/saved_images/" + memoAdapter.getItem(curRealPos).getHandwriteId() + ".jpg");
+                            deleted = file.delete();
+
+                        }
+
+                        memoAdapter.removeItem(memo);
+
+
+                    }
+                });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setCanceledOnTouchOutside(false);
+        alertDialog.show();
+
+    }
+
+    @Override
+    public void editMemo(MemoListItem memo) {
+
+        Intent intent;
+
+        if (memo.getMemoType().equals("text")) {
+            intent = new Intent(getActivity(), TextMemoWriteActivity.class);
+            intent.putExtra("textItem", memo);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        } else if (memo.getMemoType().equals("handwrite")) {
+            intent = new Intent(getActivity(), HandwritingActivity.class);
+            intent.putExtra("handwriteItem", memo);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            startActivity(intent);
+        } else {
+            Snackbar.make(getView(), "수정할 수 없습니다", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    /*
 
     public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem,MemoAdapter.MemoViewHolder> {
 
@@ -282,7 +388,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                     //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
 
                     if (dataSet.get(position).getMemoType().equals("text")) {
-                        Intent intent1 = new Intent(getActivity(), WriteMemoActivity.class);
+                        Intent intent1 = new Intent(getActivity(), TextMemoWriteActivity.class);
                         intent1.putExtra("index", dataSet.get(position).getIndex());
                         intent1.putExtra("type", "editmemo");
                         intent1.putExtra("title", dataSet.get(position).getTitle());
@@ -290,7 +396,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener {
                         intent1.putExtra("content", dataSet.get(position).getContent());
                         startActivity(intent1);
                     } else if (dataSet.get(position).getMemoType().equals("handwrite")) {
-                        Intent intent = new Intent(getActivity(), HandWritingActivity.class);
+                        Intent intent = new Intent(getActivity(), HandwritingActivity.class);
                         intent.putExtra("handwriteId", dataSet.get(position).getHandwriteId());
                         intent.putExtra("type", "edit");
                         intent.putExtra("title", dataSet.get(position).getTitle());
