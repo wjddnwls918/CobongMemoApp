@@ -1,6 +1,9 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.model;
 
-public class MemoListItem {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class MemoListItem implements Parcelable {
 
     int index;
     String title, subTitle;
@@ -20,6 +23,29 @@ public class MemoListItem {
         this.voiceId = voiceId;
         this.handwriteId = handwriteId;
     }
+
+    protected MemoListItem(Parcel in) {
+        index = in.readInt();
+        title = in.readString();
+        subTitle = in.readString();
+        memoType = in.readString();
+        inputTime = in.readString();
+        content = in.readString();
+        voiceId = in.readString();
+        handwriteId = in.readString();
+    }
+
+    public static final Creator<MemoListItem> CREATOR = new Creator<MemoListItem>() {
+        @Override
+        public MemoListItem createFromParcel(Parcel in) {
+            return new MemoListItem(in);
+        }
+
+        @Override
+        public MemoListItem[] newArray(int size) {
+            return new MemoListItem[size];
+        }
+    };
 
     public int getIndex() {
         return index;
@@ -83,5 +109,22 @@ public class MemoListItem {
 
     public void setHandwriteId(String handwriteId) {
         this.handwriteId = handwriteId;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(index);
+        dest.writeString(title);
+        dest.writeString(subTitle);
+        dest.writeString(memoType);
+        dest.writeString(inputTime);
+        dest.writeString(content);
+        dest.writeString(voiceId);
+        dest.writeString(handwriteId);
     }
 }
