@@ -18,4 +18,6 @@
 
     <dimen name="common_elevation">3dp</dimen>
 
+    <!-- mine -->
+    <dimen name="common_small_height">2dp</dimen>
 </resources>

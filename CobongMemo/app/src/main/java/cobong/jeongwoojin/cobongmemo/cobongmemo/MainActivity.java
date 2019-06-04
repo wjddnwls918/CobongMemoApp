@@ -4,44 +4,37 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.gigamole.navigationtabstrip.NavigationTabStrip;
+import com.google.android.material.tabs.TabLayout;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Locale;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private ViewPager vp;
-    MyPagerAdapter pagerAdapter;
-    private NavigationTabStrip mTopNavigationTabStrip;
-
-    public void refresh(){
-        pagerAdapter.notifyDataSetChanged();
-    }
+    private MainPagerAdapter pagerAdapter;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onResume() {
         super.onResume();
-        //pagerAdapter.notifyDataSetChanged();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -50,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.cobong_custom:
-                Intent intent = new Intent(MainActivity.this,SettingsActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent);
                 break;
 
@@ -64,17 +57,15 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+
 
         //권한
         checkDangerousPermissions();
         //set current locale
         Locale curLocale = getResources().getConfiguration().locale;
         BasicInfo.language = curLocale.getLanguage();
-        //Log.d(TAG, "current language : " + BasicInfo.language);
-
-
-
 
         // SD Card checking
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -95,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 BasicInfo.ExternalChecked = true;
             }
         }
-        initUI();
+
         setUI();
 
     }
@@ -128,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
     //권한 허용, 비허용
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -142,47 +134,64 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void initUI() {
-        vp = (ViewPager) findViewById(R.id.vp);
-        mTopNavigationTabStrip = (NavigationTabStrip) findViewById(R.id.nts_top);
-    }
-
     private void setUI() {
 
-        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        vp.setAdapter(pagerAdapter);
+        pagerAdapter = new MainPagerAdapter(getSupportFragmentManager(), binding.tlMainTab.getTabCount());
+        binding.vpMain.setAdapter(pagerAdapter);
 
-        mTopNavigationTabStrip.setTabIndex(0, true);
-        mTopNavigationTabStrip.setViewPager(vp,0);
+
+        binding.vpMain.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.tlMainTab));
+        binding.tlMainTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                binding.vpMain.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
 
     }
 
 
+    public class MainPagerAdapter extends FragmentStatePagerAdapter {
 
+        private int mPageCount;
 
-    class MyPagerAdapter extends FragmentPagerAdapter{
-        ArrayList<Fragment> fragments;
-        public MyPagerAdapter(FragmentManager manager){
-            super(manager);
-            fragments = new ArrayList<>();
-            fragments.add(new MemoListFragment());
-            fragments.add(new ScheduleFragment());
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
+        public MainPagerAdapter(FragmentManager fm, int pageCount) {
+            super(fm);
+            this.mPageCount = pageCount;
         }
 
         @Override
         public Fragment getItem(int position) {
-            return fragments.get(position);
+            switch (position) {
+                case 0:
+                    MemoListFragment memoListFragment = new MemoListFragment();
+                    return memoListFragment;
+
+                case 1:
+                    ScheduleFragment scheduleFragment = new ScheduleFragment();
+                    return scheduleFragment;
+
+                default:
+                    return null;
+            }
         }
+
+        @Override
+        public int getCount() {
+            return mPageCount;
+        }
+
     }
-
-
-
-
-
 
 }
