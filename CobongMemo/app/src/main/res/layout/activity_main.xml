@@ -3,29 +3,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
-        <!--
-                <com.gigamole.navigationtabstrip.NavigationTabStrip
-        android:id="@+id/nts_top"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_gravity="top"
-        app:nts_active_color="#42a4d1"
-        app:nts_color="#42a4d1"
-        app:nts_corners_radius="1dp"
-        app:nts_inactive_color="#ff1a1e23"
-        app:nts_size="15sp"
-        app:nts_titles="@array/titles"
-        app:nts_weight="3dp"
-
-         />
-
-        -->
 
         <FrameLayout
             android:id="@+id/fl_main"
@@ -43,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:tabGravity="fill"
-                app:tabIndicator="@android:color/white"
+                app:tabIndicatorColor="@color/cobongGray"
                 app:tabIndicatorHeight="@dimen/common_small_height"
                 app:tabTextColor="@android:color/white">
 
@@ -59,34 +39,7 @@
 
 
             </com.google.android.material.tabs.TabLayout>
-            <!--<View
-                android:layout_width="match_parent"
-                android:layout_height="4dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="18dp"
-                android:background="#182128"/>
 
-            <com.gigamole.navigationtabstrip.NavigationTabStrip
-                android:id="@+id/nts_top"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:layout_gravity="center"
-                android:layout_marginEnd="30dp"
-                android:layout_marginLeft="30dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginStart="30dp"
-                app:nts_active_color="#fff"
-                app:nts_color="#3cdedd"
-                app:nts_corners_radius="3.5dp"
-                app:nts_factor="0.8"
-                app:nts_gravity="bottom"
-                app:nts_inactive_color="#81ffffff"
-                app:nts_titles="@array/titles"
-                app:nts_type="point"
-                app:nts_typeface="fonts/moon.otf"
-                app:nts_weight="7dp"/>
-
-    -->
         </FrameLayout>
 
         <androidx.constraintlayout.widget.Guideline
