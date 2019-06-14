@@ -63,6 +63,7 @@
                             android:adjustViewBounds="true"
                             android:maxWidth="30dp"
                             android:maxHeight="30dp"
+                            android:onClick="@{() -> viewmodel.onEditClick()}"
                             android:src="@drawable/edit" />
 
                         <ImageView
@@ -73,6 +74,7 @@
                             android:adjustViewBounds="true"
                             android:maxWidth="30dp"
                             android:maxHeight="30dp"
+                            android:onClick="@{()->viewmodel.onDeleteClick()}"
                             android:src="@drawable/trash" />
 
                     </RelativeLayout>
@@ -114,7 +116,7 @@
                         android:layout_margin="5dp"
                         android:text="@{viewmodel.item.subTitle}"
                         android:textColor="#737373"
-                    android:textSize="18dp" />
+                        android:textSize="18dp" />
 
                     <View
                         android:layout_width="match_parent"

@@ -6,34 +6,28 @@ import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.dd.processbutton.iml.ActionProcessButton;
-import com.victor.loading.rotate.RotateLoading;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding;
 
 
 public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener{
 
 
     ProgressGenerator progressGenerator ;
-    ActionProcessButton btnRecord ;
-    ActionProcessButton btnStop ;
-    ActionProcessButton btnclose;
-    private RotateLoading rotateLoading;
 
     DBHelper helper;
     SQLiteDatabase db;
-
-    ImageView play;
-    ImageView pause;
 
     String filename = "";
     // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
@@ -44,6 +38,16 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
     String resultDate;
 
     private DialogInterface.OnDismissListener onDismissListener;
+
+    private FragmentVoiceRecordBinding binding;
+
+
+    //생성자
+    public VoiceRecordFragment() {
+        // Required empty public constructor
+    }
+
+
     public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener){
         this.onDismissListener = onDismissListener;
     }
@@ -58,12 +62,9 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
     @Override
     public void onComplete() {
-        //Toast.makeText(getContext(), R.string.Loading_Complete, Toast.LENGTH_LONG).show();
+
     }
 
-    public VoiceRecordFragment() {
-        // Required empty public constructor
-    }
 
 
     @Override
@@ -75,24 +76,19 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_voice_record, container, false);
-
-
-
-
-        rotateLoading = (RotateLoading)view.findViewById(R.id.rotateloading);
+        //ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_voice_record, container, false);
+        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_voice_record,container,false);
 
         progressGenerator = new ProgressGenerator(this);
 
-        btnRecord = (ActionProcessButton) view.findViewById(R.id.btnRecord);
-        btnRecord.setOnClickListener(new View.OnClickListener() {
+
+        binding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
-                rotateLoading.start();
-                btnRecord.setMode(ActionProcessButton.Mode.ENDLESS);
-                progressGenerator.start(btnRecord);
+                binding.rotateloading.start();
+                binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS);
+                progressGenerator.start(binding.btnRecord);
 
                 resultDate = curDate();
                 filename =RECORDED_FILE.getAbsolutePath()+"/"+resultDate+".mp3";
@@ -116,12 +112,11 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
             }
         });
 
-        btnStop = (ActionProcessButton)view.findViewById(R.id.btnStop);
-        btnStop.setOnClickListener(new View.OnClickListener() {
+        binding.btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rotateLoading.stop();
-                btnRecord.setProgress(100);
+                binding.rotateloading.stop();
+                binding.btnRecord.setProgress(100);
 
                 recorder.stop();
                 recorder.release();
@@ -131,8 +126,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
             }
         });
 
-        btnclose = (ActionProcessButton)view.findViewById(R.id.voiceexit);
-        btnclose.setOnClickListener(new View.OnClickListener() {
+        binding.voiceexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
@@ -141,7 +135,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
 
         // Inflate the layout for this fragment
-        return view;
+        return binding.getRoot();
     }
 
 
@@ -175,10 +169,9 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         String args[] = {resultDate, "voice", resultDate};
         try {
             db.execSQL(insertVoice,args);
-            //Toast.makeText(getContext(),"입력 완료",Toast.LENGTH_SHORT).show();
+
         }catch (Exception e){
             e.printStackTrace();
-            //Toast.makeText(getContext(),"입력 실패",Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -26,14 +26,16 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoAdapter;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoNavigator;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewActivity;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoView;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoWriteActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceRecordFragment;
 
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE;
@@ -220,12 +222,12 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
         Intent intent;
 
         if (item.getMemoType().equals("text")) {
-            intent = new Intent(getContext(), TextMemoView.class);
+            intent = new Intent(getContext(), TextMemoViewActivity.class);
             intent.putExtra("textItem", item);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         } else if (item.getMemoType().equals("voice")) {
-
 
             VoicePlayFragment dialogFragment = new VoicePlayFragment();
             Bundle inputdate = new Bundle();
@@ -239,7 +241,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
             intent.putExtra("title", item.getTitle());
             intent.putExtra("subtitle", item.getSubTitle());
             intent.putExtra("handwriteId", item.getHandwriteId());*/
-            intent.putExtra("handwriteItem",item);
+            intent.putExtra("handwriteItem", item);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
         }
@@ -310,6 +312,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
         } else if (memo.getMemoType().equals("handwrite")) {
             intent = new Intent(getActivity(), HandwritingActivity.class);
             intent.putExtra("handwriteItem", memo);
+            intent.putExtra("type", "edit");
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
@@ -480,7 +483,7 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
                     //Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
 
                     if (dataSet.get(position).getMemoType().equals("text")) {
-                        Intent intent = new Intent(getContext(), TextMemoView.class);
+                        Intent intent = new Intent(getContext(), TextMemoViewActivity.class);
 
                         //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
 

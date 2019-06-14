@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
         //권한
         checkDangerousPermissions();
-        //set current locale
-        Locale curLocale = getResources().getConfiguration().locale;
-        BasicInfo.language = curLocale.getLanguage();
+
+        //
+        setLocale();
 
         // SD Card checking
         if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
@@ -89,6 +89,12 @@ public class MainActivity extends AppCompatActivity {
 
         setUI();
 
+    }
+
+    public void setLocale() {
+        //set current locale
+        Locale curLocale = getResources().getConfiguration().locale;
+        BasicInfo.language = curLocale.getLanguage();
     }
 
     //권한 부여 함수
