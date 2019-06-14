@@ -17,7 +17,10 @@
     <dimen name="space_small_margin">8dp</dimen>
 
     <dimen name="common_elevation">3dp</dimen>
+    <dimen name="common_small_height">3dp</dimen>
 
-    <!-- mine -->
-    <dimen name="common_small_height">2dp</dimen>
+    <dimen name="item_size">80dp</dimen>
+    <dimen name="voice_item_size">110dp</dimen>
+
+
 </resources>
