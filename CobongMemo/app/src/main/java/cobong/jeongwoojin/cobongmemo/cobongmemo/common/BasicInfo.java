@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.common.util;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.common;
 
 
 import java.text.SimpleDateFormat;

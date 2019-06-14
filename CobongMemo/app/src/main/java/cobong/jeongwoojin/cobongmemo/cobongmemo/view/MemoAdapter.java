@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;

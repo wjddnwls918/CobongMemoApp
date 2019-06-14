@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
 
 import androidx.lifecycle.ViewModel;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;

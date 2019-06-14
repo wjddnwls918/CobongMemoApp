@@ -13,6 +13,10 @@ public class MemoListItem implements Parcelable {
     String voiceId;
     String handwriteId;
 
+    public MemoListItem() {
+
+    }
+
     public MemoListItem(int index, String title, String subTitle, String memoType, String inputTime, String content, String voiceId, String handwriteId) {
         this.index = index;
         this.title = title;

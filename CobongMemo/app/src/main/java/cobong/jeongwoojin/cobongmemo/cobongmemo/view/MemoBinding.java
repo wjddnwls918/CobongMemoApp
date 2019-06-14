@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
 
 import androidx.databinding.BindingAdapter;
 import android.widget.ImageView;

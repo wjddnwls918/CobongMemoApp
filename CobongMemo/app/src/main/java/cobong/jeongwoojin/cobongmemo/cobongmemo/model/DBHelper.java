@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

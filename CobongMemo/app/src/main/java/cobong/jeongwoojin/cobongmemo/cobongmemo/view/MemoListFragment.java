@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -25,12 +25,11 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.VoicePlayFragment;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoAdapter;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoNavigator;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewActivity;

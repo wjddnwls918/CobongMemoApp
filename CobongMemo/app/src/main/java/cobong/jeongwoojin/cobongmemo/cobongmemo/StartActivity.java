@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.MainActivity;
 
 public class StartActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -20,6 +20,10 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.ScheduleFragment;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.SettingsActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
