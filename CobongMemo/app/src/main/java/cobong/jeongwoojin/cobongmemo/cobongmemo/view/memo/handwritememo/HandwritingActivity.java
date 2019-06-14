@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
-import android.widget.Toast;
 
 import com.jaredrummler.android.colorpicker.ColorPickerDialog;
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
@@ -26,83 +25,72 @@ import java.util.Date;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding;
 import me.panavtec.drawableview.DrawableViewConfig;
 
-public class HandwritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener {
+public class HandwritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener, HandwriteNavigator {
 
-
-    DrawableViewConfig config;
-  /* EditText title;
-    EditText subTitle;
-
-
-    ImageView insert;
-    ImageView exit;
-*/
+    private DrawableViewConfig config;
 
     DBHelper helper;
     SQLiteDatabase db;
-  //  DrawableView drawableView;
 
-/*
-    ImageView color;
-    ImageView widthUp;
-    ImageView widthDown;
-    ImageView eraser;
-    ImageView undo;
-    ImageView blackpencil;
-*/
-
-    String handwriteId;
-
-    boolean erase;
-
-    int canHeight, canWidth;
-    int temcol;
-
-  /*  LinearLayout linearImage;*/
-
-    String type;
+    private String handwriteId;
+    private boolean erase;
+    private int temcol;
+    private String type;
 
     final private static String root = Environment.getExternalStorageDirectory().toString();
 
     private ActivityHandWritingBinding binding;
-
-    HandwriteViewModel viewModel;
+    private HandwriteViewModel viewModel;
+    private int width, height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hand_writing);
-        //setContentView(R.layout.activity_hand_writing);
 
         viewModel = ViewModelProviders.of(this).get(HandwriteViewModel.class);
-
+        viewModel.setNavigator(this);
 
         erase = false;
 
         binding.setViewmodel(viewModel);
 
-       /* drawableView = (DrawableView) findViewById(R.id.paintView);
-        title = (EditText) findViewById(R.id.handwriteTitle);
-        subTitle = (EditText) findViewById(R.id.handwriteSubtitle);
 
-        exit = (ImageView) findViewById(R.id.handwriteExit);
-        insert = (ImageView) findViewById(R.id.handwriteInsert);
+        //읽어와서 저장
+        Intent intent = getIntent();
+        viewModel.setItem(intent.getParcelableExtra("handwriteItem"));
 
-        color = (ImageView) findViewById(R.id.handwriteColor);
-        widthUp = (ImageView) findViewById(R.id.widthUp);
-        widthDown = (ImageView) findViewById(R.id.widthDown);
-        eraser = (ImageView) findViewById(R.id.eraser);
-        undo = (ImageView) findViewById(R.id.undo);
-        blackpencil = (ImageView) findViewById(R.id.blackPencil);*/
+        //캔버스 초기화
+        initCanvas();
 
+        //작성인지 수정인지 설정
+        type = intent.getStringExtra("type");
+        if (viewModel.getItem() != null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+            binding.paintView.setBackground(bitmapDrawable);
+        }
+
+        //클릭리스너 등록
+        initClickListener();
+
+    }
+
+
+    public void initCanvas() {
         DisplayMetrics dm = getResources().getDisplayMetrics();
-        int width = dm.widthPixels;
-        int height = dm.heightPixels;
+
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        width = dm.widthPixels;
+        height = (int) (dm.heightPixels * 0.65);
+
+        //Log.d("sizecheck", width + " " + height);
 
         config = new DrawableViewConfig();
         config.setStrokeColor(getResources().getColor(android.R.color.black));
@@ -110,78 +98,25 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
         config.setStrokeWidth(20.0f);
         config.setMinZoom(1.0f);
         config.setMaxZoom(3.0f);
-        config.setCanvasHeight(1000);
-        config.setCanvasWidth(width - 20);
 
+        config.setCanvasHeight(height);
+        config.setCanvasWidth(width);
 
         binding.paintView.setConfig(config);
+    }
 
-
-        Intent intent = getIntent();
-        viewModel.setItem(intent.getParcelableExtra("handwriteItem"));
-
-
-        type = intent.getStringExtra("type");
-        if (viewModel.getItem()!= null) {
-
-            //drawableView.set
-            //Toast.makeText(this, intent.getStringExtra("type"), Toast.LENGTH_LONG).show();
-            //handwriteId = intent.getStringExtra("handwriteId");
-
-            Bitmap bitmap = BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-
-            binding.paintView.setBackground(bitmapDrawable);
-/*
-            title.setText(intent.getStringExtra("title"));
-            subTitle.setText(intent.getStringExtra("subTitle"));*/
-
-        }
-
-/*
-
-        exit.setOnClickListener(this);
-        insert.setOnClickListener(this);
-        color.setOnClickListener(this);
-        widthUp.setOnClickListener(this);
-        widthDown.setOnClickListener(this);
-        eraser.setOnClickListener(this);
-        undo.setOnClickListener(this);
-        blackpencil.setOnClickListener(this);
-*/
-
-
+    public void initClickListener() {
+        binding.handwriteColor.setOnClickListener(this);
+        binding.widthUp.setOnClickListener(this);
+        binding.widthDown.setOnClickListener(this);
+        binding.eraser.setOnClickListener(this);
+        binding.undo.setOnClickListener(this);
+        binding.blackPencil.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.handwriteExit:
-                onBackPressed();
-                break;
-
-            case R.id.handwriteInsert:
-
-
-              /*  if (title.getText().toString().trim().equals("") && subTitle.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "제목과 소제목을 입력하세요", Toast.LENGTH_SHORT).show();
-                } else if (title.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "제목을 입력하세요", Toast.LENGTH_SHORT).show();
-                } else if (subTitle.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "소제목을 입력하세요", Toast.LENGTH_SHORT).show();
-                } else {
-
-
-                    if (!type.equals("insert")) {
-                        writeSDCARD();
-                    } else {
-                        writeDBhandwrite();
-
-                    }
-                    finish();
-                }*/
-
-                break;
 
             case R.id.handwriteColor:
                 //choice color
@@ -203,19 +138,10 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
                 break;
 
             case R.id.eraser:
-                if (erase) {
 
-                    config.setStrokeColor(temcol);
-                    config.setStrokeWidth(20.0f);
-                    erase = false;
-
-                } else {
-                    temcol = config.getStrokeColor();
-
-                    config.setStrokeColor(Color.argb(255, 255, 255, 255));
-                    config.setStrokeWidth(40.0f);
-                    erase = true;
-                }
+                temcol = config.getStrokeColor();
+                config.setStrokeColor(Color.argb(255, 255, 255, 255));
+                config.setStrokeWidth(40.0f);
 
                 break;
 
@@ -242,8 +168,9 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
     }
 
-    public void writeSDCARD() {
-        File editFile = new File(root + "/saved_images/" + handwriteId + ".jpg");
+    //수정시
+    public void editHandwrite() {
+        File editFile = new File(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
         try {
             FileOutputStream out;
             Bitmap back = ((BitmapDrawable) binding.paintView.getBackground().getCurrent()).getBitmap();
@@ -251,7 +178,6 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
 
             //merge bitmap
-            //아 .. 진ㅉ ㅏ오래 걸림
             Bitmap result = Bitmap.createBitmap(back.getWidth(), back.getHeight(), back.getConfig());
             Canvas canvas2 = new Canvas(result);
             int widthBack = back.getWidth();
@@ -267,14 +193,14 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
             out.flush();
             out.close();
 
-            //Toast.makeText(this, "이미지 저장 완료", Toast.LENGTH_LONG).show();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
-    public void writeDBhandwrite() {
+    //처음 작성 시
+    public void insertHandWrite() {
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 
@@ -304,7 +230,7 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
 
         String insertHandwrite;
-        Toast.makeText(this, handwriteId, Toast.LENGTH_SHORT).show();
+
         insertHandwrite = "insert into memo(title,SUBTITLE,MEMO_TYPE,ID_HANDWRITING) values(?,?,?,?)";
         String args[] = {binding.handwriteTitle.getText().toString(), binding.handwriteSubtitle.getText().toString(), "handwrite", handwriteId};
         try {
@@ -344,4 +270,30 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
     }
 
 
+    //나가기
+    @Override
+    public void onExitClick() {
+        onBackPressed();
+    }
+
+    //작성
+    @Override
+    public void onWriteClick() {
+        if (binding.handwriteTitle.getText().toString().trim().equals("") && binding.handwriteSubtitle.getText().toString().trim().equals("")) {
+            SnackBarUtil.showSnackBar(binding.getRoot(), R.string.text_input_title_subTitle);
+        } else if (binding.handwriteTitle.getText().toString().trim().equals("")) {
+            SnackBarUtil.showSnackBar(binding.getRoot(), R.string.text_input_title);
+        } else if (binding.handwriteSubtitle.getText().toString().trim().equals("")) {
+            SnackBarUtil.showSnackBar(binding.getRoot(), R.string.text_input_subTitle);
+        } else {
+
+            if (!type.equals("insert")) {
+                editHandwrite();
+            } else {
+                insertHandWrite();
+
+            }
+            finish();
+        }
+    }
 }

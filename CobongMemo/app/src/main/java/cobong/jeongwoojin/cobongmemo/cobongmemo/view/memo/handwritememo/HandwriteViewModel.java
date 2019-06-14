@@ -23,6 +23,11 @@ public class HandwriteViewModel extends ViewModel {
         navigator.onDeleteClick();
     }
 
+    //작성 완료
+    public void onWriteClick() {
+        navigator.onWriteClick();
+    }
+
     public void setItem(MemoListItem item) {
         this.item = item;
     }
