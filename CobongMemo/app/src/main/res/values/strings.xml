@@ -83,4 +83,21 @@
     <string name="ToolbarColorPickerPreference">ToolbarColorPickerPreference</string>
     <string name="BackgroundColorPickerPreference">BackgroundColorPickerPreference</string>
 
+
+    <string name="modify_success">modify success</string>
+
+
+    <!-- common -->
+    <string name="text_input_title_content">input your title and content</string>
+    <string name="text_input_title">input your title </string>
+    <string name="text_input_content">input your content</string>
+    <string name="text_input_title_subTitle">input yout title and subTitle</string>
+    <string name="text_input_subTitle">input your subTitle</string>
+
+    <!-- Text Fragment -->
+
+    <!-- Handwrite Fragment -->
+
+    <!-- Voice Fragment -->
+
 </resources>
