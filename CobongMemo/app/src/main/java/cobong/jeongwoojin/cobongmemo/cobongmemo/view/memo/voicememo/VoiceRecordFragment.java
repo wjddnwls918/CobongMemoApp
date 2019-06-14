@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo;
 
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
@@ -18,13 +18,17 @@ import java.util.Date;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProviders;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.ProgressGenerator;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding;
 
 
-public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener{
+public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener, VoiceNavigator {
 
 
-    ProgressGenerator progressGenerator ;
+    ProgressGenerator progressGenerator;
 
     DBHelper helper;
     SQLiteDatabase db;
@@ -41,21 +45,19 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
     private FragmentVoiceRecordBinding binding;
 
+    private VoiceViewModel viewModel;
 
-    //생성자
     public VoiceRecordFragment() {
-        // Required empty public constructor
     }
 
-
-    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener){
+    public void setOnDismissListener(DialogInterface.OnDismissListener onDismissListener) {
         this.onDismissListener = onDismissListener;
     }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(onDismissListener != null){
+        if (onDismissListener != null) {
             onDismissListener.onDismiss(dialog);
         }
     }
@@ -65,6 +67,11 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 
 
     @Override
@@ -76,63 +83,14 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //ViewGroup view = (ViewGroup)inflater.inflate(R.layout.fragment_voice_record, container, false);
-        binding = DataBindingUtil.inflate(inflater,R.layout.fragment_voice_record,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_voice_record, container, false);
+
+        viewModel = ViewModelProviders.of(this).get(VoiceViewModel.class);
+        viewModel.setNavigator(this);
+
+        binding.setViewmodel(viewModel);
 
         progressGenerator = new ProgressGenerator(this);
-
-
-        binding.btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                binding.rotateloading.start();
-                binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS);
-                progressGenerator.start(binding.btnRecord);
-
-                resultDate = curDate();
-                filename =RECORDED_FILE.getAbsolutePath()+"/"+resultDate+".mp3";
-
-
-
-                recorder = new MediaRecorder();
-                recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-                recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-                recorder.setOutputFile(filename);
-                recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-                try {
-                    recorder.prepare();
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
-                recorder.start();
-
-
-            }
-        });
-
-        binding.btnStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                binding.rotateloading.stop();
-                binding.btnRecord.setProgress(100);
-
-                recorder.stop();
-                recorder.release();
-                recorder = null;
-
-                writeDBvoice(resultDate);
-            }
-        });
-
-        binding.voiceexit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
 
         // Inflate the layout for this fragment
         return binding.getRoot();
@@ -141,8 +99,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
     @Override
     public void onDestroy() {
-        if(recorder != null)
-        {
+        if (recorder != null) {
             recorder.stop();
             recorder.release();
             recorder = null;
@@ -150,7 +107,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         super.onDestroy();
     }
 
-    public String curDate(){
+    public String curDate() {
         long now = System.currentTimeMillis();
         Date date = new Date(now);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
@@ -159,7 +116,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         return getTime;
     }
 
-    public void writeDBvoice(String resultDate){
+    public void writeDBvoice(String resultDate) {
         helper = new DBHelper(getContext());
         db = helper.getWritableDatabase();
 
@@ -168,12 +125,55 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         insertVoice = "insert into memo(title,memo_type,ID_VOICE) values(?,?,?)";
         String args[] = {resultDate, "voice", resultDate};
         try {
-            db.execSQL(insertVoice,args);
+            db.execSQL(insertVoice, args);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
 
+    //녹음 시작
+    @Override
+    public void onRecordClick() {
+        binding.rotateloading.start();
+        binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS);
+        progressGenerator.start(binding.btnRecord);
+
+        resultDate = curDate();
+        filename = RECORDED_FILE.getAbsolutePath() + "/" + resultDate + ".mp3";
+
+
+        recorder = new MediaRecorder();
+        recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        recorder.setOutputFile(filename);
+        recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+
+        try {
+            recorder.prepare();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        recorder.start();
+    }
+
+    //녹음 끝
+    @Override
+    public void onStopClick() {
+        binding.rotateloading.stop();
+        binding.btnRecord.setProgress(100);
+
+        recorder.stop();
+        recorder.release();
+        recorder = null;
+
+        writeDBvoice(resultDate);
+    }
+
+    //닫기
+    @Override
+    public void onExitClick() {
+        dismiss();
+    }
 }
