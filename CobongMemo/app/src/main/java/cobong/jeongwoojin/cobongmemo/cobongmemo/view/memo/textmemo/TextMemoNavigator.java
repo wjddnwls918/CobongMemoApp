@@ -2,7 +2,11 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo;
 
 public interface TextMemoNavigator {
 
-    public void onExitClick();
+    default public void onEditClick(){};
 
-    public void onWriteClick();
+    default public void onDeleteClick(){};
+
+    default public void onExitClick(){};
+
+    default public void onWriteClick(){};
 }

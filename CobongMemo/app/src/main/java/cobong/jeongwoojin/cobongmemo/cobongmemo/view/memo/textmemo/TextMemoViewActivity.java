@@ -10,12 +10,12 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.DBHelper;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextViewBinding;
 
 
-public class TextMemoView extends AppCompatActivity implements TextMemoNavigator {
+public class TextMemoViewActivity extends AppCompatActivity implements TextMemoNavigator {
 
     DBHelper helper;
     SQLiteDatabase db;
@@ -45,6 +45,7 @@ public class TextMemoView extends AppCompatActivity implements TextMemoNavigator
         viewModel.setNavigator(this);
 
         binding.setViewmodel(viewModel);
+
 
 
         //뒤로 가기
@@ -80,7 +81,7 @@ public class TextMemoView extends AppCompatActivity implements TextMemoNavigator
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 
-        String del = "delete from memo where `idx`=" + viewModel.getItem().getIndex();
+        String del = "delete from memo where `idx`=" + viewModel.getItem().getValue().getIndex();
         db.execSQL(del);
         finish();
 
@@ -89,15 +90,15 @@ public class TextMemoView extends AppCompatActivity implements TextMemoNavigator
     //메모 수정
     @Override
     public void onEditClick() {
-        Intent intent = new Intent(TextMemoView.this, TextMemoWriteActivity.class);
-        intent.putExtra("textItem", viewModel.getItem());
+        Intent intent = new Intent(TextMemoViewActivity.this, TextMemoWriteActivity.class);
+        intent.putExtra("textItem", viewModel.getItem().getValue());
         startActivityForResult(intent, 100);
     }
 
     //메모 삭제
     @Override
     public void onDeleteClick() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(TextMemoView.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(TextMemoViewActivity.this);
         builder.setTitle("확인")
                 .setMessage("메모를 지우시겠습니까?")
                 .setNegativeButton("확인", new DialogInterface.OnClickListener() {
