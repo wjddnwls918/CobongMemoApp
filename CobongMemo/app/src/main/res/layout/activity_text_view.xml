@@ -71,7 +71,6 @@
             app:layout_constraintStart_toStartOf="@id/gl_end_of_memo"
             app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -80,63 +79,79 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_end_of_util" />
 
-        <TextView
-            android:id="@+id/viewtitle"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_inset_vertical_material"
-            android:layout_marginEnd="@dimen/button_inset_vertical_material"
-            android:background="@android:color/transparent"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:clickable="false"
             android:hint="@string/writeMemoTitle"
-            android:inputType="text"
-            android:maxLength="20"
-            android:singleLine="true"
-            android:text="@{viewmodel.item.title}"
-            android:textColor="#737373"
-            android:textSize="20dp"
-            android:textStyle="bold"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_title"
             app:layout_constraintEnd_toStartOf="@id/gl_right"
             app:layout_constraintStart_toStartOf="@id/gl_left"
-            app:layout_constraintTop_toTopOf="@+id/gl_end_of_util" />
+            app:layout_constraintTop_toTopOf="@+id/gl_end_of_util">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_title" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/viewtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.title}"
+                android:textColor="#737373"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
-            android:id="@+id/viewsubtitle"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_inset_vertical_material"
-            android:layout_marginEnd="@dimen/button_inset_vertical_material"
-            android:background="@android:color/transparent"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:clickable="false"
             android:hint="@string/writeMemoSub"
-            android:inputType="text"
-            android:maxLength="20"
-            android:singleLine="true"
-            android:text="@{viewmodel.item.subTitle}"
-            android:textColor="#737373"
-            android:textSize="18dp"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_subTitle"
             app:layout_constraintEnd_toEndOf="@id/gl_right"
             app:layout_constraintStart_toStartOf="@id/gl_left"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_title" />
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_title">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle" />
 
-        <ScrollView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/viewsubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.subTitle}"
+                android:textColor="#737373"
+                android:textSize="18dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:clickable="false"
+            android:hint="@string/text_content"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_content"
             app:layout_constraintEnd_toEndOf="@id/gl_right"
             app:layout_constraintHeight_default="percent"
@@ -144,35 +159,21 @@
             app:layout_constraintStart_toStartOf="@id/gl_left"
             app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle">
 
-            <TextView
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/viewcontent"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_margin="@dimen/button_inset_vertical_material"
-                android:layout_marginTop="8dp"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
                 android:gravity="top"
-                android:hint="@string/writeMemoContent"
                 android:scrollbars="vertical"
                 android:text="@{viewmodel.item.content}"
                 android:textColor="#737373"
-                android:textSize="18dp"
-                app:layout_constraintBottom_toBottomOf="@id/gl_end_of_content"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_default="percent"
-                app:layout_constraintHeight_percent="0.72"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle" />
+                android:textSize="18dp" />
 
-        </ScrollView>
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_content" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_start_util"
@@ -215,21 +216,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.13" />
+            app:layout_constraintGuide_percent="0.16" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_subTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.18" />
+            app:layout_constraintGuide_percent="0.23" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.9" />
+            app:layout_constraintGuide_percent="0.95" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_right"
