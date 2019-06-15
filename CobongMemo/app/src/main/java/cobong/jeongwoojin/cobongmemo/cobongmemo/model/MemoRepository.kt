@@ -11,4 +11,6 @@ class MemoRepository(private val memolistDao: MemoListDao) {
         memolistDao.insert(memolistItem)
     }
 
+
+
 }

@@ -1,7 +1,6 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo;
 
 import android.os.Handler;
-import android.view.View;
 
 import com.dd.processbutton.ProcessButton;
 
