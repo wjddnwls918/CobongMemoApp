@@ -30,7 +30,7 @@
     <string name="audio_play_title">음성재생</string>
     <string name="audio_recording_title">음성녹음</string>
     <string name="audio_recording_start_title">녹음 시작</string>
-    <string name="audio_recording_stop_title">녹음 중지</string>
+    <string name="audio_recording_stop_title">저장</string>
     <string name="video_recording_start_title">녹화 시작</string>
     <string name="video_recording_stop_title">녹화 중지</string>
     <string name="video_recording_message">녹화중입니다.</string>
@@ -93,6 +93,7 @@
     <string name="text_input_content">내용을 입력하세요</string>
     <string name="text_input_title_subTitle">제목과 소제목을 입력해주세요</string>
     <string name="text_input_subTitle">소제목을 입력하세요</string>
+    <string name="text_content">내용</string>
 
     <!-- Text Fragment -->
 
@@ -100,5 +101,6 @@
     <!-- Handwrite Fragment -->
 
     <!-- Voice Fragment -->
+    <string name="voice_play_end">재생</string>
 
 </resources>
