@@ -7,6 +7,12 @@ import android.widget.FrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 public class SnackBarUtil {
+
+    public static void showSnackBar(View parentLayout, String text) {
+        Snackbar snack = Snackbar.make(parentLayout, text, Snackbar.LENGTH_SHORT);
+        snack.show();
+    }
+
     public static void showSnackBar(View parentLayout, int resId) {
         Snackbar snack = Snackbar.make(parentLayout, parentLayout.getResources().getText(resId).toString(), Snackbar.LENGTH_SHORT);
         snack.show();
