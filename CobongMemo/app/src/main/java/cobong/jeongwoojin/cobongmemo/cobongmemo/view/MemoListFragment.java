@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.VoicePlayFragment;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
@@ -34,6 +33,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.Handwrit
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewActivity;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoWriteActivity;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoicePlayFragment;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceRecordFragment;
 
 import static androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING;
@@ -49,10 +49,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
     //DB
     private DBHelper helper;
     private SQLiteDatabase db;
-
-    //private List<MemoListItem> list;
-
-    final private static String root = Environment.getExternalStorageDirectory().toString();
 
     private FragmentMemoListBinding binding;
 
@@ -236,10 +232,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
 
         } else {
             intent = new Intent(getContext(), HandwriteViewActivity.class);
-          /*  intent.putExtra("index", item.getIndex());
-            intent.putExtra("title", item.getTitle());
-            intent.putExtra("subtitle", item.getSubTitle());
-            intent.putExtra("handwriteId", item.getHandwriteId());*/
             intent.putExtra("handwriteItem", item);
             intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
@@ -250,8 +242,6 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
 
     @Override
     public void deleteMemo(MemoListItem memo) {
-        Log.d("check arrive", "hihi " + memo.getIndex());
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("경고")
@@ -271,17 +261,30 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
 
                         //저장 파일 삭제
                         File file;
-                        boolean deleted;
-
+                        String path ="";
                         int curRealPos = memoAdapter.getItemPosition(memo);
 
                         if (memoAdapter.getItem(curRealPos).getMemoType().equals("voice")) {
-                            file = new File(root + "/" + memoAdapter.getItem(curRealPos).getVoiceId() + ".mp3");
-                            deleted = file.delete();
+                            path = BasicInfo.root + "/" + memoAdapter.getItem(curRealPos).getVoiceId() + ".mp3";
+                            file = new File(path);
+                            if (file.exists()) {
+                                if(file.delete()) {
+                                    Log.d("filedelete","삭제완료");
+                                } else {
+                                    Log.d("filedelete","실패");
+                                }
+                            }
 
                         } else if (memoAdapter.getItem(curRealPos).getMemoType().equals("handwrite")) {
-                            file = new File(root + "/saved_images/" + memoAdapter.getItem(curRealPos).getHandwriteId() + ".jpg");
-                            deleted = file.delete();
+                            path = BasicInfo.root + "/saved_images/" + memoAdapter.getItem(curRealPos).getHandwriteId() + ".jpg";
+                            file = new File(path);
+                            if (file.exists()) {
+                                if(file.delete()) {
+                                    Log.d("filedelete","삭제완료");
+                                } else {
+                                    Log.d("filedelete","실패");
+                                }
+                            }
 
                         }
 
@@ -319,217 +322,5 @@ public class MemoListFragment extends Fragment implements View.OnClickListener, 
             Snackbar.make(getView(), "수정할 수 없습니다", Snackbar.LENGTH_SHORT).show();
         }
     }
-
-    /*
-
-    public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem,MemoAdapter.MemoViewHolder> {
-
-        //private List<MemoListItem> dataSet;
-
-        public MemoAdapter(List<MemoListItem> list) {
-            super(list);
-            //this.dataSet = list;
-        }
-
-
-        @NonNull
-        @Override
-        public MemoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-            MemoItemBinding binding = MemoItemBinding.inflate(LayoutInflater.from(parent.getContext()),
-                    parent, false);
-
-            return new MemoViewHolder(binding);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return getItem(position).hashCode();
-        }
-
-        @Override
-        public void onBindView(MemoViewHolder holder, int position) {
-            holder.binding.setMemo(getItem(position));
-        }
-
-
-        @Override
-        public void onBindViewHolder(@NonNull MemoViewHolder holder, final int position) {
-
-
-             String resultTitle = dataSet.get(position).getTitle();
-            String resultSubTitle = dataSet.get(position).getSubTitle();
-            String resultMemoType = dataSet.get(position).getMemoType();
-            String resultInputTime = dataSet.get(position).getInputTime();
-
-
-            if (resultMemoType.equals("voice")) {
-                holder.binding.memoSubtitle.setVisibility(View.INVISIBLE);
-            }
-
-
-            holder.binding.memoTitle.setText("제목 : " + resultTitle);
-            holder.binding.memoSubtitle.setText(resultSubTitle);
-            holder.binding.memoInputTime.setText(resultInputTime);
-
-            if (resultMemoType.equals("text")) {
-                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.text));
-            } else if (resultMemoType.equals("handwrite")) {
-
-                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.handwriting));
-            } else {
-                holder.binding.memoType.setImageDrawable(getResources().getDrawable(R.drawable.voice));
-            }
-
-
-
-             holder.binding.edit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Toast.makeText(getApplicationContext(),"edit 입니다.",Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
-
-                    if (dataSet.get(position).getMemoType().equals("text")) {
-                        Intent intent1 = new Intent(getActivity(), TextMemoWriteActivity.class);
-                        intent1.putExtra("index", dataSet.get(position).getIndex());
-                        intent1.putExtra("type", "editmemo");
-                        intent1.putExtra("title", dataSet.get(position).getTitle());
-                        intent1.putExtra("subtitle", dataSet.get(position).getSubTitle());
-                        intent1.putExtra("content", dataSet.get(position).getContent());
-                        startActivity(intent1);
-                    } else if (dataSet.get(position).getMemoType().equals("handwrite")) {
-                        Intent intent = new Intent(getActivity(), HandwritingActivity.class);
-                        intent.putExtra("handwriteId", dataSet.get(position).getHandwriteId());
-                        intent.putExtra("type", "edit");
-                        intent.putExtra("title", dataSet.get(position).getTitle());
-                        intent.putExtra("subTitle", dataSet.get(position).getSubTitle());
-                        startActivity(intent);
-                    } else {
-                        Snackbar.make(getView(), "수정할 수 없습니다", Snackbar.LENGTH_SHORT).show();
-                    }
-
-
-                }
-            });
-
-
-            holder.remove.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getApplicationContext(),"remove 입니다.",Toast.LENGTH_SHORT).show();
-
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-                    builder.setTitle("경고")
-                            .setMessage("메모를 지우시겠습니까?")
-                            .setPositiveButton("닫기",null)
-                            .setNegativeButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-
-                                    int index = list.get(position).index;
-                                    helper = new DBHelper(getContext());
-                                    db = helper.getWritableDatabase();
-
-                                    String del = "delete from memo where `idx`="+index;
-                                    db.execSQL(del);
-
-
-                                    //저장 파일 삭제
-                                    File file;
-                                    boolean deleted;
-                                    if(list.get(position).memo_type.equals("voice")){
-                                        file = new File(root+"/"+list.get(position).voiceId+".mp3");
-                                        deleted = file.delete();
-                                        //Toast.makeText(getContext(),"voice : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
-                                    }else if(list.get(position).memo_type.equals("handwrite")){
-                                        file = new File(root+"/saved_images/"+list.get(position).handwriteId+".jpg");
-                                        deleted = file.delete();
-                                        //Toast.makeText(getContext(),"handwrite : "+Boolean.toString(deleted),Toast.LENGTH_LONG).show();
-                                    }
-
-
-
-                                    loadList();
-                                    list.remove(position);
-                                    recyclerView.removeViewAt(position);
-                                    memoAdapter.notifyItemRemoved(position);
-                                    memoAdapter.notifyItemRangeChanged(position,list.size());
-
-
-                                     */
-/*recyclerView.setLayoutManager(new LinearLayoutManager( MultiMemoActivity.this ));
-                                    recyclerView.setAdapter(new memoAdapter(list));
-                                    recyclerView.addItemDecoration(new MyItemDecoration());*//*
-
-
-                                }
-                            });
-
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.setCanceledOnTouchOutside(false);
-                    alertDialog.show();
-
-
-                }
-            });
-
-
-            holder.binding.showContent.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Toast.makeText(getApplicationContext(),"show Content 입니다.",Toast.LENGTH_SHORT).show();
-
-                    if (dataSet.get(position).getMemoType().equals("text")) {
-                        Intent intent = new Intent(getContext(), TextMemoViewActivity.class);
-
-                        //Toast.makeText(getApplicationContext(),list.get(position).title,Toast.LENGTH_SHORT).show();
-
-                        intent.putExtra("index", dataSet.get(position).getIndex());
-                        intent.putExtra("title", dataSet.get(position).getTitle());
-                        intent.putExtra("subtitle", dataSet.get(position).getSubTitle());
-                        intent.putExtra("content", dataSet.get(position).getContent());
-                        startActivity(intent);
-                    } else if (dataSet.get(position).getMemoType().equals("voice")) {
-
-
-                        VoicePlayFragment dialogFragment = new VoicePlayFragment();
-                        Bundle inputdate = new Bundle();
-                        inputdate.putString("inputdate", dataSet.get(position).getVoiceId());
-                        dialogFragment.setArguments(inputdate);
-                        dialogFragment.show(getActivity().getSupportFragmentManager(), "tag");
-
-                    } else {
-                        Intent intent = new Intent(getContext(), HandwriteViewActivity.class);
-                        intent.putExtra("index", dataSet.get(position).getIndex());
-                        intent.putExtra("title", dataSet.get(position).getTitle());
-                        intent.putExtra("subtitle", dataSet.get(position).getSubTitle());
-                        intent.putExtra("handwriteId", dataSet.get(position).getHandwriteId());
-                        startActivity(intent);
-                    }
-
-                }
-            });
-
-        }
-
-
-
-
-        class MemoViewHolder extends RecyclerView.ViewHolder {
-
-            MemoItemBinding binding;
-
-            public MemoViewHolder(MemoItemBinding binding) {
-                super(binding.getRoot());
-                this.binding = binding;
-            }
-
-        }
-
-    }
-
-*/
 
 }
