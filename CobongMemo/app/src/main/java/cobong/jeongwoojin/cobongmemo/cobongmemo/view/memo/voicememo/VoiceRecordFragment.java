@@ -13,33 +13,31 @@ import android.view.ViewGroup;
 import com.dd.processbutton.iml.ActionProcessButton;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.ProgressGenerator;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 
 
 public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener, VoiceNavigator {
 
 
-    ProgressGenerator progressGenerator;
+    private ProgressGenerator progressGenerator;
 
-    DBHelper helper;
-    SQLiteDatabase db;
+    private DBHelper helper;
+    private SQLiteDatabase db;
 
-    String filename = "";
+    private String filename = "";
     // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
-    MediaPlayer player;
+    private MediaPlayer player;
     // MediaRecorder 클래스에  녹음에 관련된 메서드와 멤버 변수가 저장되어있다.
-    MediaRecorder recorder;
+    private MediaRecorder recorder;
     final private static File RECORDED_FILE = Environment.getExternalStorageDirectory();
-    String resultDate;
+    private String resultDate;
 
     private DialogInterface.OnDismissListener onDismissListener;
 
@@ -107,14 +105,6 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         super.onDestroy();
     }
 
-    public String curDate() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-        String getTime = sdf.format(date);
-
-        return getTime;
-    }
 
     public void writeDBvoice(String resultDate) {
         helper = new DBHelper(getContext());
@@ -140,7 +130,7 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS);
         progressGenerator.start(binding.btnRecord);
 
-        resultDate = curDate();
+        resultDate = DateUtil.curDate();
         filename = RECORDED_FILE.getAbsolutePath() + "/" + resultDate + ".mp3";
 
 

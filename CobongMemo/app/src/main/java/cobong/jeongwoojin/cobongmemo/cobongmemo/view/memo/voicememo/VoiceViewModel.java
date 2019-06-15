@@ -21,6 +21,19 @@ public class VoiceViewModel extends ViewModel {
         navigator.onExitClick();
     }
 
+
+    //재생 시작
+    public void onPlayClick() {
+        navigator.onPlayClick();
+    }
+
+    //정지
+    public void onPauseClick() {
+        navigator.onPauseClick();
+    }
+
+
+
     public VoiceNavigator getNavigator() {
         return navigator;
     }
