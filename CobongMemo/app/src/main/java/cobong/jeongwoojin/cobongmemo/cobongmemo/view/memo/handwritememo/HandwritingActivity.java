@@ -10,7 +10,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.View;
 
@@ -19,16 +18,17 @@ import com.jaredrummler.android.colorpicker.ColorPickerDialogListener;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import me.panavtec.drawableview.DrawableViewConfig;
 
 public class HandwritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener, HandwriteNavigator {
@@ -42,8 +42,6 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
     private boolean erase;
     private int temcol;
     private String type;
-
-    final private static String root = Environment.getExternalStorageDirectory().toString();
 
     private ActivityHandWritingBinding binding;
     private HandwriteViewModel viewModel;
@@ -71,8 +69,15 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
         //작성인지 수정인지 설정
         type = intent.getStringExtra("type");
+
+        //수정이면
+        if (type.equals("edit")) {
+            binding.handwriteTitle.setKeyListener(null);
+            binding.handwriteSubtitle.setKeyListener(null);
+        }
+
         if (viewModel.getItem() != null) {
-            Bitmap bitmap = BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
+            Bitmap bitmap = BitmapFactory.decodeFile(BasicInfo.root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
             binding.paintView.setBackground(bitmapDrawable);
         }
@@ -170,7 +175,8 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
     //수정시
     public void editHandwrite() {
-        File editFile = new File(root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
+
+        File editFile = new File(BasicInfo.root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg");
         try {
             FileOutputStream out;
             Bitmap back = ((BitmapDrawable) binding.paintView.getBackground().getCurrent()).getBitmap();
@@ -204,10 +210,9 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 
-
-        File myDir = new File(root + "/saved_images");
+        File myDir = new File(BasicInfo.root + "/saved_images");
         myDir.mkdir();
-        handwriteId = curDate();
+        handwriteId = DateUtil.curDate();
         String fname = handwriteId + ".jpg";
 
 
@@ -259,17 +264,6 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
         }
     };
 
-
-    public String curDate() {
-        long now = System.currentTimeMillis();
-        Date date = new Date(now);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmss");
-        String getTime = sdf.format(date);
-
-        return getTime;
-    }
-
-
     //나가기
     @Override
     public void onExitClick() {
@@ -279,6 +273,9 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
     //작성
     @Override
     public void onWriteClick() {
+
+        KeyBoardUtil.hideSoftKeyboard(binding.getRoot(), this);
+
         if (binding.handwriteTitle.getText().toString().trim().equals("") && binding.handwriteSubtitle.getText().toString().trim().equals("")) {
             SnackBarUtil.showSnackBar(binding.getRoot(), R.string.text_input_title_subTitle);
         } else if (binding.handwriteTitle.getText().toString().trim().equals("")) {

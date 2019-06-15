@@ -8,13 +8,17 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
+
+import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandwriteViewBinding;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 
 public class HandwriteViewActivity extends AppCompatActivity implements HandwriteNavigator {
 
@@ -79,12 +83,22 @@ public class HandwriteViewActivity extends AppCompatActivity implements Handwrit
         helper = new DBHelper(this);
         db = helper.getWritableDatabase();
 
-        /*int index = intent.getIntExtra("index",-1);
-        if(index == -1)
-            finish();*/
-
         String del = "delete from memo where `idx`="+ viewModel.getItem().getIndex();
         db.execSQL(del);
+
+
+        String path = BasicInfo.root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg";
+        File file = new File(path);
+        Log.d("filedelete",path);
+        if (file.exists()) {
+            if(file.delete()) {
+                Log.d("filedelete","삭제완료");
+            } else {
+                Log.d("filedelete","실패");
+            }
+        }
+
+
         finish();
 
     }

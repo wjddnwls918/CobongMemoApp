@@ -13,190 +13,6 @@
 
     </data>
 
-
-    <!--
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:orientation="vertical"
-            android:paddingBottom="16dp">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:orientation="vertical">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <ImageView
-                        android:id="@+id/handwriteExit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:adjustViewBounds="true"
-                        android:maxWidth="30dp"
-                        android:maxHeight="30dp"
-                        android:onClick="@{() -> viewmodel.onExitClick()}"
-                        android:src="@drawable/icon_close" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:hint="@string/writeMemoTextView" />
-
-                    <ImageView
-                        android:id="@+id/handwriteInsert"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:adjustViewBounds="true"
-                        android:maxWidth="30dp"
-                        android:maxHeight="30dp"
-                        android:onClick="@{() -> viewmodel.onWriteClick()}"
-                        android:src="@drawable/icon_ok" />
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#D3D0D0" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:orientation="horizontal">
-
-                    <EditText
-                        android:id="@+id/handwriteTitle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:hint="@string/writeMemoTitle"
-                        android:inputType="text"
-                        android:text="@{viewmodel.item.title}" />
-
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#D3D0D0" />
-
-                <EditText
-                    android:id="@+id/handwriteSubtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/writeMemoSub"
-                    android:inputType="text"
-                    android:text="@{viewmodel.item.subTitle}" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:background="#D3D0D0" />
-
-
-                <FrameLayout
-                    android:id="@+id/fl_canvas"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <me.panavtec.drawableview.DrawableView
-                        android:id="@+id/paintView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                </FrameLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#D3D0D0" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <ImageView
-                    android:id="@+id/handwriteColor"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/palette2" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/widthUp"
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/up" />
-
-                    <ImageView
-                        android:id="@+id/widthDown"
-                        android:layout_width="50dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/down" />
-
-                </LinearLayout>
-
-
-                <ImageView
-                    android:id="@+id/eraser"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/eraser2" />
-
-                <ImageView
-                    android:id="@+id/undo"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/undo" />
-
-                <ImageView
-                    android:id="@+id/blackPencil"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/blackpencil" />
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-
-
-    </LinearLayout>
-
-    -->
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -249,58 +65,60 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_end_of_util" />
 
-        <EditText
-            android:id="@+id/handwriteTitle"
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_inset_vertical_material"
-            android:layout_marginEnd="@dimen/button_inset_vertical_material"
-            android:background="@android:color/transparent"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
             android:hint="@string/writeMemoTitle"
-            android:inputType="text"
-            android:maxLength="20"
-            android:singleLine="true"
-            android:text="@{viewmodel.item.title}"
-            android:textSize="20dp"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_title"
             app:layout_constraintEnd_toStartOf="@id/gl_right"
             app:layout_constraintStart_toStartOf="@id/gl_left"
-            app:layout_constraintTop_toTopOf="@+id/gl_end_of_util" />
+            app:layout_constraintTop_toTopOf="@+id/gl_end_of_util">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_title" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/handwriteTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.title}"
+                android:textSize="20dp" />
 
-        <EditText
-            android:id="@+id/handwriteSubtitle"
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/button_inset_vertical_material"
-            android:layout_marginEnd="@dimen/button_inset_vertical_material"
-            android:background="@android:color/transparent"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
             android:hint="@string/writeMemoSub"
-            android:inputType="text"
-            android:maxLength="7"
-            android:singleLine="true"
-            android:text="@{viewmodel.item.subTitle}"
-            android:textSize="18dp"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_subTitle"
             app:layout_constraintEnd_toEndOf="@id/gl_right"
             app:layout_constraintStart_toStartOf="@id/gl_left"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_title" />
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_title">
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/handwriteSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:inputType="text"
+                android:maxLength="7"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.subTitle}"
+                android:textSize="18dp" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#D3D0D0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle" />
-
+        </com.google.android.material.textfield.TextInputLayout>
 
         <ImageView
             android:id="@+id/handwriteColor"
@@ -382,7 +200,7 @@
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_default="percent"
-            app:layout_constraintHeight_percent="0.7"
+            app:layout_constraintHeight_percent="0.65"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle" />
 
@@ -458,14 +276,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.13" />
+            app:layout_constraintGuide_percent="0.16" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_subTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.18" />
+            app:layout_constraintGuide_percent="0.23" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_content"
