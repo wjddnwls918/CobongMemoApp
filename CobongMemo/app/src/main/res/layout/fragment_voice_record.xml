@@ -1,110 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#fffbfb"
-    android:layout_margin="5dp"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
 
+    <data>
 
-    android:minWidth="1000dp"
-    >
+        <variable
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceViewModel" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        >
-
-        <ImageView
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/voice"
-            />
-
-        <com.victor.loading.rotate.RotateLoading
-            android:id="@+id/rotateloading"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_centerInParent="true"
-            app:loading_speed="11"
-            app:loading_width="5dp"
-            app:loading_color="#a7a7a7"
-            android:layout_centerHorizontal="true"
-            />
-
-
-        />
-
-    </RelativeLayout>
+    </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        >
-
-
-
-        <com.dd.processbutton.iml.ActionProcessButton
-            android:id="@+id/btnRecord"
-            android:layout_width="0dp"
-            android:layout_height="46.5dp"
-            android:layout_weight="2"
-            android:layout_margin="2dp"
-            android:text="@string/audio_recording_start_title"
-            android:textColor="@android:color/white"
-            android:textSize="13dp"
-            custom:pb_colorComplete="@color/blue_normal"
-            custom:pb_colorNormal="@color/blue_normal"
-            custom:pb_colorPressed="@color/blue_pressed"
-            custom:pb_colorProgress="@color/cobongRed"
-            custom:pb_textComplete="@string/audio_recording_start_title"
-            custom:pb_textProgress="@string/record" />
+        android:layout_margin="5dp"
+        android:background="#fffbfb"
+        android:minWidth="1000dp"
 
 
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/voice" />
+
+            <com.victor.loading.rotate.RotateLoading
+                android:id="@+id/rotateloading"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
+                app:loading_color="#a7a7a7"
+                app:loading_speed="11"
+                app:loading_width="5dp" />
 
 
-        <com.dd.processbutton.iml.ActionProcessButton
-            android:id="@+id/btnStop"
-            android:layout_width="0dp"
-            android:layout_height="47dp"
-            android:layout_weight="2"
-            android:layout_margin="3dp"
-            android:text="@string/audio_recording_stop_title"
-            android:textColor="@android:color/white"
-            android:textSize="13dp"
-            custom:pb_colorComplete="@color/green_complete"
-            custom:pb_colorNormal="@color/blue_normal"
-            custom:pb_colorPressed="@color/blue_pressed"
-            custom:pb_colorProgress="@color/purple_progress"
-            custom:pb_textComplete="@string/audio_recording_stop_title"
-            custom:pb_textProgress="@string/Loading" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
 
+            <com.dd.processbutton.iml.ActionProcessButton
+                android:id="@+id/btnRecord"
+                android:layout_width="0dp"
+                android:layout_height="46.5dp"
+                android:layout_margin="2dp"
+                android:layout_weight="2"
+                android:onClick="@{() -> viewmodel.onRecordClick()}"
+                android:text="@string/audio_recording_start_title"
+                android:textColor="@android:color/white"
+                android:textSize="13dp"
+                custom:pb_colorComplete="@color/blue_normal"
+                custom:pb_colorNormal="@color/blue_normal"
+                custom:pb_colorPressed="@color/blue_pressed"
+                custom:pb_colorProgress="@color/cobongRed"
+                custom:pb_textComplete="@string/audio_recording_start_title"
+                custom:pb_textProgress="@string/record" />
 
-        <com.dd.processbutton.iml.ActionProcessButton
-            android:id="@+id/voiceexit"
-            android:layout_width="0dp"
-            android:layout_height="47dp"
-            android:layout_weight="1"
-            android:layout_margin="3dp"
-            android:text="@string/close_btn"
-            android:textColor="@android:color/white"
-            android:textSize="13dp"
-            custom:pb_colorComplete="@color/green_complete"
-            custom:pb_colorNormal="@color/blue_normal"
-            custom:pb_colorPressed="@color/blue_pressed"
-            custom:pb_colorProgress="@color/purple_progress"
-            custom:pb_textComplete="@string/Success"
-            custom:pb_textProgress="@string/Loading" />
+
+            <com.dd.processbutton.iml.ActionProcessButton
+                android:id="@+id/btnStop"
+                android:layout_width="0dp"
+                android:layout_height="47dp"
+                android:layout_margin="3dp"
+                android:layout_weight="2"
+                android:onClick="@{() -> viewmodel.onStopClick()}"
+                android:text="@string/audio_recording_stop_title"
+                android:textColor="@android:color/white"
+                android:textSize="13dp"
+                custom:pb_colorComplete="@color/green_complete"
+                custom:pb_colorNormal="@color/blue_normal"
+                custom:pb_colorPressed="@color/blue_pressed"
+                custom:pb_colorProgress="@color/purple_progress"
+                custom:pb_textComplete="@string/audio_recording_stop_title"
+                custom:pb_textProgress="@string/Loading" />
+
+
+            <com.dd.processbutton.iml.ActionProcessButton
+                android:id="@+id/voiceexit"
+                android:layout_width="0dp"
+                android:layout_height="47dp"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:onClick="@{() -> viewmodel.onExitClick()}"
+                android:text="@string/close_btn"
+                android:textColor="@android:color/white"
+                android:textSize="13dp"
+                custom:pb_colorComplete="@color/green_complete"
+                custom:pb_colorNormal="@color/blue_normal"
+                custom:pb_colorPressed="@color/blue_pressed"
+                custom:pb_colorProgress="@color/purple_progress"
+                custom:pb_textComplete="@string/Success"
+                custom:pb_textProgress="@string/Loading" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
-
-
-</LinearLayout>
+</layout>

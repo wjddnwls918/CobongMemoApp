@@ -28,7 +28,7 @@
     <string name="audio_play_title">Audio Play</string>
     <string name="audio_recording_title">Audio Recording</string>
     <string name="audio_recording_start_title">Start Recording</string>
-    <string name="audio_recording_stop_title">Stop Recording</string>
+    <string name="audio_recording_stop_title">Record voice</string>
     <string name="video_recording_start_title">Start Video Recording</string>
     <string name="video_recording_stop_title">Stop Video Recording</string>
     <string name="video_recording_message">In Video Recording...</string>
@@ -82,5 +82,24 @@
     <string name="cancel">Cancel</string>
     <string name="ToolbarColorPickerPreference">ToolbarColorPickerPreference</string>
     <string name="BackgroundColorPickerPreference">BackgroundColorPickerPreference</string>
+
+
+    <string name="modify_success">modify success</string>
+
+
+    <!-- common -->
+    <string name="text_input_title_content">input your title and content</string>
+    <string name="text_input_title">input your title </string>
+    <string name="text_input_content">input your content</string>
+    <string name="text_input_title_subTitle">input yout title and subTitle</string>
+    <string name="text_input_subTitle">input your subTitle</string>
+    <string name="text_content">content</string>
+
+    <!-- Text Fragment -->
+
+    <!-- Handwrite Fragment -->
+
+    <!-- Voice Fragment -->
+    <string name="voice_play_end">play</string>
 
 </resources>

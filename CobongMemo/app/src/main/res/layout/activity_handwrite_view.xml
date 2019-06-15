@@ -1,128 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingBottom="16dp"
-        android:layout_margin="10dp"
-        >
+        android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/handwriteViewExit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:onClick="@{() -> viewmodel.onExitClick()}"
+            android:src="@drawable/icon_close"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_of_exit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10"
-            android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="@string/writeMemoTextView"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_of_memo"
+            app:layout_constraintStart_toStartOf="@id/gl_end_of_exit"
+            app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:id="@+id/handwriteViewExit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="30dp"
-                    android:maxWidth="30dp"
-                    android:src="@drawable/icon_close"
-                    />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:hint="@string/writeMemoTextView"/>
-
-
-                <ImageView
-                    android:id="@+id/deletehandwrite"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:adjustViewBounds="true"
-                    android:maxHeight="30dp"
-                    android:maxWidth="30dp"
-                    android:src="@drawable/trash"
-                    />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#D3D0D0"/>
-
-
-                <TextView
-                    android:textSize="20dp"
-                    android:textStyle="bold"
-                    android:id="@+id/handwriteTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:hint="@string/writeMemoTitle"
-                    android:inputType="text"
-                    android:layout_margin="3dp"
-                    />
-
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="3dp"
-                android:background="#D3D0D0"/>
-
-            <TextView
-                android:textSize="18dp"
-                android:id="@+id/handwriteSubtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:background="@android:color/transparent"
-                android:hint="@string/writeMemoSub"
-                android:inputType="text"
-                android:layout_margin="3dp"
-                />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="8dp"
-                android:background="#D3D0D0"/>
-
-
-
-            <ImageView
-                android:id="@+id/handwriteViewImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-
-
-
-
-
-
-        </LinearLayout>
+        <ImageView
+            android:id="@+id/deletehandwrite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:maxWidth="30dp"
+            android:maxHeight="30dp"
+            android:onClick="@{()->viewmodel.onDeleteClick()}"
+            android:src="@drawable/trash"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gl_end_of_memo"
+            app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="8dp"
-            android:background="#D3D0D0"/>
+            android:background="#D3D0D0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_util" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:hint="@string/writeMemoTitle"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_title"
+            app:layout_constraintEnd_toStartOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@id/gl_left"
+            app:layout_constraintTop_toTopOf="@+id/gl_end_of_util">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/handwriteTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.title}"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+        </com.google.android.material.textfield.TextInputLayout>
 
 
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:hint="@string/writeMemoSub"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_subTitle"
+            app:layout_constraintEnd_toEndOf="@id/gl_right"
+            app:layout_constraintStart_toStartOf="@id/gl_left"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_title">
 
 
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/handwriteSubtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:clickable="false"
+                android:focusable="false"
+                android:inputType="text"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.subTitle}"
+                android:textSize="18dp" />
 
-    </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/handwriteViewImage"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/button_inset_vertical_material"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_default="percent"
+            app:layout_constraintHeight_percent="0.65"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_subTitle" />
 
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#D3D0D0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_content" />
 
-</LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start_util"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.01" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_util"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.07" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_memo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.02" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.16" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_subTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.23" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.98" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
