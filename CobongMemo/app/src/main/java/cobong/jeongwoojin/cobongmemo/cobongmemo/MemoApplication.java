@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view;
+package cobong.jeongwoojin.cobongmemo.cobongmemo;
 
 import android.app.Application;
 
