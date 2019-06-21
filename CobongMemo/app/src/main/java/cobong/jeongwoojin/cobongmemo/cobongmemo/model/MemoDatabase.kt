@@ -1,11 +1,11 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.model
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 
-@Database(entities = arrayOf(MemoListItem::class), version = 1)
+@Database(entities = arrayOf(MemoItem::class), version = 1)
 abstract class MemoDatabase : RoomDatabase() {
 
     abstract fun memolistDao(): MemoListDao
@@ -19,12 +19,14 @@ abstract class MemoDatabase : RoomDatabase() {
             if (tempInstance != null) {
                 return tempInstance
             }
-            synchronized(this) {
+            synchronized(MemoDatabase::class) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     MemoDatabase::class.java,
-                    "Memo_database"
-                ).build()
+                    "memo_db"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
 
                 INSTANCE = instance
                 return instance
