@@ -42,7 +42,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/gl_item_middle"
             app:layout_constraintEnd_toEndOf="@+id/gl_end_of_title"
-            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintHorizontal_bias="0.05"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
