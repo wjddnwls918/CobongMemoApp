@@ -3,7 +3,6 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -28,15 +27,11 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import me.panavtec.drawableview.DrawableViewConfig;
 
 public class HandwritingActivity extends AppCompatActivity implements View.OnClickListener, ColorPickerDialogListener, HandwriteNavigator {
 
     private DrawableViewConfig config;
-
-    DBHelper helper;
-    SQLiteDatabase db;
 
     private String handwriteId;
     private boolean erase;
@@ -94,8 +89,6 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         width = dm.widthPixels;
         height = (int) (dm.heightPixels * 0.65);
-
-        //Log.d("sizecheck", width + " " + height);
 
         config = new DrawableViewConfig();
         config.setStrokeColor(getResources().getColor(android.R.color.black));
@@ -207,8 +200,6 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
 
     //처음 작성 시
     public void insertHandWrite() {
-        helper = new DBHelper(this);
-        db = helper.getWritableDatabase();
 
         File myDir = new File(BasicInfo.root + "/saved_images");
         myDir.mkdir();
@@ -233,16 +224,8 @@ public class HandwritingActivity extends AppCompatActivity implements View.OnCli
             e.printStackTrace();
         }
 
-
-        String insertHandwrite;
-
-        insertHandwrite = "insert into memo(title,SUBTITLE,MEMO_TYPE,ID_HANDWRITING) values(?,?,?,?)";
-        String args[] = {binding.handwriteTitle.getText().toString(), binding.handwriteSubtitle.getText().toString(), "handwrite", handwriteId};
-        try {
-            db.execSQL(insertHandwrite, args);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //insert handwrtie memo
+        viewModel.insertHandwriteMemo(binding.handwriteTitle.getText().toString(), binding.handwriteSubtitle.getText().toString(),  handwriteId);
 
     }
 

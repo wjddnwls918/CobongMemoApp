@@ -4,32 +4,24 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextViewBinding;
 
 
 public class TextMemoViewActivity extends AppCompatActivity implements TextMemoNavigator {
 
-    DBHelper helper;
-    SQLiteDatabase db;
-
     Intent intent;
-
     private ActivityTextViewBinding binding;
     private TextMemoViewModel viewModel;
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        //Toast.makeText(this,viewModel.getItem().getTitle().toString(), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -45,11 +37,6 @@ public class TextMemoViewActivity extends AppCompatActivity implements TextMemoN
         viewModel.setNavigator(this);
 
         binding.setViewmodel(viewModel);
-
-
-
-        //뒤로 가기
-        binding.viewExit.setOnClickListener((v) -> finish());
 
     }
 
@@ -76,16 +63,7 @@ public class TextMemoViewActivity extends AppCompatActivity implements TextMemoN
         finish();
     }
 
-    public void delMemo() {
 
-        helper = new DBHelper(this);
-        db = helper.getWritableDatabase();
-
-        String del = "delete from memo where `idx`=" + viewModel.getItem().getValue().getIndex();
-        db.execSQL(del);
-        finish();
-
-    }
 
     //메모 수정
     @Override
@@ -104,7 +82,8 @@ public class TextMemoViewActivity extends AppCompatActivity implements TextMemoN
                 .setNegativeButton("확인", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        delMemo();
+                        viewModel.deleteTextMemo();
+                        finish();
                     }
                 })
                 .setPositiveButton("취소", null);

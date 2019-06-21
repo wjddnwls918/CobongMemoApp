@@ -3,7 +3,6 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import androidx.lifecycle.ViewModelProviders;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandwriteViewBinding;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 
 public class HandwriteViewActivity extends AppCompatActivity implements HandwriteNavigator {
 
@@ -28,10 +26,6 @@ public class HandwriteViewActivity extends AppCompatActivity implements Handwrit
     String handwriteId;
 
     final private static String root = Environment.getExternalStorageDirectory().toString();
-
-    DBHelper helper;
-    SQLiteDatabase db;
-
     Intent intent;
 
     @Override
@@ -80,12 +74,7 @@ public class HandwriteViewActivity extends AppCompatActivity implements Handwrit
 
     public void delHandwrite(){
 
-        helper = new DBHelper(this);
-        db = helper.getWritableDatabase();
-
-        String del = "delete from memo where `idx`="+ viewModel.getItem().getIndex();
-        db.execSQL(del);
-
+        viewModel.deleteHandwriteMemo(viewModel.getItem().getIndex());
 
         String path = BasicInfo.root + "/saved_images/" + viewModel.getItem().getHandwriteId() + ".jpg";
         File file = new File(path);

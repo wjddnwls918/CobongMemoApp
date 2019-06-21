@@ -1,7 +1,6 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo;
 
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -20,16 +19,12 @@ import androidx.lifecycle.ViewModelProviders;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil;
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.DBHelper;
 
 
 public class VoiceRecordFragment extends DialogFragment implements ProgressGenerator.OnCompleteListener, VoiceNavigator {
 
 
     private ProgressGenerator progressGenerator;
-
-    private DBHelper helper;
-    private SQLiteDatabase db;
 
     private String filename = "";
     // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
@@ -106,23 +101,6 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
     }
 
 
-    public void writeDBvoice(String resultDate) {
-        helper = new DBHelper(getContext());
-        db = helper.getWritableDatabase();
-
-        String insertVoice;
-        //Toast.makeText(getContext(),resultDate,Toast.LENGTH_SHORT).show();
-        insertVoice = "insert into memo(title,memo_type,ID_VOICE) values(?,?,?)";
-        String args[] = {resultDate, "voice", resultDate};
-        try {
-            db.execSQL(insertVoice, args);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
     //녹음 시작
     @Override
     public void onRecordClick() {
@@ -132,7 +110,6 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
 
         resultDate = DateUtil.curDate();
         filename = RECORDED_FILE.getAbsolutePath() + "/" + resultDate + ".mp3";
-
 
         recorder = new MediaRecorder();
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -158,7 +135,8 @@ public class VoiceRecordFragment extends DialogFragment implements ProgressGener
         recorder.release();
         recorder = null;
 
-        writeDBvoice(resultDate);
+        //insert voice memo
+        viewModel.insertVoice(resultDate);
     }
 
     //닫기

@@ -1,9 +1,12 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo;
 
-import androidx.lifecycle.ViewModel;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
+import android.app.Application;
 
-public class HandwriteViewModel extends ViewModel {
+import androidx.lifecycle.AndroidViewModel;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository;
+
+public class HandwriteViewModel extends AndroidViewModel {
 
     private MemoListItem item;
     private HandwriteNavigator navigator;
@@ -12,6 +15,9 @@ public class HandwriteViewModel extends ViewModel {
         return item;
     }
 
+    public HandwriteViewModel(Application application){
+        super(application);
+    }
 
     //뒤로가기
     public void onExitClick() {
@@ -38,5 +44,15 @@ public class HandwriteViewModel extends ViewModel {
 
     public void setNavigator(HandwriteNavigator navigator) {
         this.navigator = navigator;
+    }
+
+    //insert handwrite memo
+    public void insertHandwriteMemo(String title, String subTitle, String handwriteId){
+        MemoRepository.Companion.getInstance(getApplication()).insertHandwriteMemo(title,subTitle,handwriteId);
+    }
+
+    //delete handwrite memo
+    public void deleteHandwriteMemo(int index){
+        MemoRepository.Companion.getInstance(getApplication()).deleteTextMemo(index);
     }
 }

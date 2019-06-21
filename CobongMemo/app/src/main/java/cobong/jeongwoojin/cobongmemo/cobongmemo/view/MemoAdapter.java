@@ -28,7 +28,6 @@ public class MemoAdapter extends BaseRecyclerViewAdapter<MemoListItem, MemoAdapt
                 parent, false);
 
 
-
         //선언하고
         listener = new ItemClickListener() {
             @Override

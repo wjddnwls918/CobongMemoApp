@@ -1,10 +1,17 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo;
 
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-public class VoiceViewModel extends ViewModel {
+import androidx.lifecycle.AndroidViewModel;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository;
+
+public class VoiceViewModel extends AndroidViewModel {
 
     VoiceNavigator navigator;
+
+    public VoiceViewModel(Application application) {
+            super(application);
+    }
 
     //녹음 시작
     public void onRecordClick() {
@@ -14,6 +21,10 @@ public class VoiceViewModel extends ViewModel {
     //녹음 끝
     public void onStopClick() {
         navigator.onStopClick();
+    }
+
+    public void insertVoice(String resultDate) {
+        MemoRepository.Companion.getInstance(getApplication()).insertVoiceRecord(resultDate);
     }
 
     //닫기

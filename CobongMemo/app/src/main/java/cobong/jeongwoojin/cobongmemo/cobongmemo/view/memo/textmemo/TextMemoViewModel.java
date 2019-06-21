@@ -1,21 +1,19 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo;
 
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
+import android.app.Application;
 
-public class TextMemoViewModel extends ViewModel {
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository;
+
+public class TextMemoViewModel extends AndroidViewModel {
 
     private MutableLiveData<MemoListItem> item = new MutableLiveData<>();
-    //private MemoListItem item;
     private TextMemoNavigator navigator;
 
-    public TextMemoViewModel() {
-
-    }
-
-    public TextMemoViewModel(MemoListItem item) {
-        this.item.setValue(item);
+    public TextMemoViewModel(Application application) {
+        super(application);
     }
 
     //메모 수정
@@ -50,7 +48,22 @@ public class TextMemoViewModel extends ViewModel {
     public MutableLiveData<MemoListItem> getItem() {
         return item;
     }
+
     public void setItem(MemoListItem item) {
         this.item.setValue(item);
     }
+
+
+    public void insertTextMemo(String title, String subTitle, String content) {
+        MemoRepository.Companion.getInstance(getApplication()).insertTextMemo(title, subTitle, content);
+    }
+
+    public void updateTextMemo(int index, String title, String subTitle, String content) {
+        MemoRepository.Companion.getInstance(getApplication()).updateTextMemo(index, title, subTitle, content);
+    }
+
+    public void deleteTextMemo() {
+        MemoRepository.Companion.getInstance(getApplication()).deleteTextMemo(item.getValue().getIndex());
+    }
+
 }
