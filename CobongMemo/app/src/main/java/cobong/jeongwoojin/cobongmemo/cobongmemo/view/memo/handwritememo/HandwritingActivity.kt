@@ -2,22 +2,13 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.View
-
-import com.jaredrummler.android.colorpicker.ColorPickerDialog
-import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
-
-import java.io.File
-import java.io.FileOutputStream
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -27,41 +18,46 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding
+import com.jaredrummler.android.colorpicker.ColorPickerDialog
+import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import me.panavtec.drawableview.DrawableViewConfig
+import java.io.File
+import java.io.FileOutputStream
 
 class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPickerDialogListener,
     HandwriteNavigator {
 
     private var config: DrawableViewConfig? = null
 
-    private var handwriteId: String? = null
+    private lateinit var handwriteId: String
     private var erase: Boolean = false
     private var temcol: Int = 0
     private var type: String? = null
 
-    private var binding: ActivityHandWritingBinding? = null
-    private var viewModel: HandwriteViewModel? = null
     private var width: Int = 0
     private var height: Int = 0
 
     internal var dialogListener: DialogInterface.OnClickListener =
-        DialogInterface.OnClickListener { dialog, which -> finish() }
+        DialogInterface.OnClickListener { _, _ -> finish() }
+
+    private lateinit var binding: ActivityHandWritingBinding
+    private lateinit var viewModel: HandwriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hand_writing)
 
         viewModel = ViewModelProviders.of(this).get(HandwriteViewModel::class.java)
-        viewModel!!.navigator = this
+        viewModel.navigator = this
 
         erase = false
 
-        binding!!.viewmodel = viewModel
+        binding.viewmodel = viewModel
 
 
         //읽어와서 저장
         val intent = intent
-        viewModel!!.item = intent.getParcelableExtra("handwriteItem")
+        viewModel.item = intent.getParcelableExtra("handwriteItem")
 
         //캔버스 초기화
         initCanvas()
@@ -71,15 +67,15 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
 
         //수정이면
         if (type == "edit") {
-            binding!!.handwriteTitle.keyListener = null
-            binding!!.handwriteSubtitle.keyListener = null
+            binding.handwriteTitle.keyListener = null
+            binding.handwriteSubtitle.keyListener = null
         }
 
-        if (viewModel!!.item != null) {
+        if (viewModel.item != null) {
             val bitmap =
-                BitmapFactory.decodeFile(MemoApplication.root + "/saved_images/" + viewModel!!.item.handwriteId + ".jpg")
+                BitmapFactory.decodeFile(MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg")
             val bitmapDrawable = BitmapDrawable(bitmap)
-            binding!!.paintView.background = bitmapDrawable
+            binding.paintView.background = bitmapDrawable
         }
 
         //클릭리스너 등록
@@ -106,16 +102,16 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         config!!.canvasHeight = height
         config!!.canvasWidth = width
 
-        binding!!.paintView.setConfig(config!!)
+        binding.paintView.setConfig(config!!)
     }
 
     fun initClickListener() {
-        binding!!.handwriteColor.setOnClickListener(this)
-        binding!!.widthUp.setOnClickListener(this)
-        binding!!.widthDown.setOnClickListener(this)
-        binding!!.eraser.setOnClickListener(this)
-        binding!!.undo.setOnClickListener(this)
-        binding!!.blackPencil.setOnClickListener(this)
+        binding.handwriteColor.setOnClickListener(this)
+        binding.widthUp.setOnClickListener(this)
+        binding.widthDown.setOnClickListener(this)
+        binding.eraser.setOnClickListener(this)
+        binding.undo.setOnClickListener(this)
+        binding.blackPencil.setOnClickListener(this)
     }
 
     override fun onClick(v: View) {
@@ -142,7 +138,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
                 config!!.strokeWidth = 40.0f
             }
 
-            R.id.undo -> binding!!.paintView.undo()
+            R.id.undo -> binding.paintView.undo()
 
 
             R.id.blackPencil -> config!!.strokeColor = Color.argb(255, 0, 0, 0)
@@ -164,11 +160,11 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
     fun editHandwrite() {
 
         val editFile =
-            File(MemoApplication.root + "/saved_images/" + viewModel!!.item.handwriteId + ".jpg")
+            File(MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg")
         try {
             val out: FileOutputStream
-            val back = (binding!!.paintView.background.current as BitmapDrawable).bitmap
-            val image = binding!!.paintView.obtainBitmap()
+            val back = (binding.paintView.background.current as BitmapDrawable).bitmap
+            val image = binding.paintView.obtainBitmap()
 
 
             //merge bitmap
@@ -199,17 +195,17 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         val myDir = File(MemoApplication.root + "/saved_images")
         myDir.mkdir()
         handwriteId = DateUtil.curDate()
-        val fname = handwriteId!! + ".jpg"
+        val fname = handwriteId + ".jpg"
 
 
         var out: FileOutputStream? = null
         try {
 
-            val image = binding!!.paintView.obtainBitmap()
+            val image = binding.paintView.obtainBitmap()
 
             val canvas = Canvas(image)
             canvas.drawColor(Color.WHITE)
-            canvas.drawBitmap(binding!!.paintView.obtainBitmap(), 0f, 0f, null)
+            canvas.drawBitmap(binding.paintView.obtainBitmap(), 0f, 0f, null)
 
             out = FileOutputStream(File(myDir, fname), true)
             image.compress(Bitmap.CompressFormat.JPEG, 100, out)
@@ -220,9 +216,9 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         }
 
         //insert handwrtie memo
-        viewModel!!.insertHandwriteMemo(
-            binding!!.handwriteTitle.text!!.toString(),
-            binding!!.handwriteSubtitle.text!!.toString(),
+        viewModel.insertHandwriteMemo(
+            binding.handwriteTitle.text!!.toString(),
+            binding.handwriteSubtitle.text!!.toString(),
             handwriteId
         )
 
@@ -246,14 +242,14 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
     //작성
     override fun onWriteClick() {
 
-        KeyBoardUtil.hideSoftKeyboard(binding!!.root, this)
+        KeyBoardUtil.hideSoftKeyboard(binding.root, this)
 
-        if (binding!!.handwriteTitle.text!!.toString().trim { it <= ' ' } == "" && binding!!.handwriteSubtitle.text!!.toString().trim { it <= ' ' } == "") {
-            SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title_subTitle)
-        } else if (binding!!.handwriteTitle.text!!.toString().trim { it <= ' ' } == "") {
-            SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title)
-        } else if (binding!!.handwriteSubtitle.text!!.toString().trim { it <= ' ' } == "") {
-            SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_subTitle)
+        if (binding.handwriteTitle.text!!.toString().trim { it <= ' ' } == "" && binding.handwriteSubtitle.text!!.toString().trim { it <= ' ' } == "") {
+            SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title_subTitle)
+        } else if (binding.handwriteTitle.text!!.toString().trim { it <= ' ' } == "") {
+            SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title)
+        } else if (binding.handwriteSubtitle.text!!.toString().trim { it <= ' ' } == "") {
+            SnackBarUtil.showSnackBar(binding.root, R.string.text_input_subTitle)
         } else {
 
             if (type != "insert") {
@@ -266,5 +262,4 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         }
     }
 
-    override fun onDeleteClick() {}
 }
