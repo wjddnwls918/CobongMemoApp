@@ -1,9 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 interface HandwriteNavigator {
-
-    open fun onWriteClick() {}
-    open fun onExitClick() {}
-    open fun onDeleteClick() {}
-
+    fun onWriteClick() {}
+    fun onExitClick() {}
+    fun onDeleteClick() {}
 }
