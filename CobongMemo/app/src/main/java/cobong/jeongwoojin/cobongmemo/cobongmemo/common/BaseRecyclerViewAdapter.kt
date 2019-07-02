@@ -2,17 +2,14 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.common
 
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
-
-abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(private var dataSet: MutableList<T>?) :
-    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
+abstract class BaseRecyclerVIewAdapter<T, VH : RecyclerView.ViewHolder?>(open var dataSet: MutableList<T>?) :
+    RecyclerView.Adapter<VH>() {
     fun getItem(position: Int): T? {
         return if (dataSet == null) null else dataSet!![position]
     }
 
-
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        onBindView(holder as VH, position)
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        onBindView(holder, position)
     }
 
     abstract fun onBindView(holder: VH, position: Int)
@@ -39,7 +36,6 @@ abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(private 
 
     /**
      * clear and add items.
-     *
      * @param items list.
      */
     fun updateItems(items: List<T>) {
@@ -64,12 +60,19 @@ abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(private 
         }
     }
 
-    fun removeItem(item: T) {
-        val position = getItemPosition(item)
-
+    /**
+     * Remove item
+     */
+    fun removeItem(position: Int) {
         dataSet!!.removeAt(position)
         notifyItemRemoved(position)
     }
+
+    fun removeItem(item: T) {
+        val position = getItemPosition(item)
+        removeItem(position)
+    }
+
 
     /**
      * Set items.
@@ -79,12 +82,14 @@ abstract class BaseRecyclerViewAdapter<T, VH : RecyclerView.ViewHolder>(private 
         notifyDataSetChanged()
     }
 
+
+    /**
+     * Get items.
+     */
+
     fun getItemPosition(item: T): Int {
         return dataSet!!.indexOf(item)
     }
 
-    fun removeItem(position: Int) {
-        dataSet!!.removeAt(position)
-        notifyDataSetChanged()
-    }
+
 }
