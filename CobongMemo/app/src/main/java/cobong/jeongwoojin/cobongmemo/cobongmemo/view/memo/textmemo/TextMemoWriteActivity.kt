@@ -4,7 +4,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -16,24 +15,22 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextWritingB
 
 class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMemoNavigator {
 
-    internal var intent: Intent
-
-    private var binding: ActivityTextWritingBinding? = null
-    private var viewModel: TextMemoViewModel? = null
+    private lateinit var binding: ActivityTextWritingBinding
+    private lateinit var viewModel: TextMemoViewModel
 
     internal var dialogListener: DialogInterface.OnClickListener =
-        DialogInterface.OnClickListener { dialog, which -> finish() }
+        DialogInterface.OnClickListener { _, _ -> finish() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_text_writing)
 
         viewModel = ViewModelProviders.of(this).get(TextMemoViewModel::class.java)
-        intent = getIntent()
-        viewModel!!.setItem(intent.getParcelableExtra("textItem"))
 
-        viewModel!!.navigator = this
-        binding!!.viewmodel = viewModel
+        viewModel.item.value = intent.getParcelableExtra("textItem")
+
+        viewModel.navigator = this
+        binding.viewmodel = viewModel
     }
 
     override fun onClick(v: View) {
@@ -51,48 +48,54 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
     override fun onWriteClick() {
 
         //키보드 숨기기
-        KeyBoardUtil.hideSoftKeyboard(binding!!.root, applicationContext)
+        KeyBoardUtil.hideSoftKeyboard(binding.root, applicationContext)
 
         //저장
-        if (viewModel!!.item.value == null) {
-            if (binding!!.title.text!!.toString().trim { it <= ' ' } == "" && binding!!.content.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title_content)
-            } else if (binding!!.title.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title)
-            } else if (binding!!.content.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_content)
+        if (viewModel.item.value == null) {
+            if (binding.title.text!!.toString().trim { it <= ' ' } == "" && binding.content.text!!.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title_content)
+            } else if (binding.title.text.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title)
+            } else if (binding.content.text!!.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_content)
             } else {
 
-                viewModel!!.insertTextMemo(
-                    binding!!.title.text!!.toString(),
-                    binding!!.subTitle.text!!.toString(),
-                    binding!!.content.text!!.toString()
+                viewModel.insertTextMemo(
+                    binding.title.text!!.toString(),
+                    binding.subTitle.text!!.toString(),
+                    binding.content.text!!.toString()
                 )
                 finish()
 
             }
         } else {
             //수정
-            if (binding!!.title.text!!.toString().trim { it <= ' ' } == "" && binding!!.content.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title_content)
-            } else if (binding!!.title.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_title)
-            } else if (binding!!.content.text!!.toString().trim { it <= ' ' } == "") {
-                SnackBarUtil.showSnackBar(binding!!.root, R.string.text_input_content)
+            if (binding.title.text!!.toString().trim { it <= ' ' } == "" && binding.content.text!!.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title_content)
+            } else if (binding.title.text!!.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_title)
+            } else if (binding.content.text!!.toString().trim { it <= ' ' } == "") {
+                SnackBarUtil.showSnackBar(binding.root, R.string.text_input_content)
             } else {
 
                 //update text memo
-                viewModel!!.updateTextMemo(
-                    viewModel!!.item.value!!.index,
-                    binding!!.title.text!!.toString(),
-                    binding!!.subTitle.text!!.toString(),
-                    binding!!.content.text!!.toString()
+                viewModel.updateTextMemo(
+                    viewModel.item.value!!.index,
+                    binding.title.text!!.toString(),
+                    binding.subTitle.text!!.toString(),
+                    binding.content.text!!.toString()
                 )
 
-                viewModel!!.item.value!!.title = binding!!.title.text!!.toString()
-                viewModel!!.item.value!!.subTitle = binding!!.subTitle.text!!.toString()
-                viewModel!!.item.value!!.content = binding!!.content.text!!.toString()
+                viewModel.item.value?.title = binding.title.text.toString()
+                viewModel.item.value?.subTitle = binding.subTitle.text.toString()
+                viewModel.item.value?.content = binding.content.text.toString()
 
+
+                val intent = Intent()
+                intent.putExtra("result",viewModel.item.value)
+
+
+                setResult(101,intent)
                 finish()
 
             }
@@ -107,13 +110,5 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
         val dialog = builder.create()
         dialog.setCanceledOnTouchOutside(false)
         dialog.show()
-    }
-
-    override fun onEditClick() {
-
-    }
-
-    override fun onDeleteClick() {
-
     }
 }
