@@ -1,10 +1,8 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 import android.app.Application
-
 import androidx.lifecycle.AndroidViewModel
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
 
 class HandwriteViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,12 +26,12 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
 
     //insert handwrite memo
     fun insertHandwriteMemo(title: String, subTitle: String, handwriteId: String) {
-        MemoRepository.getInstance(getApplication())
-            .insertHandwriteMemo(title, subTitle, handwriteId)
+        /*MemoRepository.getInstance(getApplication())
+            .insertHandwriteMemo(title, subTitle, handwriteId)*/
     }
 
     //delete handwrite memo
     fun deleteHandwriteMemo(index: Int) {
-        MemoRepository.getInstance(getApplication()).deleteTextMemo(index)
+        //MemoRepository.getInstance(getApplication()).deleteTextMemo(index)
     }
 }

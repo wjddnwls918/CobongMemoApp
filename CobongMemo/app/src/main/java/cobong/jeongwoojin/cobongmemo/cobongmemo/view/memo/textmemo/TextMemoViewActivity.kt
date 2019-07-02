@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextViewBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
 
 
 class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
@@ -43,7 +43,7 @@ class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
 
         if ( (requestCode == 100 && resultCode == 101) && data != null) {
 
-            var item = data.getParcelableExtra<MemoListItem>("result")
+            var item = data.getParcelableExtra<MemoItem>("result")
 
             binding.viewtitle.setText(item.title)
             binding.viewsubtitle.setText(item.subTitle)
@@ -72,7 +72,9 @@ class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
         builder.setTitle("확인")
             .setMessage("메모를 지우시겠습니까?")
             .setNegativeButton("확인") { _, _ ->
-                viewModel.deleteTextMemo()
+                //viewModel.deleteTextMemo()
+
+                viewModel.deleteTextMemoByRoom()
                 finish()
             }
             .setPositiveButton("취소", null)

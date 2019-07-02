@@ -1,9 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo
 
 import android.app.Application
-
 import androidx.lifecycle.AndroidViewModel
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
 
 class VoiceViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -20,7 +18,7 @@ class VoiceViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun insertVoice(resultDate: String) {
-        MemoRepository.getInstance(getApplication()).insertVoiceRecord(resultDate)
+        //MemoRepository.getInstance(getApplication()).insertVoiceRecord(resultDate)
     }
 
     //닫기
