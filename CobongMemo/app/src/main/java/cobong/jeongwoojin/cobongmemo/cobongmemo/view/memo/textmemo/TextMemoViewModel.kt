@@ -9,7 +9,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
 
 class TextMemoViewModel(application: Application) : AndroidViewModel(application) {
 
-    val item = MutableLiveData<MemoListItem>()
+    var item = MutableLiveData<MemoListItem>()
     var navigator: TextMemoNavigator? = null
 
     //메모 수정
@@ -31,11 +31,6 @@ class TextMemoViewModel(application: Application) : AndroidViewModel(application
     fun onWriteClick() {
         navigator!!.onWriteClick()
     }
-
-    fun setItem(item: MemoListItem) {
-        this.item.value = item
-    }
-
 
     fun insertTextMemo(title: String, subTitle: String, content: String) {
         MemoRepository.getInstance(getApplication()).insertTextMemo(title, subTitle, content)
