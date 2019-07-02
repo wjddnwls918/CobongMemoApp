@@ -7,7 +7,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
 
 class VoiceViewModel(application: Application) : AndroidViewModel(application) {
 
-    var navigator: VoiceNavigator
+    lateinit var navigator: VoiceNavigator
 
     //녹음 시작
     fun onRecordClick() {

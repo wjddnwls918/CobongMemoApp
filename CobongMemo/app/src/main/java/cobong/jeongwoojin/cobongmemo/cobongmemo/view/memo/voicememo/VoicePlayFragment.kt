@@ -8,16 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
-import com.dd.processbutton.iml.ActionProcessButton
-
-import java.io.File
-
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoicePlayBinding
+import com.dd.processbutton.iml.ActionProcessButton
 
 
 class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener, VoiceNavigator {
@@ -32,16 +28,14 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
     private var length: Int = 0
 
-    private var binding: FragmentVoicePlayBinding? = null
-    private var viewModel: VoiceViewModel? = null
+    private lateinit var binding: FragmentVoicePlayBinding
+    private lateinit var viewModel: VoiceViewModel
 
     override fun onComplete() {
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -50,15 +44,15 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_voice_play, container, false)
         viewModel = ViewModelProviders.of(this).get(VoiceViewModel::class.java)
-        binding!!.viewmodel = viewModel
-        viewModel!!.setNavigator(this)
+        binding.viewmodel = viewModel
+        viewModel.navigator = this
 
         inputDate = arguments!!.getString("inputdate")
         filename = RECORDED_FILE.toString() + "/" + this.inputDate + ".mp3"
 
         progressGenerator = ProgressGenerator(this)
 
-        return binding!!.root
+        return binding.root
     }
 
     override fun onDestroy() {
@@ -91,18 +85,17 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
     //시작
     override fun onPlayClick() {
-        binding!!.rotateloading.start()
-        binding!!.play.setMode(ActionProcessButton.Mode.ENDLESS)
-        progressGenerator!!.start(binding!!.play)
+        binding.rotateloading.start()
+        binding.play.setMode(ActionProcessButton.Mode.ENDLESS)
+        progressGenerator!!.start(binding.play)
 
         try {
             // 오디오를 플레이 하기위해 MediaPlayer 객체 player를 생성한다.
             player = MediaPlayer()
             player!!.setOnCompletionListener {
-                //Toast.makeText(getContext(), "재생이 완료됐습니다.",Toast.LENGTH_LONG).show();
 
-                binding!!.rotateloading.stop()
-                binding!!.play.progress = 100
+                binding.rotateloading.stop()
+                binding.play.progress = 100
                 // 오디오 재생 중지
                 player!!.stop()
 
@@ -112,8 +105,6 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
             }
             // 재생할 오디오 파일 저장위치를 설정
             player!!.setDataSource(filename)
-            // 웹상에 있는 오디오 파일을 재생할때
-            // player.setDataSource(Audio_Url);
 
             // 오디오 재생준비,시작
             player!!.prepare()
@@ -130,8 +121,8 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
         if (player == null)
             return
 
-        binding!!.rotateloading.stop()
-        binding!!.play.progress = 100
+        binding.rotateloading.stop()
+        binding.play.progress = 100
 
         // 오디오 재생 중지
         player!!.stop()
