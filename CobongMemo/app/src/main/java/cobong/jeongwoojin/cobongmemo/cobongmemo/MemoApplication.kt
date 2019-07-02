@@ -2,6 +2,9 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo
 
 import android.app.Application
 import android.os.Environment
+import com.facebook.stetho.Stetho
+import com.facebook.stetho.okhttp3.StethoInterceptor
+import okhttp3.OkHttpClient
 
 class MemoApplication : Application() {
     companion object {
@@ -53,5 +56,18 @@ class MemoApplication : Application() {
         var DATABASE_NAME = "memo/memo.db"
     }
 
+    override fun onCreate() {
+        super.onCreate()
 
+        Stetho.initializeWithDefaults(this)
+
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(StethoInterceptor())
+            .build()
+
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+    }
 }
