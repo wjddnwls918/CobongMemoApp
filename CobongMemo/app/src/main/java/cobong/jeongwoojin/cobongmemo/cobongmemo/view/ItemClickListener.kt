@@ -1,7 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view
 
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
 
 interface ItemClickListener {
-    fun onMemoClick(item: MemoListItem)
+    fun onMemoClick(item: MemoItem)
 }

@@ -1,9 +1,9 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view
 
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
 
 interface MemoNavigator {
-    fun sendMemo(item: MemoListItem) {}
-    fun deleteMemo(memo: MemoListItem) {}
-    fun editMemo(memo: MemoListItem) {}
+    fun sendMemo(item: MemoItem) {}
+    fun deleteMemo(memo: MemoItem) {}
+    fun editMemo(memo: MemoItem) {}
 }
