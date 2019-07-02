@@ -8,7 +8,7 @@ object DateUtil {
     fun curDate(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
-        val sdf = SimpleDateFormat("yyyyMMddhhmmss")
+        val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss")
 
         return sdf.format(date)
     }
