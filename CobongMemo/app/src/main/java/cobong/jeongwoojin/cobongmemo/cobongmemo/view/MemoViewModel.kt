@@ -10,7 +10,8 @@ class MemoViewModel(application: Application): AndroidViewModel(application) {
     var navigator: MemoNavigator? = null
     private var repository: MemoRepository = MemoRepository.getInstance(application)
 
-    var allMemos:List<MemoListItem> = ArrayList()
+    lateinit var allMemos:MutableList<MemoListItem>
+/*
 
     private lateinit var memoAdapter: MemoAdapter
 
@@ -21,6 +22,7 @@ class MemoViewModel(application: Application): AndroidViewModel(application) {
     fun getAdapter(): MemoAdapter {
         return memoAdapter
     }
+*/
 
     //get allmemos
     fun getAllMemos() {
@@ -29,10 +31,8 @@ class MemoViewModel(application: Application): AndroidViewModel(application) {
 
 
     //delete memo
-    fun deleteMemo (memo: MemoListItem){
+    fun deleteMemo (memo: MemoListItem, memoAdapter: MemoAdapter){
         repository.deleteMemo(memo, memoAdapter)
-
-        memoAdapter!!.removeItem(memo)
     }
 
 /*    private var allMemos: LiveData<List<MemoItem>> = repository.getAll()
