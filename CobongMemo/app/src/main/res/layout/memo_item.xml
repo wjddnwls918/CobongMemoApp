@@ -5,10 +5,14 @@
 
     <data>
 
+        <!--
         <variable
             name="memo"
             type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem" />
-
+            -->
+        <variable
+            name="memo"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem" />
 
         <variable
             name="viewmodel"
