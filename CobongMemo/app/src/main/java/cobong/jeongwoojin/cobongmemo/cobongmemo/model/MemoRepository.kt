@@ -4,7 +4,7 @@ import android.app.Application
 import android.database.Cursor
 import android.util.Log
 import androidx.lifecycle.LiveData
-import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BasicInfo
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.MemoAdapter
 import java.io.File
 
@@ -86,7 +86,7 @@ class MemoRepository(application: Application) {
 
 
     //get all memos
-    fun getAllMemo(): List<MemoListItem> {
+    fun getAllMemo(): MutableList<MemoListItem> {
         val list = ArrayList<MemoListItem>()
 
         //list = database.memolistDao().getAllMemos();
@@ -139,12 +139,12 @@ class MemoRepository(application: Application) {
 
         //저장 파일 삭제
         val file: File
-        var path = ""
-        val curRealPos = memoAdapter!!.getItemPosition(memo)
+        var path: String
+        val curRealPos = memoAdapter.getItemPosition(memo)
 
-        if (memoAdapter!!.getItem(curRealPos)!!.memoType == "voice") {
+        if (memoAdapter.getItem(curRealPos)!!.memoType == "voice") {
             path =
-                BasicInfo.root + "/" + memoAdapter!!.getItem(curRealPos)!!.voiceId + ".mp3"
+                MemoApplication.root + "/" + memoAdapter.getItem(curRealPos)!!.voiceId + ".mp3"
             file = File(path)
             if (file.exists()) {
                 if (file.delete()) {
@@ -154,9 +154,9 @@ class MemoRepository(application: Application) {
                 }
             }
 
-        } else if (memoAdapter!!.getItem(curRealPos)!!.memoType == "handwrite") {
+        } else if (memoAdapter.getItem(curRealPos)!!.memoType == "handwrite") {
             path =
-                BasicInfo.root + "/saved_images/" + memoAdapter!!.getItem(curRealPos)!!.handwriteId + ".jpg"
+                MemoApplication.root + "/saved_images/" + memoAdapter.getItem(curRealPos)!!.handwriteId + ".jpg"
             file = File(path)
             if (file.exists()) {
                 if (file.delete()) {
