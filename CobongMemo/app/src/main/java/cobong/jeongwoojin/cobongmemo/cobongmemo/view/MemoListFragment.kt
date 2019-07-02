@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewActivity
@@ -56,6 +57,8 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
         //RecyclerView init
         initRecyclerView()
 
+        initObserveLivedata()
+
         //스크롤시 fab 없애기
         binding.rcvMemoList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
@@ -78,11 +81,21 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
         return binding.root
     }
 
+    fun initObserveLivedata() {
+        viewModel.allMemosByRoom.observe(this, Observer {
+            memos -> memos.let {
+            memoAdapter.setItem(it)
+        }
+        })
+    }
+
     fun initRecyclerView() {
 
-        viewModel.getAllMemos()
+       /* viewModel.getAllMemos()
+        memoAdapter = MemoAdapter(viewModel.allMemos, viewModel)*/
 
-        memoAdapter = MemoAdapter(viewModel.allMemos, viewModel)
+        memoAdapter = MemoAdapter(ArrayList(), viewModel)
+
         binding.rcvMemoList.layoutManager = LinearLayoutManager(context)
         binding.rcvMemoList.adapter = memoAdapter
     }
@@ -91,9 +104,8 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
     //load List or refresh List
     fun loadList() {
 
-        viewModel.getAllMemos()
-        memoAdapter.setItem(viewModel.allMemos)
-        //viewModel.getAdapter()!!.setItem(viewModel.allMemos)
+       /* viewModel.getAllMemos()
+        memoAdapter.setItem(viewModel.allMemos)*/
 
     }
 
@@ -148,7 +160,7 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
     }
 
     //메모 보기로 이동
-    override fun sendMemo(item: MemoListItem) {
+    override fun sendMemo(item: MemoItem) {
         selectMemoType(item,
             {
                 val intent = Intent(context, TextMemoViewActivity::class.java)
@@ -172,18 +184,18 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
     }
 
 
-    override fun deleteMemo(memo: MemoListItem) {
+    override fun deleteMemo(memo: MemoItem) {
 
         makeDialog {
             //delete memo
-            viewModel.deleteMemo(memo, memoAdapter)
-
-            memoAdapter.removeItem(memo)
+            //viewModel.deleteMemo(memo, memoAdapter)
+            viewModel.deleteByRoom(memo)
+            //memoAdapter.removeItem(memo)
         }
     }
 
 
-    override fun editMemo(memo: MemoListItem) {
+    override fun editMemo(memo: MemoItem) {
 
         selectMemoType(memo,
             {
@@ -206,7 +218,7 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
     }
 
     fun selectMemoType(
-        memo: MemoListItem, text: () -> Unit, voice: () -> Unit,
+        memo: MemoItem, text: () -> Unit, voice: () -> Unit,
         handwrite: () -> Unit
     ) {
         when (memo.memoType) {

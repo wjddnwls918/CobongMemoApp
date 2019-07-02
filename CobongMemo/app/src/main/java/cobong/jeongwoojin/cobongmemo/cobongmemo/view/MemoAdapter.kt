@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerVIewAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
 
-class MemoAdapter(list: MutableList<MemoListItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoListItem, MemoAdapter.MemoViewHolder>(list) {
+class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoItem, MemoAdapter.MemoViewHolder>(list) {
     private var listener: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
@@ -18,7 +18,7 @@ class MemoAdapter(list: MutableList<MemoListItem>, private val viewModel: MemoVi
 
         //선언하고
         listener = object : ItemClickListener {
-            override fun onMemoClick(item: MemoListItem) {
+            override fun onMemoClick(item: MemoItem) {
                 viewModel.sendMemo(item)
             }
         }
