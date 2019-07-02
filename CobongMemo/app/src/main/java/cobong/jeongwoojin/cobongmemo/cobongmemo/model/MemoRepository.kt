@@ -4,19 +4,32 @@ import android.app.Application
 import android.database.Cursor
 import android.util.Log
 import androidx.lifecycle.LiveData
-import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.MemoAdapter
-import java.io.File
 
 class MemoRepository(application: Application) {
 
     private val memoDatabase = MemoDatabase.getDatabase(application)
     private val memoDao: MemoListDao = memoDatabase.memolistDao()
-    private val memos: LiveData<List<MemoItem>> = memoDao.getAllMemos()
+
+    val memos: LiveData<List<MemoItem>> = memoDao.getAllMemos()
 
     var helper: DBHelper = DBHelper(application.applicationContext)
     var db = helper.writableDatabase
 
+    suspend fun insertByRoom(memo: MemoItem) {
+        memoDao.insert(memo)
+    }
+
+    suspend fun deleteByRoom(memo: MemoItem) {
+        memoDao.deleteMemos(memo)
+    }
+
+    suspend fun deleteMemoNullableByRoom(memo: MemoItem?) {
+        memoDao.deleteMemoNullable(memo)
+    }
+
+    suspend fun updateByRoom(memo: MemoItem) {
+        memoDao.updateMemos(memo)
+    }
 
     companion object {
         private var INSTANCE: MemoRepository? = null
@@ -86,6 +99,7 @@ class MemoRepository(application: Application) {
 
 
     //get all memos
+
     fun getAllMemo(): MutableList<MemoListItem> {
         val list = ArrayList<MemoListItem>()
 
@@ -131,7 +145,7 @@ class MemoRepository(application: Application) {
     }
 
     //delete memo
-    fun deleteMemo(memo: MemoListItem, memoAdapter: MemoAdapter) {
+   /* fun deleteMemo(memo: MemoListItem, memoAdapter: MemoAdapter) {
 
         val del = "delete from memo where `idx`=" + memo.index
         db!!.execSQL(del)
@@ -215,7 +229,7 @@ class MemoRepository(application: Application) {
     }
 
     //insert handwrite memo
-    fun insertHandwriteMemo(title: String, subTitle:String, handwriteId: String) {
+    fun insertHandwriteMemo(title: String, subTitle: String, handwriteId: String) {
         val insertHandwrite: String
 
         insertHandwrite =
@@ -241,5 +255,5 @@ class MemoRepository(application: Application) {
         db.execSQL(del)
 
     }
-
+*/
 }
