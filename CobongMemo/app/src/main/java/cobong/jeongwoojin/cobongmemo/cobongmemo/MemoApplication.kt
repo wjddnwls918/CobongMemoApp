@@ -5,10 +5,10 @@ import android.os.Environment
 
 class MemoApplication : Application() {
     companion object {
-
-
         var language = ""
 
+        val RECORDED_FILE = Environment.getExternalStorageDirectory()
+        
         //
         val root = Environment.getExternalStorageDirectory().toString()
 
