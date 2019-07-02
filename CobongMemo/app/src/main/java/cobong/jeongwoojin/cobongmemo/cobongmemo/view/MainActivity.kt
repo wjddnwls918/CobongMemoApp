@@ -7,14 +7,6 @@ import android.os.Environment
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-
-import com.google.android.material.tabs.TabLayout
-import com.gun0912.tedpermission.PermissionListener
-import com.gun0912.tedpermission.TedPermission
-
-import java.io.File
-import java.util.Locale
-
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -26,11 +18,15 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.SettingsActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleFragment
+import com.google.android.material.tabs.TabLayout
+import com.gun0912.tedpermission.PermissionListener
+import com.gun0912.tedpermission.TedPermission
+import java.io.File
 
 class MainActivity : AppCompatActivity() {
 
-    private var pagerAdapter: MainPagerAdapter? = null
-    private var binding: ActivityMainBinding? = null
+    private lateinit var pagerAdapter: MainPagerAdapter
+    private lateinit var binding: ActivityMainBinding
 
     //TedPermission
     internal var permissionlistener: PermissionListener = object : PermissionListener {
@@ -39,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         override fun onPermissionDenied(deniedPermissions: List<String>) {
-            SnackBarUtil.showSnackBar(binding!!.root, "Permission Denied\n$deniedPermissions")
+            SnackBarUtil.showSnackBar(binding.root, "Permission Denied\n$deniedPermissions")
         }
 
     }
@@ -52,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
-
 
     //메뉴 이벤트
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,14 +110,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUI() {
 
-        pagerAdapter = MainPagerAdapter(supportFragmentManager, binding!!.tlMainTab.tabCount)
-        binding!!.vpMain.adapter = pagerAdapter
+        pagerAdapter = MainPagerAdapter(supportFragmentManager, binding.tlMainTab.tabCount)
+        binding.vpMain.adapter = pagerAdapter
 
 
-        binding!!.vpMain.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding!!.tlMainTab))
-        binding!!.tlMainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+        binding.vpMain.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tlMainTab))
+        binding.tlMainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
-                binding!!.vpMain.currentItem = tab.position
+                binding.vpMain.currentItem = tab.position
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab) {
