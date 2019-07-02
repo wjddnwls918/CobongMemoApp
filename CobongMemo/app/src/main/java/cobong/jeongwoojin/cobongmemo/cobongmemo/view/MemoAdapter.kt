@@ -7,8 +7,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerVIewAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
 
-class MemoAdapter(list: MutableList<MemoListItem>, private val viewModel: MemoViewModel) :
-    BaseRecyclerVIewAdapter<MemoListItem, MemoAdapter.MemoViewHolder>(list) {
+class MemoAdapter(list: MutableList<MemoListItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoListItem, MemoAdapter.MemoViewHolder>(list) {
     private var listener: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
@@ -28,17 +27,17 @@ class MemoAdapter(list: MutableList<MemoListItem>, private val viewModel: MemoVi
         binding.listener = listener
 
         binding.viewmodel = viewModel
-        return MemoAdapter.MemoViewHolder(binding)
+        return MemoViewHolder(binding)
     }
+
 
     override fun getItemId(position: Int): Long {
         return getItem(position)!!.hashCode().toLong()
     }
 
-    override fun onBindView(holder: MemoAdapter.MemoViewHolder, position: Int) {
+    override fun onBindView(holder: MemoViewHolder, position: Int) {
         holder.binding.memo = getItem(position)
     }
 
-    internal inner class MemoViewHolder(var binding: MemoItemBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    class MemoViewHolder(var binding: MemoItemBinding) : RecyclerView.ViewHolder(binding.root)
 }
