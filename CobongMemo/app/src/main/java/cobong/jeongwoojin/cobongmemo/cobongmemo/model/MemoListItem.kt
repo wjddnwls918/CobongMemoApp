@@ -3,77 +3,48 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class MemoListItem : Parcelable {
+data class MemoListItem(
 
-    var index: Int = 0
-    var title: String? = null
-    var subTitle: String? = null
-    var memoType: String? = null
-    var inputTime: String? = null
-    var content: String? = null
-    var voiceId: String? = null
-    var handwriteId: String? = null
+    var index: Int,
+    var title: String?,
+    var subTitle: String?,
+    var memoType: String?,
+    var inputTime: String?,
+    var content: String?,
+    var voiceId: String?,
+    var handwriteId: String?
 
-    constructor() {
+) : Parcelable {
 
-    }
+    constructor(source: Parcel) : this(
+        source.readInt(),
+        source.readString(),
+        source.readString(),
+        source.readString(),
+        source.readString(),
+        source.readString(),
+        source.readString(),
+        source.readString()
+    )
 
-    constructor(
-        index: Int,
-        title: String,
-        subTitle: String,
-        memoType: String,
-        inputTime: String,
-        content: String,
-        voiceId: String,
-        handwriteId: String
-    ) {
-        this.index = index
-        this.title = title
-        this.subTitle = subTitle
-        this.memoType = memoType
-        this.inputTime = inputTime
-        this.content = content
-        this.voiceId = voiceId
-        this.handwriteId = handwriteId
-    }
+    override fun describeContents() = 0
 
-    protected constructor(`in`: Parcel) {
-        index = `in`.readInt()
-        title = `in`.readString()
-        subTitle = `in`.readString()
-        memoType = `in`.readString()
-        inputTime = `in`.readString()
-        content = `in`.readString()
-        voiceId = `in`.readString()
-        handwriteId = `in`.readString()
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.writeInt(index)
-        dest.writeString(title)
-        dest.writeString(subTitle)
-        dest.writeString(memoType)
-        dest.writeString(inputTime)
-        dest.writeString(content)
-        dest.writeString(voiceId)
-        dest.writeString(handwriteId)
+    override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
+        writeInt(index)
+        writeString(title)
+        writeString(subTitle)
+        writeString(memoType)
+        writeString(inputTime)
+        writeString(content)
+        writeString(voiceId)
+        writeString(handwriteId)
     }
 
     companion object {
-
+        @JvmField
         val CREATOR: Parcelable.Creator<MemoListItem> = object : Parcelable.Creator<MemoListItem> {
-            override fun createFromParcel(`in`: Parcel): MemoListItem {
-                return MemoListItem(`in`)
-            }
-
-            override fun newArray(size: Int): Array<MemoListItem> {
-                return arrayOfNulls(size)
-            }
+            override fun createFromParcel(source: Parcel): MemoListItem = MemoListItem(source)
+            override fun newArray(size: Int): Array<MemoListItem?> = arrayOfNulls(size)
         }
     }
 }
