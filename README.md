@@ -10,6 +10,7 @@
 
 ### 사용 라이브러리
 - [ROOM](https://developer.android.com/jetpack/androidx/releases/room)
+- [Viewmodel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 - [Databinding](https://developer.android.com/topic/libraries/data-binding?hl=ko)
 - [coroutine](https://codelabs.developers.google.com/codelabs/kotlin-coroutines/#0)
