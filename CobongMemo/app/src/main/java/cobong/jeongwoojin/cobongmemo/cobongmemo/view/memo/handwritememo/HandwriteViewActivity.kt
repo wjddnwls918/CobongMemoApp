@@ -53,7 +53,8 @@ class HandwriteViewActivity : AppCompatActivity(), HandwriteNavigator {
 
     fun delHandwrite() {
 
-        viewModel.deleteHandwriteMemo(viewModel.item!!.index)
+        //viewModel.deleteHandwriteMemo(viewModel.item!!.index)
+        viewModel.deleteHandwriteMemoByRoom()
 
         val path = MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg"
         val file = File(path)

@@ -216,7 +216,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         }
 
         //insert handwrtie memo
-        viewModel.insertHandwriteMemo(
+        viewModel.insertHandWriteMemoByRoom(
             binding.handwriteTitle.text!!.toString(),
             binding.handwriteSubtitle.text!!.toString(),
             handwriteId

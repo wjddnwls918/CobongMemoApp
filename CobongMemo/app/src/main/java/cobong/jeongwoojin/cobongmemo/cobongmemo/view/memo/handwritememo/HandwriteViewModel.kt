@@ -2,11 +2,15 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem
+import androidx.lifecycle.viewModelScope
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HandwriteViewModel(application: Application) : AndroidViewModel(application) {
 
-    var item: MemoListItem? = null
+    var item: MemoItem? = null
     var navigator: HandwriteNavigator? = null
 
     //뒤로가기
@@ -24,14 +28,24 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
         navigator!!.onWriteClick()
     }
 
-    //insert handwrite memo
-    fun insertHandwriteMemo(title: String, subTitle: String, handwriteId: String) {
-        /*MemoRepository.getInstance(getApplication())
-            .insertHandwriteMemo(title, subTitle, handwriteId)*/
+    fun insertHandWriteMemoByRoom(title: String, subTitle: String, handwriteId: String) {
+        viewModelScope.launch (Dispatchers.IO){
+            MemoRepository.getInstance(getApplication()).insertByRoom(
+                MemoItem(
+                    index = null,
+                    title = title,
+                    subTitle = subTitle,
+                    memoType = "handwrite",
+                    content = null,
+                    voiceId = null,
+                    handwriteId = handwriteId
+                )
+            )
+        }
     }
 
-    //delete handwrite memo
-    fun deleteHandwriteMemo(index: Int) {
-        //MemoRepository.getInstance(getApplication()).deleteTextMemo(index)
+    fun deleteHandwriteMemoByRoom() = viewModelScope.launch(Dispatchers.IO) {
+        MemoRepository.getInstance(getApplication()).deleteMemoNullableByRoom(item)
     }
+
 }
