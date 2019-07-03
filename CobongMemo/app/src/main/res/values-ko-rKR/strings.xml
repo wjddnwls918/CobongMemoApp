@@ -64,30 +64,22 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="action_settings">세팅</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="dummy_email">jondoe@gmail.com</string>
-    <string name="dummy_password">123456789</string>
-    <string name="Sign_in">회원가입</string>
     <string name="Success">성공</string>
     <string name="Loading">로딩중..</string>
-    <string name="Question">How are you?</string>
-    <string name="Send">전송</string>
-    <string name="Done">확인</string>
-    <string name="Upload">업로드</string>
-    <string name="Beautiful_Picture">Beautiful Picture</string>
-    <string name="Uploading">업로딩</string>
-    <string name="Loading_Complete">로딩완료</string>
+
 
     <!-- color picker -->
     <string name="confirm">확인</string>
     <string name="cancel">취소</string>
-    <string name="ToolbarColorPickerPreference">ToolbarColorPickerPreference</string>
-    <string name="BackgroundColorPickerPreference">BackgroundColorPickerPreference</string>
 
 
     <string name="modify_success">수정 완료</string>
 
     <!-- common -->
+    <string name="text">글</string>
+    <string name="voice">음성</string>
+    <string name="handwrite">손글씨</string>
+    <string name="select_memo_type">메모 타입 선택</string>
     <string name="text_input_title_content">제목과 내용을 입력해주세요</string>
     <string name="text_input_title">제목을 입력하세요 </string>
     <string name="text_input_content">내용을 입력하세요</string>

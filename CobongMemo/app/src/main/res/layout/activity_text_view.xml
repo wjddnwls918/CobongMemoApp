@@ -106,7 +106,7 @@
                 android:singleLine="true"
                 android:text="@{viewmodel.item.title}"
                 android:textColor="#737373"
-                android:textSize="20dp"
+                android:textSize="@dimen/text_size"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,11 +134,11 @@
                 android:clickable="false"
                 android:focusable="false"
                 android:inputType="text"
-                android:maxLength="20"
+                android:maxLength="15"
                 android:singleLine="true"
                 android:text="@{viewmodel.item.subTitle}"
                 android:textColor="#737373"
-                android:textSize="18dp" />
+                android:textSize="@dimen/text_size" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -170,7 +170,7 @@
                 android:scrollbars="vertical"
                 android:text="@{viewmodel.item.content}"
                 android:textColor="#737373"
-                android:textSize="18dp" />
+                android:textSize="@dimen/text_size" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
