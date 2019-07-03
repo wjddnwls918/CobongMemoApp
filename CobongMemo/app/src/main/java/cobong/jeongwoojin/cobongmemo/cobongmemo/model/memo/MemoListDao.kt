@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.model
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

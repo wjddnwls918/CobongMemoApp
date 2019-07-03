@@ -9,7 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextViewBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
 
 class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
