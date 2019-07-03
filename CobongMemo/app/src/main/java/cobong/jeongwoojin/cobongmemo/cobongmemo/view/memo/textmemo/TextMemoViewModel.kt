@@ -71,16 +71,4 @@ class TextMemoViewModel(application: Application) : AndroidViewModel(application
             )
         }
 
-    fun insertTextMemo(title: String, subTitle: String, content: String) {
-        //MemoRepository.getInstance(getApplication()).insertTextMemo(title, subTitle, content)
-    }
-
-    fun updateTextMemo(index: Int, title: String, subTitle: String, content: String) {
-        //MemoRepository.getInstance(getApplication()).updateTextMemo(index, title, subTitle, content)
-    }
-
-    fun deleteTextMemo() {
-        //MemoRepository.getInstance(getApplication()).deleteTextMemo(item.value!!.index)
-    }
-
 }

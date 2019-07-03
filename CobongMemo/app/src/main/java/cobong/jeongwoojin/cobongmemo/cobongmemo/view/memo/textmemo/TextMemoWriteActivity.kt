@@ -60,12 +60,6 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
                 SnackBarUtil.showSnackBar(binding.root, R.string.text_input_content)
             } else {
 
-                /*viewModel.insertTextMemo(
-                    binding.title.text!!.toString(),
-                    binding.subTitle.text!!.toString(),
-                    binding.content.text!!.toString()
-                )*/
-
                 viewModel.insertTextMemoByRoom(
                     binding.title.text!!.toString(),
                     binding.subTitle.text!!.toString(),
@@ -86,25 +80,6 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
             } else {
 
                 //update text memo
-                /*viewModel.updateTextMemo(
-                    viewModel.item.value?.index,
-                    binding.title.text!!.toString(),
-                    binding.subTitle.text!!.toString(),
-                    binding.content.text!!.toString()
-                )
-
-                viewModel.item.value?.title = binding.title.text.toString()
-                viewModel.item.value?.subTitle = binding.subTitle.text.toString()
-                viewModel.item.value?.content = binding.content.text.toString()
-
-
-                val intent = Intent()
-                intent.putExtra("result",viewModel.item.value)
-
-
-                setResult(101,intent)
-                finish()*/
-
                 viewModel.updateTextMemoByRoom(
                     binding.title.text!!.toString(),
                     binding.subTitle.text!!.toString(),
