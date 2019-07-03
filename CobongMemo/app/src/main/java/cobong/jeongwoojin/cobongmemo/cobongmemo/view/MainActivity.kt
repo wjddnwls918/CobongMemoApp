@@ -17,6 +17,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.SettingsActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoListFragment
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleFragment
 import com.google.android.material.tabs.TabLayout
 import com.gun0912.tedpermission.PermissionListener

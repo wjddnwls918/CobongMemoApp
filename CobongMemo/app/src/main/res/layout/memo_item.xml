@@ -8,19 +8,19 @@
         <!--
         <variable
             name="memo"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoListItem" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoListItem" />
             -->
         <variable
             name="memo"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem" />
 
         <variable
             name="viewmodel"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.MemoViewModel" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.MemoViewModel" />
 
         <variable
             name="listener"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.ItemClickListener" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.ItemClickListener" />
 
     </data>
 

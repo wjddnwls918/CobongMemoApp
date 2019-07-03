@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.model
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo
 
 import android.os.Parcel
 import android.os.Parcelable
@@ -47,7 +47,8 @@ data class MemoItem(
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<MemoItem> = object : Parcelable.Creator<MemoItem> {
-            override fun createFromParcel(source: Parcel): MemoItem = MemoItem(source)
+            override fun createFromParcel(source: Parcel): MemoItem =
+                MemoItem(source)
             override fun newArray(size: Int): Array<MemoItem?> = arrayOfNulls(size)
         }
     }

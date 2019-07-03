@@ -1,11 +1,11 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerVIewAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
 class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoItem, MemoAdapter.MemoViewHolder>(list) {
     private var listener: ItemClickListener? = null
@@ -17,7 +17,8 @@ class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : 
         )
 
         //선언하고
-        listener = object : ItemClickListener {
+        listener = object :
+            ItemClickListener {
             override fun onMemoClick(item: MemoItem) {
                 viewModel.sendMemo(item)
             }
@@ -27,7 +28,9 @@ class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : 
         binding.listener = listener
 
         binding.viewmodel = viewModel
-        return MemoViewHolder(binding)
+        return MemoViewHolder(
+            binding
+        )
     }
 
 

@@ -16,7 +16,7 @@ object DateUtil {
     fun curDateForVoiceMemo(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
-        val sdf = SimpleDateFormat("yyyyMMddhhmmss")
+        val sdf = SimpleDateFormat("yyyy년MM월dd일hh시mm분_음성메모")
 
         return sdf.format(date)
     }

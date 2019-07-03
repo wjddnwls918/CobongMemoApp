@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo
 
 import android.app.AlertDialog
 import android.content.Intent
@@ -17,16 +17,20 @@ import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_DRAGGING
 import androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwriteViewActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo.HandwritingActivity
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.MemoAdapter
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.MemoNavigator
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.MemoViewModel
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoViewActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.textmemo.TextMemoWriteActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoicePlayFragment
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceRecordFragment
 import com.google.android.material.snackbar.Snackbar
 
-class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
+class MemoListFragment : Fragment(), View.OnClickListener,
+    MemoNavigator {
 
     //DB
     private lateinit var binding: FragmentMemoListBinding
@@ -81,7 +85,10 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
 
     fun initRecyclerView() {
 
-        memoAdapter = MemoAdapter(ArrayList(), viewModel)
+        memoAdapter = MemoAdapter(
+            ArrayList(),
+            viewModel
+        )
 
         binding.rcvMemoList.layoutManager = LinearLayoutManager(context)
         binding.rcvMemoList.adapter = memoAdapter

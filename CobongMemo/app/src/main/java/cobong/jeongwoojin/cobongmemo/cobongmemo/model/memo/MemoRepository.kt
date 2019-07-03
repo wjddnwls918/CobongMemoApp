@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.model
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo
 
 import android.app.Application
 import android.util.Log
@@ -8,7 +8,10 @@ import java.io.File
 
 class MemoRepository(application: Application) {
 
-    private val memoDatabase = MemoDatabase.getDatabase(application)
+    private val memoDatabase =
+        MemoDatabase.getDatabase(
+            application
+        )
     private val memoDao: MemoListDao = memoDatabase.memolistDao()
 
     val memos: LiveData<List<MemoItem>> = memoDao.getAllMemos()
@@ -72,12 +75,14 @@ class MemoRepository(application: Application) {
         private var INSTANCE: MemoRepository? = null
 
         fun getInstance(application: Application): MemoRepository {
-            val tempInstance = INSTANCE
+            val tempInstance =
+                INSTANCE
             if (tempInstance != null) {
                 return tempInstance
             }
             synchronized(MemoRepository::class) {
-                val instance = MemoRepository(application)
+                val instance =
+                    MemoRepository(application)
                 INSTANCE = instance
                 return instance
             }

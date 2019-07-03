@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.model
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo
 
 import android.content.Context
 import androidx.room.Database
@@ -15,7 +15,8 @@ abstract class MemoDatabase : RoomDatabase() {
         private var INSTANCE: MemoDatabase? = null
 
         fun getDatabase(context: Context): MemoDatabase {
-            val tempInstance = INSTANCE
+            val tempInstance =
+                INSTANCE
             if (tempInstance != null) {
                 return tempInstance
             }

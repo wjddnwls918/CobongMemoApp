@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoRepository
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
