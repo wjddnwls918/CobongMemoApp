@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
-import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication.Companion.RECORDED_FILE
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding
@@ -87,8 +87,8 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS)
         progressGenerator!!.start(binding.btnRecord)
 
-        resultDate = DateUtil.curDate()
-        filename = RECORDED_FILE.absolutePath + "/" + resultDate + ".mp3"
+        resultDate = DateUtil.curDateForVoiceMemo()
+        filename = MemoApplication.root + "/" + resultDate + ".mp3"
 
         recorder = MediaRecorder()
         recorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -115,7 +115,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         recorder = null
 
         //insert voice memo
-        viewModel.insertVoice(resultDate)
+        viewModel.insertVoiceMemoByRoom(resultDate)
     }
 
     //닫기
