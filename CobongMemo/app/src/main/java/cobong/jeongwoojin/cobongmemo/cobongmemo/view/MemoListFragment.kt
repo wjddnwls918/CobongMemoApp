@@ -1,7 +1,6 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view
 
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,21 +26,12 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoicePlayFra
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceRecordFragment
 import com.google.android.material.snackbar.Snackbar
 
-//MemoDatabase database = MemoDatabase.Companion.getDatabase(getContext().getApplicationContext());
-
 class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
 
     //DB
     private lateinit var binding: FragmentMemoListBinding
     private lateinit var viewModel: MemoViewModel
     private lateinit var memoAdapter: MemoAdapter
-
-    override fun onStart() {
-        super.onStart()
-
-        //load data
-        loadList()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -91,23 +81,12 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
 
     fun initRecyclerView() {
 
-       /* viewModel.getAllMemos()
-        memoAdapter = MemoAdapter(viewModel.allMemos, viewModel)*/
-
         memoAdapter = MemoAdapter(ArrayList(), viewModel)
 
         binding.rcvMemoList.layoutManager = LinearLayoutManager(context)
         binding.rcvMemoList.adapter = memoAdapter
     }
 
-
-    //load List or refresh List
-    fun loadList() {
-
-       /* viewModel.getAllMemos()
-        memoAdapter.setItem(viewModel.allMemos)*/
-
-    }
 
     override fun onClick(v: View) {
         when (v.id) {
@@ -134,13 +113,6 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
                             //음성
                             1 -> {
                                 val dialogFragment = VoiceRecordFragment()
-                                //Fragment 종료시 화면 새로고침
-                                dialogFragment.setOnDismissListener(
-                                    DialogInterface.OnDismissListener() {
-                                       onStart()
-                                    }
-                                )
-
                                 dialogFragment.show(activity!!.supportFragmentManager, "tag")
                             }
 
@@ -170,9 +142,9 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
                 startActivity(intent)
             }, {
                 val dialogFragment = VoicePlayFragment()
-                val inputdate = Bundle()
-                inputdate.putString("inputdate", item.voiceId)
-                dialogFragment.arguments = inputdate
+                val voiceBundle = Bundle()
+                voiceBundle.putParcelable("voiceItem", item)
+                dialogFragment.arguments = voiceBundle
                 dialogFragment.show(activity!!.supportFragmentManager, "tag")
             }, {
                 val intent = Intent(context, HandwriteViewActivity::class.java)
@@ -188,9 +160,7 @@ class MemoListFragment : Fragment(), View.OnClickListener, MemoNavigator {
 
         makeDialog {
             //delete memo
-            //viewModel.deleteMemo(memo, memoAdapter)
             viewModel.deleteByRoom(memo)
-            //memoAdapter.removeItem(memo)
         }
     }
 
