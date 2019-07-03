@@ -13,4 +13,12 @@ object DateUtil {
         return sdf.format(date)
     }
 
+    fun curDateForVoiceMemo(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+        val sdf = SimpleDateFormat("yyyyMMddhhmmss")
+
+        return sdf.format(date)
+    }
+
 }
