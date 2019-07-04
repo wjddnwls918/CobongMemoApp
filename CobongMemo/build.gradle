@@ -25,6 +25,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -42,4 +43,5 @@ ext {
     androidxArchVersion = '2.0.0'
     coroutines = '1.2.0'
     stethoVersion = '1.5.1'
+    materialCalendarVersion = '2.0.1'
 }

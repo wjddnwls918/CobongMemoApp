@@ -21,4 +21,14 @@ object DateUtil {
         return sdf.format(date)
     }
 
+    fun dateTransForCalendar(date: Long): String {
+        try {
+            val formatter = SimpleDateFormat("yyyy년 MM월", Locale.ENGLISH)
+            val d = Date(date)
+            return formatter.format(d).toUpperCase()
+        } catch (e: Exception) {
+            return " "
+        }
+    }
+
 }

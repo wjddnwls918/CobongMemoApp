@@ -20,10 +20,15 @@
     <dimen name="common_small_height">3dp</dimen>
 
     <dimen name="item_size">100dp</dimen>
+    <dimen name="calendar_item_width_size">50dp</dimen>
+    <dimen name="calendar_item_height_size">40dp</dimen>
     <dimen name="voice_item_size">110dp</dimen>
     <dimen name="memo_input_margin">10dp</dimen>
 
     <dimen name="text_size">15dp</dimen>
+    <dimen name="text_size_sp">15sp</dimen>
+
+    <dimen name="schedule_calendar_height">300dp</dimen>
 
 
 </resources>

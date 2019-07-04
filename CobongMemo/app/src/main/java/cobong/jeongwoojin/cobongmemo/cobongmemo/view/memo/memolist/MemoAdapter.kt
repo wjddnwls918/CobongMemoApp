@@ -4,14 +4,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerVIewAdapter
-import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.MemoItemBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemMemoBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
 class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoItem, MemoAdapter.MemoViewHolder>(list) {
     private var listener: ItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
-        val binding = MemoItemBinding.inflate(
+        val binding = ItemMemoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -42,5 +42,5 @@ class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : 
         holder.binding.memo = getItem(position)
     }
 
-    class MemoViewHolder(var binding: MemoItemBinding) : RecyclerView.ViewHolder(binding.root)
+    class MemoViewHolder(var binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root)
 }

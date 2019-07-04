@@ -1,9 +1,11 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo
+package cobong.jeongwoojin.cobongmemo.cobongmemo.model
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoListDao
 
 @Database(entities = arrayOf(MemoItem::class), version = 1)
 abstract class MemoDatabase : RoomDatabase() {
