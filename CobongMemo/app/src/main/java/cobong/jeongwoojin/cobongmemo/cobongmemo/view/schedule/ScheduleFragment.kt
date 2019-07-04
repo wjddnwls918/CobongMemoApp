@@ -35,14 +35,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_schedule, container, false)
         viewModel = ViewModelProviders.of(this).get(CalendarViewModel::class.java)
 
-        /*binding.mcvScheduleCalendar.setOnDateChangeListener(CalendarView.OnDateChangeListener(
-
-        ))*/
-
-        /*initCalendar()
-        viewModel.initCalendarList()*/
         binding.mcvScheduleCalendar.setOnDateChangedListener(this)
-
 
         binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongGray, hashSetOf(CalendarDay.from(2019,7,5) )))
 
@@ -57,28 +50,4 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
     ) {
         Log.d("checkdate",date.toString())
     }
-
-
-   /* fun initCalendar() {
-
-        viewModel.calendarList.observe(this, Observer { memos ->
-            memos.let {
-                var adapter = CalendarAdapter(memos)
-                if(adapter != null) {
-                    adapter.calendarList = it
-                } else {
-                    val lm: StaggeredGridLayoutManager = StaggeredGridLayoutManager(7,StaggeredGridLayoutManager.VERTICAL)
-                    adapter = CalendarAdapter(it)
-                    binding.mcvScheduleCalendar.layoutManager = lm
-                    binding.mcvScheduleCalendar.adapter = adapter
-                    if( viewModel.centerPosition >= 0) {
-                        binding.mcvScheduleCalendar.scrollToPosition(viewModel.centerPosition)
-                    }
-
-                }
-            }
-        })
-
-    }*/
-
 }
