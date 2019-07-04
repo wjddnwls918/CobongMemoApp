@@ -89,7 +89,8 @@ dependencies {
     // okhttp
     implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
 
-
+    //MaterialCalendarView
+    implementation "com.github.prolificinteractive:material-calendarview:$materialCalendarVersion"
 }
 
 repositories {
