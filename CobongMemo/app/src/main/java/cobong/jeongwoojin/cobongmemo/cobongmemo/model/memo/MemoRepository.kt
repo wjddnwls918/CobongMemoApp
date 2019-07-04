@@ -4,6 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.LiveData
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.MemoDatabase
 import java.io.File
 
 class MemoRepository(application: Application) {
