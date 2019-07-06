@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.calendar.CalendarViewModel" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel" />
 
     </data>
 
@@ -70,6 +70,7 @@
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="@dimen/space_medium_margin"
             android:layout_marginBottom="@dimen/space_medium_margin"
+            android:onClick="@{ () -> viewmodel.onAddScheduleStartClick()}"
             android:src="@drawable/ic_event_white_24dp"
             app:fabSize="normal" />
 

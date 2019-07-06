@@ -27,6 +27,7 @@
 
     <dimen name="text_size">15dp</dimen>
     <dimen name="text_size_sp">15sp</dimen>
+    <dimen name="text_size_sp_large">20sp</dimen>
 
     <dimen name="schedule_calendar_height">300dp</dimen>
 

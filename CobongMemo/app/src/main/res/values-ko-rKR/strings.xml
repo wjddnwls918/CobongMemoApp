@@ -95,4 +95,27 @@
     <!-- Voice Fragment -->
     <string name="voice_play_end">재생</string>
 
+
+    <!-- Schedule Fragemnt -->
+    <string name="input_schedule">일정을 입력하세요.</string>
+    <string name="input_date">날짜</string>
+    <string name="input_start_time">시작 시간</string>
+    <string name="input_end_time">종료 시간</string>
+    <string name="input_place">장소</string>
+    <string name="input_description">설명</string>
+
+    <string name="set_alarm">알람 설정</string>
+    <string name="alarm_ontime">정시</string>
+    <string name="alarm_five_minutes_ago">5분 전</string>
+    <string name="alarm_ten_minutes_ago">10분 전</string>
+    <string name="alarm_fifteen_minutes_ago">15분 전</string>
+    <string name="alarm_thirty_minutes_ago">30분 전</string>
+    <string name="alarm_one_hours_ago">1시간 전</string>
+    <string name="alarm_two_hours_ago">2시간 전</string>
+    <string name="alarm_three_hours_ago">3시간 전</string>
+    <string name="alarm_twelve_hours_ago">12시간 전</string>
+    <string name="alarm_one_day_ago">1일 전</string>
+    <string name="alarm_two_days_ago">2일 전</string>
+    <string name="alarm_one_week_ago">1주 전</string>
+
 </resources>

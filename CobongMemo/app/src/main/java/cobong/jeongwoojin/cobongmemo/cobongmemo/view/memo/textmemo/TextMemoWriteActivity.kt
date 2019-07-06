@@ -60,11 +60,7 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
                 SnackBarUtil.showSnackBar(binding.root, R.string.text_input_content)
             } else {
 
-                viewModel.insertTextMemoByRoom(
-                    binding.title.text!!.toString(),
-                    binding.subTitle.text!!.toString(),
-                    binding.content.text!!.toString()
-                )
+                insertTextmemo()
 
                 finish()
 
@@ -79,18 +75,8 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
                 SnackBarUtil.showSnackBar(binding.root, R.string.text_input_content)
             } else {
 
-                //update text memo
-                viewModel.updateTextMemoByRoom(
-                    binding.title.text!!.toString(),
-                    binding.subTitle.text!!.toString(),
-                    binding.content.text!!.toString()
-                )
-
-
-                viewModel.item.value?.title = binding.title.text.toString()
-                viewModel.item.value?.subTitle = binding.subTitle.text.toString()
-                viewModel.item.value?.content = binding.content.text.toString()
-
+                updateTextmemo()
+                setViewModel()
 
                 val intent = Intent()
                 intent.putExtra("result", viewModel.item.value)
@@ -106,13 +92,38 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
         }
     }
 
+    fun setViewModel() {
+        
+        viewModel.item.value?.title = binding.title.text.toString()
+        viewModel.item.value?.subTitle = binding.subTitle.text.toString()
+        viewModel.item.value?.content = binding.content.text.toString()
+
+    }
+
+    fun insertTextmemo() {
+        viewModel.insertTextMemoByRoom(
+            binding.title.text!!.toString(),
+            binding.subTitle.text!!.toString(),
+            binding.content.text!!.toString()
+        )
+    }
+
+    fun updateTextmemo() {
+        viewModel.updateTextMemoByRoom(
+            binding.title.text!!.toString(),
+            binding.subTitle.text!!.toString(),
+            binding.content.text!!.toString()
+        )
+    }
+
     override fun onBackPressed() {
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage("작성중인 내용을 저장하지 않고 나가시겠습니까?")
-        builder.setPositiveButton("확인", dialogListener)
-        builder.setNegativeButton("취소", null)
-        val dialog = builder.create()
-        dialog.setCanceledOnTouchOutside(false)
-        dialog.show()
+        AlertDialog.Builder(this).apply {
+            setMessage("작성중인 내용을 저장하지 않고 나가시겠습니까?")
+            setPositiveButton("확인", dialogListener)
+            setNegativeButton("취소", null)
+        }.create().apply {
+            setCanceledOnTouchOutside(false)
+            show()
+        }
     }
 }
