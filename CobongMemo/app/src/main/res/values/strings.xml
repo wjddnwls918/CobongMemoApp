@@ -94,4 +94,26 @@
     <!-- Voice Fragment -->
     <string name="voice_play_end">play</string>
 
+    <!-- Schedule Fragemnt -->
+    <string name="input_schedule">Input your schedule.</string>
+    <string name="input_date">Date</string>
+    <string name="input_start_time">Start time</string>
+    <string name="input_end_time">End time</string>
+    <string name="input_place">Place</string>
+    <string name="input_description">Description</string>
+
+    <string name="set_alarm">Set your alarm</string>
+    <string name="alarm_ontime">on time</string>
+    <string name="alarm_five_minutes_ago">5 minutes ago</string>
+    <string name="alarm_ten_minutes_ago">10 minutes ago</string>
+    <string name="alarm_fifteen_minutes_ago">15 minutes ago</string>
+    <string name="alarm_thirty_minutes_ago">30 minutes ago</string>
+    <string name="alarm_one_hours_ago">1 hour ago</string>
+    <string name="alarm_two_hours_ago">2 hours ago</string>
+    <string name="alarm_three_hours_ago">3 hours ago</string>
+    <string name="alarm_twelve_hours_ago">12 hours ago</string>
+    <string name="alarm_one_day_ago">1 day ago</string>
+    <string name="alarm_two_days_ago">2 days ago</string>
+    <string name="alarm_one_week_ago">1 week ago</string>
+
 </resources>
