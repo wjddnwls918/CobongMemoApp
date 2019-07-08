@@ -3,6 +3,7 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.MenuItem
@@ -16,6 +17,7 @@ import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoActivity
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -76,11 +78,24 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
             if (event.getRawX() >= (binding.tietInputPlace.getRight() - binding.tietInputPlace.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
                 // your action here
                 KeyBoardUtil.hideSoftKeyboard(binding.root, this)
-                SnackBarUtil.showSnackBar(binding.root, "검색 버튼 클릭")
+                //SnackBarUtil.showSnackBar(binding.root, "검색 버튼 클릭")
+
+                val intent = Intent(this, PlaceInfoActivity::class.java)
+                startActivityForResult(intent,100)
+
                 return true;
             }
         }
         return false;
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == 100 && resultCode == 101) {
+            val placeName = data?.getStringExtra("resultPlaceName")
+            val addressName = data?.getStringExtra("resultAddressName")
+
+            viewModel.place.set(placeName+"/"+addressName)
+        }
     }
 
     override fun onBackPressed() {
