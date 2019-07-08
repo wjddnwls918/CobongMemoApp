@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="document"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document" />
+
+        <variable
+            name="listener"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_place_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_small_size"
+        android:layout_margin="@dimen/memo_input_margin"
+        android:elevation="@dimen/cardview_default_elevation"
+        android:onClick="@{() -> listener.onDocumentClick(document)}">
+
+
+        <ImageView
+            android:id="@+id/iv_place_info"
+            android:layout_width="@dimen/close_drawable_size"
+            android:layout_height="@dimen/close_drawable_size"
+            android:src="@drawable/ic_place_black_24dp"
+            app:layout_constraintBottom_toBottomOf="@id/gl_vertical_center"
+            app:layout_constraintEnd_toEndOf="@id/gl_end_of_marker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_vertical_center" />
+
+        <TextView
+            android:id="@+id/tv_place_name"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/space_small_margin"
+            android:gravity="center_vertical"
+            android:text="@{document.place_name}"
+            android:textSize="@dimen/text_size_sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/gl_vertical_center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gl_end_of_marker"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_address_name"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="@dimen/space_small_margin"
+            android:gravity="center_vertical"
+            android:text="@{document.address_name}"
+            android:textSize="@dimen/text_size_sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/gl_end_of_marker"
+            app:layout_constraintTop_toTopOf="@id/gl_vertical_center" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_marker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_vertical_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
