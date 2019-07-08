@@ -15,9 +15,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".view.schedule.placeInfo.PlaceInfoActivity"
+            android:theme="@style/noActionBar"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity
             android:name=".view.schedule.ScheduleAddActivity"
-            android:theme="@style/noActionBar"></activity>
-        <!-- Splash Activity -->
+            android:theme="@style/noActionBar" /> <!-- Splash Activity -->
         <activity
             android:name=".StartActivity"
             android:screenOrientation="portrait"
@@ -32,7 +35,7 @@
             android:name=".view.memo.textmemo.TextMemoWriteActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".view.setting.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.memo.textmemo.TextMemoViewActivity"
