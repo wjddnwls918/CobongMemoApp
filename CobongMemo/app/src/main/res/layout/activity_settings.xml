@@ -2,7 +2,7 @@
 <fragment
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/settings_fragment"
-    android:name="cobong.jeongwoojin.cobongmemo.cobongmemo.SettingPreferenceFragment"
+    android:name="cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting.SettingPreferenceFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     />
