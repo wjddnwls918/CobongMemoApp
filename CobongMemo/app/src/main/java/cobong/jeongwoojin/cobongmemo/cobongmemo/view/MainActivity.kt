@@ -14,7 +14,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
-import cobong.jeongwoojin.cobongmemo.cobongmemo.SettingsActivity
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting.SettingsActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoListFragment
