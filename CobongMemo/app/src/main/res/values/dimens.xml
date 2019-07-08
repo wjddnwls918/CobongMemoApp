@@ -20,6 +20,7 @@
     <dimen name="common_small_height">3dp</dimen>
 
     <dimen name="item_size">100dp</dimen>
+    <dimen name="item_small_size">80dp</dimen>
     <dimen name="calendar_item_width_size">50dp</dimen>
     <dimen name="calendar_item_height_size">40dp</dimen>
     <dimen name="voice_item_size">110dp</dimen>
