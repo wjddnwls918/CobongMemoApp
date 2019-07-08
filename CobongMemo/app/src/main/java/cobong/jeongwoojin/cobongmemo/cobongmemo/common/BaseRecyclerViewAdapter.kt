@@ -18,62 +18,6 @@ abstract class BaseRecyclerVIewAdapter<T, VH : RecyclerView.ViewHolder?>(var dat
     }
 
     /**
-     * Add items.
-     *
-     * @param items list.
-     */
-   /* fun addItems(items: List<T>) {
-        *//*if (dataSet == null) {
-            dataSet = ArrayList()
-        }*//*
-
-        val currentSize = itemCount
-        dataSet.addAll(items)
-
-        notifyItemRangeInserted(currentSize, items.size)
-    }
-
-    *//**
-     * clear and add items.
-     * @param items list.
-     *//*
-    fun updateItems(items: List<T>) {
-       *//* if (dataSet == null) {
-            dataSet = ArrayList()
-        }*//*
-        dataSet.clear()
-        notifyDataSetChanged()
-
-        dataSet.addAll(items)
-        notifyItemRangeChanged(0, items.size)
-    }
-
-
-    *//**
-     * RemoveAll items.
-     *//*
-    fun removeAllItems() {
-        if (dataSet.size != 0) {
-            dataSet.clear()
-            notifyDataSetChanged()
-        }
-    }
-
-    *//**
-     * Remove item
-     *//*
-    fun removeItem(position: Int) {
-        dataSet.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
-    fun removeItem(item: T) {
-        val position = getItemPosition(item)
-        removeItem(position)
-    }*/
-
-
-    /**
      * Set items.
      */
     fun setItem(items: List<T>) {
