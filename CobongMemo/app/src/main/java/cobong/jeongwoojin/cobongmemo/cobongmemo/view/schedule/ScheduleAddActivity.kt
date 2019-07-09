@@ -3,19 +3,27 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.text.format.DateFormat
 import android.view.MenuItem
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoActivity
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,6 +35,8 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
     var dialogListener: DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ -> finish() }
+
+    lateinit var mapView: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +56,11 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
         initToolbar()
 
-    }
+        initObservePlace()
+        initPlaceEditTextListener()
 
+
+    }
 
     fun initToolbar() {
         setSupportActionBar(binding.tbSchedule);
@@ -66,21 +79,129 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
         return false
     }
 
+
+    fun initObservePlace() {
+
+        viewModel.document.observe(this, androidx.lifecycle.Observer {
+
+            it.run {
+                if (!(viewModel.document.value == null)) {
+                    extendMapView()
+
+                    val curPoint =
+                        MapPoint.mapPointWithGeoCoord(this.y.toDouble(), this.x.toDouble())
+                    mapView.setMapCenterPoint(curPoint, true);
+                    mapView.setZoomLevel(2, true);
+                    mapView.addPOIItem(getMarker(curPoint))
+
+                    binding.flPlaceImage.addView(mapView)
+
+                    binding.tietInputPlace.setText(this.place_name + "/" + this.address_name)
+                } else {
+                    if (binding.flPlaceImage.size > 0)
+                        binding.flPlaceImage.removeAllViews()
+
+                    mapView.removeAllPOIItems()
+
+                    reduceMapView()
+
+                }
+            }
+
+        })
+
+    }
+
+
+    fun getMarker(curPoint: MapPoint): MapPOIItem {
+
+        return MapPOIItem().apply {
+            itemName = "여기"
+            tag = 0
+            mapPoint = curPoint
+            markerType = MapPOIItem.MarkerType.RedPin
+        }
+    }
+
+    fun initPlaceEditTextListener() {
+
+        binding.tietInputPlace.addTextChangedListener(
+            object : TextWatcher {
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (binding.tietInputPlace.text?.toString().equals("")) {
+                        if (binding.flPlaceImage.size > 0)
+                            binding.flPlaceImage.removeAllViews()
+
+                        reduceMapView()
+                    }
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    if (binding.tietInputPlace.text?.toString().equals("")) {
+                        if (binding.flPlaceImage.size > 0)
+                            binding.flPlaceImage.removeAllViews()
+                        reduceMapView()
+                    }
+                }
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+
+                }
+            }
+        )
+    }
+
+    fun extendMapView() {
+
+        binding.glStartOfMap.setGuidelinePercent(0.8.toFloat())
+
+        binding.glEndOfDescription.setGuidelinePercent(0.9.toFloat())
+
+        binding.glEndOfAlarm.setGuidelinePercent(1.toFloat())
+    }
+
+    fun reduceMapView() {
+
+        binding.glStartOfMap.setGuidelinePercent(0.5.toFloat())
+
+        binding.glEndOfDescription.setGuidelinePercent(0.6.toFloat())
+
+        binding.glEndOfAlarm.setGuidelinePercent(0.7.toFloat())
+    }
+
+
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-        val DRAWABLE_LEFT = 0;
-        val DRAWABLE_TOP = 1;
+
         val DRAWABLE_RIGHT = 2;
-        val DRAWABLE_BOTTOM = 3;
 
         if (event?.getAction() == MotionEvent.ACTION_UP) {
             if (event.getRawX() >= (binding.tietInputPlace.getRight() - binding.tietInputPlace.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
-                // your action here
+
                 KeyBoardUtil.hideSoftKeyboard(binding.root, this)
-                SnackBarUtil.showSnackBar(binding.root, "검색 버튼 클릭")
+
+                val intent = Intent(this, PlaceInfoActivity::class.java)
+                startActivityForResult(intent, 100)
+
                 return true;
             }
         }
         return false;
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == 100 && resultCode == 101) {
+
+            mapView = MapView(this)
+
+            mapView.removeAllPOIItems()
+
+            viewModel.document.value = data?.getParcelableExtra("result")
+        }
     }
 
     override fun onBackPressed() {
@@ -119,7 +240,7 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
         android.app.AlertDialog.Builder(this).apply {
             setTitle(resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.set_alarm))
-            setItems(alarmType) { dialog, which ->
+            setItems(alarmType) { _, which ->
                 when (which) {
 
                     which -> {
@@ -152,7 +273,7 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
         val cal: Calendar = Calendar.getInstance()
         DatePickerDialog(
             this,
-            DatePickerDialog.OnDateSetListener { datePicker, year, month, date ->
+            DatePickerDialog.OnDateSetListener { _, year, month, date ->
                 viewModel.date.set(String.format("%d년 %d월 %d일", year, month + 1, date))
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)
         ).apply {
@@ -167,7 +288,7 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
         TimePickerDialog(
             this,
-            TimePickerDialog.OnTimeSetListener { timePicker, hour, min ->
+            TimePickerDialog.OnTimeSetListener { _, hour, min ->
                 when (format) {
                     "start" -> {
 

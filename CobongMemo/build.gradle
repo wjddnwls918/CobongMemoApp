@@ -34,7 +34,8 @@ task clean(type: Delete) {
 }
 
 ext {
-    rxVersion = '2.2.6'
+    rxJavaVersion = '2.2.10'
+    rxAndroidVersion = '2.1.1'
     roomVersion = '2.1.0-alpha06'
     tedPermissionVersion = '2.2.2'
     lifecycleVersion = '2.2.0-alpha01'
@@ -44,4 +45,7 @@ ext {
     coroutines = '1.2.0'
     stethoVersion = '1.5.1'
     materialCalendarVersion = '2.0.1'
+    retrofitVersion = '2.6.0'
+    okhttpVersion = '3.10.0'
+    rxKotlinVersion = '2.4.0-beta.1'
 }

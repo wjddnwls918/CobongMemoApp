@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo;
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
 import androidx.annotation.Nullable;
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R;
 
 
 public class SettingPreferenceFragment extends PreferenceFragment {

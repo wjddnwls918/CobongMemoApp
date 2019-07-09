@@ -118,4 +118,9 @@
     <string name="alarm_two_days_ago">2일 전</string>
     <string name="alarm_one_week_ago">1주 전</string>
 
+    <string name="select_place">장소 선택</string>
+
+    <string name="place_info">검색</string>
+    <string name="place_info_can_not_find_keyword">검색어를 찾을 수 없습니다.</string>
+
 </resources>

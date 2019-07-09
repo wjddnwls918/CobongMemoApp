@@ -116,4 +116,10 @@
     <string name="alarm_two_days_ago">2 days ago</string>
     <string name="alarm_one_week_ago">1 week ago</string>
 
+
+    <string name="select_place">Select Place</string>
+
+    <string name="place_info">search</string>
+    <string name="place_info_can_not_find_keyword">Can not find keyword</string>
+
 </resources>

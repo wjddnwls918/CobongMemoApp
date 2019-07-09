@@ -12,6 +12,7 @@ android {
         versionCode 2
         versionName "1.0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -46,10 +47,6 @@ dependencies {
 
     implementation 'com.appeaser.sublimepickerlibrary:sublimepickerlibrary:2.1.2'
 
-    implementation "androidx.room:room-runtime:$roomVersion"
-    kapt "androidx.room:room-compiler:$roomVersion"
-    testImplementation "androidx.room:room-testing:$roomVersion"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.jaredrummler:colorpicker:1.1.0'
@@ -62,6 +59,8 @@ dependencies {
 
     //coroutine
     //implementation "androidx.room:room-coroutines:2.1.0-alpha04"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion"
 
 
@@ -88,9 +87,27 @@ dependencies {
 
     // okhttp
     implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"
+    implementation "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
     //MaterialCalendarView
     implementation "com.github.prolificinteractive:material-calendarview:$materialCalendarVersion"
+
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    //kakao map
+    implementation files('libs/libDaumMapAndroid.jar')
+
+    //multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
+
+    //rx
+    //implementation("io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion")
+
 }
 
 repositories {
