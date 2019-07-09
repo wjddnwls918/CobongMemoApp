@@ -22,7 +22,7 @@ class ScheduleViewModel : ViewModel() {
 
     var isEnd: Boolean = false
 
-    var place:ObservableField<String> = ObservableField()
+    var document:MutableLiveData<Document> = MutableLiveData()
 
     fun onAddScheduleStartClick() {
         navigator.onAddScheduleStartClick()
