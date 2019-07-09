@@ -14,11 +14,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting.SettingsActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoListFragment
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleFragment
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting.SettingsActivity
 import com.google.android.material.tabs.TabLayout
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
@@ -165,7 +165,8 @@ class MainActivity : AppCompatActivity() {
             .setPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.ACCESS_FINE_LOCATION
             )
             .check()
     }
