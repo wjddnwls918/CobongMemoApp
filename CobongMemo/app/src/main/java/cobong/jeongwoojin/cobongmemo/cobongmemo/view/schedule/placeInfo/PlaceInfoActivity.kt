@@ -53,7 +53,7 @@ class PlaceInfoActivity : AppCompatActivity(), ScheduleNavigator {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
-            cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.home -> onBackPressed()
+            android.R.id.home -> onBackPressed()
 
             R.id.menu_search -> {
                 searchPlaceByKeyword()
@@ -149,8 +149,7 @@ class PlaceInfoActivity : AppCompatActivity(), ScheduleNavigator {
 
     override fun onDocumentClick(document: Document) {
         val intent = Intent()
-        intent.putExtra("resultAddressName", document.address_name)
-        intent.putExtra("resultPlaceName", document.place_name)
+        intent.putExtra("result",document)
         setResult(101, intent)
 
         finish()
