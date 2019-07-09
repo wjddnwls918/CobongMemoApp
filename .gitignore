@@ -66,3 +66,6 @@ fastlane/readme.md
 
 # Kakao App key
 kakao_string.xml
+
+# End of https://www.gitignore.io/api/java,kotlin,windows,android,intellij+all,androidstudio
+app/src/main/res/values/keys.xml
