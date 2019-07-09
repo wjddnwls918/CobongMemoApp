@@ -12,6 +12,7 @@ android {
         versionCode 2
         versionName "1.0.0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -96,6 +97,13 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+
+    //kakao map
+    implementation files('libs/libDaumMapAndroid.jar')
+
+    //multidex
+    implementation 'com.android.support:multidex:1.0.3'
+
 
     //rx
     //implementation("io.reactivex.rxjava2:rxkotlin:$rxKotlinVersion")
