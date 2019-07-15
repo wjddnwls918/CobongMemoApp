@@ -1,6 +1,7 @@
 ﻿## **CobongMemo Application** / 정우진 (wjddnwls918)
 **CobongMemo** 는 텍스트, 음성, 손글씨의 메모와 일정을 관리할 수 있는 기능을 가진 앱입니다.
 
+<img src="./image/playstore-icon.png" width="30%" />
 
 ### 개발 환경
 - 주 언어 : Kotlin
@@ -25,12 +26,15 @@
 #### 1.메모(텍스트, 음성, 손글씨)
 
 ##### 1)메인
+<div>
 <img src="./image/memo_list.jpg" width="30%" />
 
-<div>
+</div>
   
   
 ##### 2)텍스트
+
+<div>
 <img src="./image/text_memo.jpg" width="30%" />
   
   <img src="./image/text_view.jpg" width="30%" />
