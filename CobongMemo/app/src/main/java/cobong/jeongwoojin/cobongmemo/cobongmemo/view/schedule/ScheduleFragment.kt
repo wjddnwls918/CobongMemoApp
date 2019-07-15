@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.calendar.CalendarDecorator
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
@@ -41,7 +40,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener,ScheduleNavigator {
 
 
         binding.mcvScheduleCalendar.setOnDateChangedListener(this)
-        binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongGray, hashSetOf(CalendarDay.from(2019,7,5) )))
+        //binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongGray, hashSetOf(CalendarDay.from(2019,7,5) )))
 
         return binding.root
     }
@@ -51,7 +50,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener,ScheduleNavigator {
         date: CalendarDay,
         selected: Boolean
     ) {
-        Log.d("checkdate",date.toString())
+        Log.d("checkdate",date.year.toString()+"-"+date.month+"-"+date.day)
     }
 
     override fun onAddScheduleStartClick() {
