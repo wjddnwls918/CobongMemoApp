@@ -6,11 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoListDao
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleDao
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 
-@Database(entities = arrayOf(MemoItem::class), version = 1)
+@Database(entities = arrayOf(MemoItem::class, ScheduleItem::class), version = 1)
 abstract class MemoDatabase : RoomDatabase() {
 
     abstract fun memolistDao(): MemoListDao
+    abstract fun scheduleDao(): ScheduleDao
 
     companion object {
         @Volatile

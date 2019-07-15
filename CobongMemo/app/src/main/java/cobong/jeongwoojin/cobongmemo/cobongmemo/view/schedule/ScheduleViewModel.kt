@@ -1,28 +1,50 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 
+import android.app.Application
 import androidx.databinding.ObservableField
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document
 import io.reactivex.disposables.CompositeDisposable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
-class ScheduleViewModel : ViewModel() {
+class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
     lateinit var navigator: ScheduleNavigator
+
+    val disposable: CompositeDisposable = CompositeDisposable()
+    var isEnd: Boolean = false
 
     var date: ObservableField<String> = ObservableField()
     var startTime: ObservableField<String> = ObservableField()
     var endTime: ObservableField<String> = ObservableField()
+    var place: ObservableField<String> = ObservableField()
+    var alarmType: MutableLiveData<Int?> = MutableLiveData()
 
-    val disposable: CompositeDisposable = CompositeDisposable()
 
     var placeInfo: MutableLiveData<MutableList<Document>> = MutableLiveData()
 
-    var isEnd: Boolean = false
+    var document: MutableLiveData<Document> = MutableLiveData()
 
-    var document:MutableLiveData<Document> = MutableLiveData()
+
+    //Room
+    lateinit var scheduleListByRoom: LiveData<List<ScheduleItem>>
+
+    private var repository: ScheduleRepository
+
+    val allMemosByRoom: LiveData<List<ScheduleItem>>
+
+    init {
+        repository = ScheduleRepository.getInstance(application)
+        allMemosByRoom = repository.schedule
+    }
+
 
     fun onAddScheduleStartClick() {
         navigator.onAddScheduleStartClick()
@@ -48,14 +70,21 @@ class ScheduleViewModel : ViewModel() {
         navigator.onDateClick()
     }
 
-    //get from kakao
+    fun onDocumentClick(document: Document) {
+        navigator.onDocumentClick(document)
+    }
+
+    /*  From kakao api
+    *
+    *
+     */
     fun getKeywordPlace(key: String, query: String, page: Int) {
 
         disposable.add(
-            ScheduleRepository.getInstance().getKeywordPlace(key, query, page)
+            ScheduleRepository.getInstance(getApplication()).getKeywordPlace(key, query, page)
                 .subscribe({ data ->
 
-                    if(!isEnd)
+                    if (!isEnd)
                         placeInfo.postValue(data.documents)
 
                     if (data.meta.is_end)
@@ -71,8 +100,39 @@ class ScheduleViewModel : ViewModel() {
     }
 
 
-    fun onDocumentClick(document: Document) {
-        navigator.onDocumentClick(document)
+    /*  From Room
+    *
+    *
+     */
+
+
+    fun inserScheduleByRoom(
+        title: String,
+        date: String,
+        startTime: String,
+        endTime: String,
+        place: String,
+        description: String,
+        alarmType: Int?,
+        y: Double?,
+        x: Double?
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            ScheduleRepository.getInstance(getApplication()).insertByRoom(
+                ScheduleItem(
+                    index = null,
+                    title = title,
+                    date = date,
+                    startTime = startTime,
+                    endTime = endTime,
+                    place = place,
+                    description = description,
+                    alarmType = alarmType,
+                    y = y,
+                    x = x
+                )
+            )
+        }
     }
 
 

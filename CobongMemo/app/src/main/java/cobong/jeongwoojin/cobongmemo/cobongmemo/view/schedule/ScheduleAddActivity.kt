@@ -17,6 +17,7 @@ import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModelProviders
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
@@ -96,7 +97,8 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
                     binding.flPlaceImage.addView(mapView)
 
-                    binding.tietInputPlace.setText(this.place_name + "/" + this.address_name)
+                    viewModel.place.set(this.place_name + "/" + this.address_name)
+                    //binding.tietInputPlace.setText(this.place_name + "/" + this.address_name)
                 } else {
                     if (binding.flPlaceImage.size > 0)
                         binding.flPlaceImage.removeAllViews()
@@ -128,20 +130,15 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
         binding.tietInputPlace.addTextChangedListener(
             object : TextWatcher {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (binding.tietInputPlace.text?.toString().equals("")) {
+                    if (!(binding.tietInputPlace.text?.toString().equals(viewModel.place.get()))) {
+                        reduceMapView()
                         if (binding.flPlaceImage.size > 0)
                             binding.flPlaceImage.removeAllViews()
-
-                        reduceMapView()
                     }
                 }
 
                 override fun afterTextChanged(s: Editable?) {
-                    if (binding.tietInputPlace.text?.toString().equals("")) {
-                        if (binding.flPlaceImage.size > 0)
-                            binding.flPlaceImage.removeAllViews()
-                        reduceMapView()
-                    }
+
                 }
 
                 override fun beforeTextChanged(
@@ -218,8 +215,55 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
     }
 
     override fun onScheduleWriteFinishClick() {
-        finish()
+
+        KeyBoardUtil.hideSoftKeyboard(binding.root,this)
+
+        if (inputCheck()) {
+
+            var y:Double? = -1.0
+            var x:Double? = -1.0
+
+            if( binding.tietInputPlace.text?.toString().equals(viewModel.place.get()) ) {
+                y = viewModel.document.value?.y?.toDouble()
+                x = viewModel.document.value?.x?.toDouble()
+            }
+
+            viewModel.inserScheduleByRoom(
+                binding.tietInputSchedule.text.toString(),
+                binding.tietInputDate.text.toString(),
+                binding.tietInputStartTime.text.toString(),
+                binding.tietInputEndTime.text.toString(),
+                binding.tietInputPlace.text.toString(),
+                binding.tietInputDescription.text.toString(),
+                viewModel.alarmType.value,
+                y,
+                x
+            )
+
+            finish()
+
+        } else
+            SnackBarUtil.showSnackBar(binding.root, resources.getString(R.string.input_check))
+
+
+        //finish()
     }
+
+    fun inputCheck(): Boolean {
+
+        if (binding.tietInputSchedule.text.toString().equals("") ||
+            binding.tietInputDate.text.toString().equals("") ||
+            binding.tietInputStartTime.text.toString().equals("") ||
+            binding.tietInputEndTime.text.toString().equals("") ||
+            binding.tietInputPlace.text.toString().equals("") ||
+            binding.tietInputDescription.text.toString().equals("") ||
+            binding.tietInputAlarm.text.toString().equals("")
+        )
+            return false
+
+        return true
+    }
+
 
     override fun onSetAlarmClick() {
 
@@ -244,6 +288,7 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
                 when (which) {
 
                     which -> {
+                        viewModel.alarmType.value = which
                         binding.tietInputAlarm.setText(alarmType.get(which))
                     }
                 }
@@ -274,7 +319,31 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
         DatePickerDialog(
             this,
             DatePickerDialog.OnDateSetListener { _, year, month, date ->
-                viewModel.date.set(String.format("%d년 %d월 %d일", year, month + 1, date))
+
+
+                var tempMonth:String
+
+                if (month + 1 < 10) {
+                    tempMonth = "0" + (month + 1)
+                } else {
+                    tempMonth = (month + 1).toString()
+                }
+
+                var tempDate:String
+                if (date < 10) {
+                    tempDate = "0" + date
+                } else {
+                    tempDate = date.toString()
+                }
+
+                val temp = year.toString() + "-" + tempMonth + "-" + tempDate
+
+                viewModel.date.set(temp)
+                //viewModel.date.set(String.format("%d년 %d월 %d일", year, month + 1, date))
+
+                //viewModel.dateString.value = temp
+
+
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)
         ).apply {
             datePicker.minDate = Date().time
@@ -335,21 +404,39 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
         ifString: (Date, Int, Int) -> Boolean
     ) {
 
+        var tempHour:String
+
+        if (hour < 10) {
+            tempHour = "0" + hour
+        } else {
+            tempHour = hour.toString()
+        }
+
+        var tempMinute:String
+        if (min < 10) {
+            tempMinute = "0" + min
+        } else {
+            tempMinute = min.toString()
+        }
+
+        val transTime = tempHour + ":" + tempMinute
+
         if (!(compareDate.get() == null)) {
 
-            var compareTransDate: Date = SimpleDateFormat("HH시 mm분")
-                .parse(compareDate.get().toString())
+            var compareTransDate: Date = SimpleDateFormat("HH:mm")
+                .parse(compareDate.get())
 
             if (!(ifString(compareTransDate, hour, min))) {
                 SnackBarUtil.showSnackBar(binding.root, errorMsg)
 
             } else {
-                checkDate.set(String.format("%d시 %d분", hour, min))
+                checkDate.set(transTime)
 
             }
 
         } else {
-            checkDate.set(String.format("%d시 %d분", hour, min))
+            checkDate.set(transTime)
+
         }
 
     }

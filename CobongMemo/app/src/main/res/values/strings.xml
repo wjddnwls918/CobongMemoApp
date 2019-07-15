@@ -122,4 +122,6 @@
     <string name="place_info">search</string>
     <string name="place_info_can_not_find_keyword">Can not find keyword</string>
 
+    <string name="input_check">Check your input. plz</string>
+
 </resources>

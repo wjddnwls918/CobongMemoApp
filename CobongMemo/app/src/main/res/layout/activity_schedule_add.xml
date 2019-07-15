@@ -159,7 +159,8 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_place_black_24dp"
                 android:drawableRight="@drawable/ic_search_black_24dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@{viewmodel.place}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

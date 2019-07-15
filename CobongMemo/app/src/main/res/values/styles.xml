@@ -12,7 +12,7 @@
     </style>
 
     <style name="SplashTheme" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name = "android:windowBackground">@drawable/suzy</item>
+        <item name="android:windowBackground">@drawable/cobongesplash</item>
     </style>
 
 
