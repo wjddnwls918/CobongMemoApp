@@ -134,7 +134,7 @@ class PlaceInfoActivity : AppCompatActivity(), ScheduleNavigator {
     fun initKeyboardSearchListener() {
         binding.etInputPlaceKeyword.setOnEditorActionListener {
 
-                v, actionId, event ->
+                v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 searchPlaceByKeyword();
                 true
