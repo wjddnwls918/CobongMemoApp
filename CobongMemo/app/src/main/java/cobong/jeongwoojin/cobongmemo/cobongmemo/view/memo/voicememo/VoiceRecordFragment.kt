@@ -14,6 +14,8 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding
 import com.dd.processbutton.iml.ActionProcessButton
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
 class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListener, VoiceNavigator {
@@ -83,26 +85,31 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
 
     //녹음 시작
     override fun onRecordClick() {
-        binding.rotateloading.start()
-        binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS)
-        progressGenerator!!.start(binding.btnRecord)
 
-        resultDate = DateUtil.curDateForVoiceMemo()
-        filename = MemoApplication.root + "/" + resultDate + ".mp3"
+            binding.rotateloading.start()
+            binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS)
+            progressGenerator!!.start(binding.btnRecord)
 
-        recorder = MediaRecorder()
-        recorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-        recorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-        recorder!!.setOutputFile(filename)
-        recorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            resultDate = DateUtil.curDateForVoiceMemo()
+            filename = MemoApplication.root + "/" + resultDate + ".mp3"
 
-        try {
-            recorder!!.prepare()
-        } catch (e: Exception) {
-            e.printStackTrace()
+            recorder = MediaRecorder().apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)
+                setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+                setOutputFile(filename)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            }
+
+            try {
+                recorder!!.prepare()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        GlobalScope.launch {
+            recorder!!.start()
+
         }
-
-        recorder!!.start()
     }
 
     //녹음 끝
