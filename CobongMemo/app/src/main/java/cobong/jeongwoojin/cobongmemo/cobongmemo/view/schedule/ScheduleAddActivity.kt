@@ -193,11 +193,12 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == 100 && resultCode == 101) {
 
-            mapView = MapView(this)
+                mapView = MapView(this)
 
-            mapView.removeAllPOIItems()
+                mapView.removeAllPOIItems()
 
-            viewModel.document.value = data?.getParcelableExtra("result")
+                viewModel.document.value = data?.getParcelableExtra("result")
+
         }
     }
 
