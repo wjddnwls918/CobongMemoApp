@@ -44,7 +44,7 @@ class ScheduleRepository(application: Application) {
     fun getKeywordPlace(key: String, query: String, page: Int): Single<KakaoResponseModel> {
         return service.getKeywordPlace(key, query, page)
             //.observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io());
+            .subscribeOn(Schedulers.io())
     }
 
 
@@ -57,6 +57,8 @@ class ScheduleRepository(application: Application) {
     suspend fun insertByRoom(schedule: ScheduleItem) {
         scheduleDao.insert(schedule)
     }
+
+    fun getAllScheduleByDate(date: String): Single<List<ScheduleItem>> = scheduleDao.getAllScheduleByDate(date).subscribeOn(Schedulers.io())
 
 
 }

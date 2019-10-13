@@ -2,6 +2,7 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import io.reactivex.Single
 
 
 @Dao
@@ -9,6 +10,9 @@ interface ScheduleDao {
 
     @Query("SELECT * from schedule order by `index` desc")
     fun getAllSchedule(): LiveData<List<ScheduleItem>>
+
+    @Query( "SELECT * from schedule where date = :date order by `startTime` asc")
+    fun getAllScheduleByDate(date: String): Single<List<ScheduleItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(schedule: ScheduleItem)
