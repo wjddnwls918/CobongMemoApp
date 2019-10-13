@@ -12,6 +12,10 @@
 
     <color name="cobongRed">#ff4040</color>
 
+    <color name="cobongLightGray">#F7F7F7</color>
+
+    <color name="cobongLightDarkGray">#DBDBDB</color>
+
     <!-- end of custom -->
 
 

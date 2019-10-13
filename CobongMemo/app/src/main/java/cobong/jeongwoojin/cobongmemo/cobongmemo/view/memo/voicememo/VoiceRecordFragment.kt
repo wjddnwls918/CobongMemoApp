@@ -36,7 +36,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         this.onDismissListener = onDismissListener
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (onDismissListener != null) {
             onDismissListener!!.onDismiss(dialog)
