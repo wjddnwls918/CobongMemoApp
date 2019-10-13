@@ -29,6 +29,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var pagerAdapter: MainPagerAdapter
     private lateinit var binding: ActivityMainBinding
 
+    private val FINISH_INTERVAL_TIME = 2000
+    private var backPressedTime:Long= 0
+
     //TedPermission
     internal var permissionlistener: PermissionListener = object : PermissionListener {
         override fun onPermissionGranted() {
@@ -116,6 +119,8 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.vpMain.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tlMainTab))
+
+
         binding.tlMainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab) {
                 binding.vpMain.currentItem = tab.position
@@ -134,18 +139,20 @@ class MainActivity : AppCompatActivity() {
     inner class MainPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
         FragmentStatePagerAdapter(fm) {
 
-        override fun getItem(position: Int): Fragment? {
+        override fun getItem(position: Int): Fragment {
+
+            var fragment:Fragment = MemoListFragment()
+
             when (position) {
                 0 -> {
-                    return MemoListFragment()
+                    fragment = MemoListFragment()
                 }
 
                 1 -> {
-                    return ScheduleFragment()
+                    fragment = ScheduleFragment()
                 }
-
-                else -> return null
             }
+            return fragment
         }
 
         override fun getCount(): Int {
@@ -169,6 +176,22 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_FINE_LOCATION
             )
             .check()
+    }
+
+    override fun onBackPressed() {
+
+        var tempTime = System.currentTimeMillis()
+        var intervalTime = tempTime - backPressedTime
+
+        //첫 번째 클릭
+        when {
+            0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime ->{
+                super.onBackPressed()
+            }
+            else -> {
+                backPressedTime = tempTime
+                SnackBarUtil.showSnackBar(binding.root,"뒤로 버튼을 한번 더 누르시면 종료됩니다.")}
+        }
     }
 
 }
