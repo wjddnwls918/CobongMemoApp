@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
             }
             else -> {
                 backPressedTime = tempTime
-                SnackBarUtil.showSnackBar(binding.root,"뒤로 버튼을 한번 더 누르시면 종료됩니다.")}
+                SnackBarUtil.showSnackBar(binding.root,resources.getString(R.string.finish_app))}
         }
     }
 

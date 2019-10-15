@@ -12,4 +12,5 @@ interface ScheduleNavigator {
     fun onDateClick() {}
     fun onDocumentClick(document: Document) {}
     fun onScheduleClick(schedule: ScheduleItem) {}
+    fun onScheduleDeleteClick() {}
 }
