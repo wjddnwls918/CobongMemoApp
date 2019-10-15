@@ -49,4 +49,5 @@ ext {
     okhttpVersion = '3.10.0'
     rxKotlinVersion = '2.4.0-beta.1'
     lottieVersion = '3.0.7'
+    workVersion = "2.2.0"
 }
