@@ -2,24 +2,32 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.calendar.CalendarDecorator
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleadd.ScheduleAddActivity
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleview.ScheduleViewActivity
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 
 
-class ScheduleFragment : Fragment(), OnDateSelectedListener,ScheduleNavigator {
+class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
 
-    lateinit var viewModel: ScheduleViewModel
-    lateinit var binding: FragmentScheduleBinding
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var viewModel: ScheduleViewModel
+
+    private lateinit var binding: FragmentScheduleBinding
+    private lateinit var scheduleAdapter: ScheduleAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,17 +40,46 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener,ScheduleNavigator {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_schedule, container, false)
-        viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
+
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java)
+        //viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
 
 
         viewModel.navigator = this
         binding.viewmodel = viewModel
 
+        initScheduleRecyclerView()
+        initScheduleObserveByDate()
+        initScheduleObserve()
+        initScheduleCalendar()
 
-        binding.mcvScheduleCalendar.setOnDateChangedListener(this)
         //binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongGray, hashSetOf(CalendarDay.from(2019,7,5) )))
 
         return binding.root
+    }
+
+    fun initScheduleCalendar() {
+
+        binding.mcvScheduleCalendar.setOnDateChangedListener(this)
+    }
+
+    fun initScheduleRecyclerView() {
+        scheduleAdapter = ScheduleAdapter(arrayListOf(), viewModel)
+
+        binding.rcvScheduleList.layoutManager = LinearLayoutManager(context)
+        binding.rcvScheduleList.adapter = scheduleAdapter
+
+    }
+
+
+    fun initScheduleObserveByDate() {
+        viewModel.allSchedulesByRoomByDate.observe(this, Observer { schedules ->
+            schedules.let {
+                scheduleAdapter.setItem(it.toMutableList())
+            }
+        })
     }
 
     override fun onDateSelected(
@@ -50,12 +87,55 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener,ScheduleNavigator {
         date: CalendarDay,
         selected: Boolean
     ) {
-        Log.d("checkdate",date.year.toString()+"-"+date.month+"-"+date.day)
+        val year = date.year.toString()
+
+        val month: String
+        if (date.month < 10)
+            month = ("0" + date.month)
+        else
+            month = "" + date.month
+        val day: String
+        if (date.day < 10)
+            day = ("0" + date.day)
+        else
+            day = "" + date.day
+
+        val transDate = year + "-" + month + "-" + day
+
+        viewModel.transDate = transDate
+        viewModel.getAllScheduleByDate(transDate)
+
     }
 
     override fun onAddScheduleStartClick() {
-        val intent:Intent = Intent(context,ScheduleAddActivity::class.java)
-        startActivity(intent)
+        startActivity(Intent(context, ScheduleAddActivity::class.java))
+    }
+
+    override fun onScheduleClick(schedule: ScheduleItem) {
+        startActivity(
+            Intent(
+                context,
+                ScheduleViewActivity::class.java
+            ).apply { this.putExtra("schedule", schedule) })
+    }
+
+    fun initScheduleObserve() {
+        viewModel.allSchedulesByRoom.observe(this, Observer { memos ->
+            memos.let {
+
+                if (!viewModel.transDate.equals(""))
+                    viewModel.getAllScheduleByDate(viewModel.transDate)
+
+                val set = HashSet<CalendarDay>()
+                for (i in it.indices) {
+                    val trans = it[i].date.split("-")
+                    set.add(CalendarDay.from(trans[0].toInt(), trans[1].toInt(), trans[2].toInt()))
+                }
+                //달력 표시
+                binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongRed, set))
+
+            }
+        })
     }
 
 }

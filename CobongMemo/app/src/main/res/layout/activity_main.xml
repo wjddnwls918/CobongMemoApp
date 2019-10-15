@@ -49,6 +49,7 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.08" />
 
+
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vp_main"
             android:layout_width="match_parent"

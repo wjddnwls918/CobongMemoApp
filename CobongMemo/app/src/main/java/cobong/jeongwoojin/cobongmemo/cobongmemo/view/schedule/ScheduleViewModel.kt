@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 
 import android.app.Application
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -27,22 +28,25 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
     var place: ObservableField<String> = ObservableField()
     var alarmType: MutableLiveData<Int?> = MutableLiveData()
 
-
     var placeInfo: MutableLiveData<MutableList<Document>> = MutableLiveData()
 
     var document: MutableLiveData<Document> = MutableLiveData()
 
+    lateinit var curSchedule:ScheduleItem
+
+    var transDate: String = ""
 
     //Room
-    lateinit var scheduleListByRoom: LiveData<List<ScheduleItem>>
 
     private var repository: ScheduleRepository
 
-    val allMemosByRoom: LiveData<List<ScheduleItem>>
+    var allSchedulesByRoomByDate: MutableLiveData<List<ScheduleItem>> = MutableLiveData()
+
+    val allSchedulesByRoom: LiveData<List<ScheduleItem>>
 
     init {
         repository = ScheduleRepository.getInstance(application)
-        allMemosByRoom = repository.schedule
+        allSchedulesByRoom = repository.schedule
     }
 
 
@@ -72,6 +76,15 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     fun onDocumentClick(document: Document) {
         navigator.onDocumentClick(document)
+    }
+
+    fun onScheduleClick(schedule: ScheduleItem) {
+        Log.d("checkarrive", "hihi")
+        navigator.onScheduleClick(schedule)
+    }
+
+    fun onScheduleDeleteClick() {
+        navigator.onScheduleDeleteClick()
     }
 
     /*  From kakao api
@@ -106,7 +119,7 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
      */
 
 
-    fun inserScheduleByRoom(
+    fun insertScheduleByRoom(
         title: String,
         date: String,
         startTime: String,
@@ -114,11 +127,11 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         place: String,
         description: String,
         alarmType: Int?,
-        y: Double?,
-        x: Double?
+        y: Double,
+        x: Double
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            ScheduleRepository.getInstance(getApplication()).insertByRoom(
+            repository.insertByRoom(
                 ScheduleItem(
                     index = null,
                     title = title,
@@ -135,5 +148,33 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun getAllScheduleByDate(date: String) {
+        /*viewModelScope.launch (Dispatchers.IO){
+            allSchedulesByRoom = repository.getAllScheduleByDate(date)
+        }*/
+
+        disposable.add(
+            repository.getAllScheduleByDate(date)
+                .subscribe({ data ->
+
+                    if (data.size == 0)
+                        allSchedulesByRoomByDate.postValue(listOf())
+                    else
+                        allSchedulesByRoomByDate.postValue(data)
+
+                    Log.d("checkdate", data.size.toString())
+
+                }, { e ->
+                    Log.d("checkdate", "error occured")
+                    e.printStackTrace()
+                })
+        )
+
+    }
+
+    //delete Schedule
+    fun deleteSchedule() {
+        viewModelScope.launch(Dispatchers.IO) { repository.deleteSchedule(curSchedule) }
+    }
 
 }

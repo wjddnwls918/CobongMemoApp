@@ -67,6 +67,9 @@
     <string name="Success">Success</string>
     <string name="Loading">Loading..</string>
 
+    <!-- main -->
+    <string name="finish_app">If you click back button one more, Application is gonna close</string>
+
 
     <!-- color picker -->
     <string name="confirm">Ok</string>

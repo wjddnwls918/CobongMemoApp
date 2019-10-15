@@ -36,7 +36,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         this.onDismissListener = onDismissListener
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
+    override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)
         if (onDismissListener != null) {
             onDismissListener!!.onDismiss(dialog)
@@ -117,12 +117,14 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         binding.rotateloading.stop()
         binding.btnRecord.progress = 100
 
-        recorder!!.stop()
-        recorder!!.release()
-        recorder = null
+        if(recorder != null) {
+            recorder!!.stop()
+            recorder!!.release()
+            recorder = null
 
-        //insert voice memo
-        viewModel.insertVoiceMemoByRoom(resultDate)
+            //insert voice memo
+            viewModel.insertVoiceMemoByRoom(resultDate)
+        }
     }
 
     //닫기

@@ -34,13 +34,13 @@
                 android:textSize="@dimen/text_size_sp_large" />
 
             <ImageView
-                android:id="@+id/iv_add_schedule"
+                android:id="@+id/iv_delete_schedule"
                 android:layout_width="@dimen/calendar_item_height_size"
                 android:layout_height="@dimen/calendar_item_height_size"
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/space_medium_margin"
-                android:onClick="@{() -> viewmodel.onScheduleWriteFinishClick()}"
-                android:src="@drawable/icon_ok" />
+                android:onClick="@{() -> viewmodel.onScheduleDeleteClick()}"
+                android:src="@drawable/trash" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -60,9 +60,11 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_input_schedule"
+                android:text="@{viewmodel.curSchedule.title}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_title_black_24dp"
+                android:focusable="false"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -88,7 +90,7 @@
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onDateClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.date}" />
+                android:text="@{viewmodel.curSchedule.date}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -110,9 +112,8 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_access_time_black_24dp"
                 android:focusable="false"
-                android:onClick="@{() -> viewmodel.onStartTimeSettingClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.startTime}" />
+                android:text="@{viewmodel.curSchedule.startTime}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -134,9 +135,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:focusable="false"
-                android:onClick="@{() -> viewmodel.onEndTimeSettingClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.endTime}" />
+                android:text="@{viewmodel.curSchedule.endTime}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -158,9 +158,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_place_black_24dp"
-                android:drawableRight="@drawable/ic_search_black_24dp"
+                android:focusable="false"
                 android:singleLine="true"
-                android:text="@{viewmodel.place}" />
+                android:text="@{viewmodel.curSchedule.place}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,6 +192,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:focusable="false"
+                android:text="@{viewmodel.curSchedule.description}"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -214,8 +216,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_alarm_black_24dp"
+                app:alarmType="@{viewmodel.curSchedule.alarmType}"
                 android:focusable="false"
-                android:onClick="@{() -> viewmodel.onSetAlarmClick()}"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
