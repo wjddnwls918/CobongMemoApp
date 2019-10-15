@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleadd
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -16,11 +16,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoActivity
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -29,15 +31,17 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouchListener {
+class ScheduleAddActivity : AppCompatActivity(),
+    ScheduleNavigator, View.OnTouchListener {
 
-    lateinit var binding: ActivityScheduleAddBinding
-    lateinit var viewModel: ScheduleViewModel
+    private lateinit var binding: ActivityScheduleAddBinding
+    private lateinit var viewmodelFactory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var viewModel: ScheduleViewModel
 
-    var dialogListener: DialogInterface.OnClickListener =
+    private var dialogListener: DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ -> finish() }
 
-    lateinit var mapView: MapView
+    private lateinit var mapView: MapView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +50,10 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
             cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_schedule_add
         )
 
-        viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
+        viewmodelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+
+        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleViewModel::class.java)
+       // viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
 
         binding.viewmodel = viewModel
 
@@ -221,15 +228,15 @@ class ScheduleAddActivity : AppCompatActivity(), ScheduleNavigator, View.OnTouch
 
         if (inputCheck()) {
 
-            var y:Double? = -1.0
-            var x:Double? = -1.0
+            var y:Double = -1.0
+            var x:Double = -1.0
 
             if( binding.tietInputPlace.text?.toString().equals(viewModel.place.get()) ) {
-                y = viewModel.document.value?.y?.toDouble()
-                x = viewModel.document.value?.x?.toDouble()
+                y = viewModel.document.value?.y!!.toDouble()
+                x = viewModel.document.value?.x!!.toDouble()
             }
 
-            viewModel.inserScheduleByRoom(
+            viewModel.insertScheduleByRoom(
                 binding.tietInputSchedule.text.toString(),
                 binding.tietInputDate.text.toString(),
                 binding.tietInputStartTime.text.toString(),
