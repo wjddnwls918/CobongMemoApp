@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.schedule.scheduleadd.ScheduleAddActivity">
+
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/tb_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/viewpagerSchedule"
+                android:textSize="@dimen/text_size_sp_large" />
+
+            <ImageView
+                android:id="@+id/iv_delete_schedule"
+                android:layout_width="@dimen/calendar_item_height_size"
+                android:layout_height="@dimen/calendar_item_height_size"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/space_medium_margin"
+                android:onClick="@{() -> viewmodel.onScheduleDeleteClick()}"
+                android:src="@drawable/trash" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/viewpagerSchedule"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_title"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_toolbar">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_schedule"
+                android:text="@{viewmodel.curSchedule.title}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_title_black_24dp"
+                android:focusable="false"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_date"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_date"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_title">
+
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_event_black_24dp"
+                android:focusable="false"
+                android:onClick="@{() -> viewmodel.onDateClick()}"
+                android:singleLine="true"
+                android:text="@{viewmodel.curSchedule.date}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_start_time"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_time"
+            app:layout_constraintEnd_toEndOf="@id/gl_vertical_center"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="@{viewmodel.curSchedule.startTime}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_end_time"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_time"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_vertical_center"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_date">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="@{viewmodel.curSchedule.endTime}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_place"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_place"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_time">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_place"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_place_black_24dp"
+                android:focusable="false"
+                android:singleLine="true"
+                android:text="@{viewmodel.curSchedule.place}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <FrameLayout
+            android:id="@+id/fl_place_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@android:color/transparent"
+            app:layout_constraintBottom_toBottomOf="@id/gl_start_of_map"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_place" />
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/input_description"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_description"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_start_of_map">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_description_black_24dp"
+                android:focusable="false"
+                android:text="@{viewmodel.curSchedule.description}"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_input_box"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="@string/viewpagerAlarm"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_alarm"
+            app:layout_constraintEnd_toEndOf="@id/gl_right_end"
+            app:layout_constraintStart_toStartOf="@id/gl_left_end"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_description">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_input_alarm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_alarm_black_24dp"
+                app:alarmType="@{viewmodel.curSchedule.alarmType}"
+                android:focusable="false"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_vertical_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_left_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_right_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.97" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.1" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.2" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start_of_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_alarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.7" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
