@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow.ScheduleShowViewModel" />
 
     </data>
 
@@ -88,7 +88,6 @@
                 android:layout_height="wrap_content"
                 android:drawableLeft="@drawable/ic_event_black_24dp"
                 android:focusable="false"
-                android:onClick="@{() -> viewmodel.onDateClick()}"
                 android:singleLine="true"
                 android:text="@{viewmodel.curSchedule.date}" />
 

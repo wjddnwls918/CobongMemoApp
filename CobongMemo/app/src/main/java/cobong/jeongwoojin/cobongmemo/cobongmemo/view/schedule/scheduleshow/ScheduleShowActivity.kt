@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleview
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -8,38 +8,35 @@ import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
-import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleViewBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleShowBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-class ScheduleViewActivity : AppCompatActivity(), ScheduleNavigator {
+class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
 
-    private lateinit var binding: ActivityScheduleViewBinding
+    private lateinit var binding: ActivityScheduleShowBinding
     private lateinit var viewmodelFactory: ViewModelProvider.AndroidViewModelFactory
-    private lateinit var viewModel: ScheduleViewModel
+    private lateinit var viewModel: ScheduleShowViewModel
 
     private var mapView: MapView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_schedule_view)
+        setContentView(R.layout.activity_schedule_show)
 
         binding = DataBindingUtil.setContentView(
             this,
-            R.layout.activity_schedule_view
+            R.layout.activity_schedule_show
         )
 
         viewmodelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-
-        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleViewModel::class.java)
-
-        binding.viewmodel = viewModel
-        viewModel.navigator = this
+        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleShowViewModel::class.java).apply {
+            binding.viewmodel = this
+            navigator = this@ScheduleShowActivity
+        }
 
         Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").title)
         Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").date)
@@ -94,7 +91,7 @@ class ScheduleViewActivity : AppCompatActivity(), ScheduleNavigator {
     }
 
     override fun onScheduleDeleteClick() {
-        AlertDialog.Builder(this@ScheduleViewActivity).setTitle("확인")
+        AlertDialog.Builder(this@ScheduleShowActivity).setTitle("확인")
             .setMessage("일정을 지우시겠습니까?")
             .setNegativeButton("확인") { _, _ ->
 
