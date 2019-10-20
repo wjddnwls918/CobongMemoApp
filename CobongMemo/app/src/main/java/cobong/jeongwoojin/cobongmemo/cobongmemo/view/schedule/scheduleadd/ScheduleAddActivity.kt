@@ -32,11 +32,11 @@ import java.util.*
 
 
 class ScheduleAddActivity : AppCompatActivity(),
-    ScheduleNavigator, View.OnTouchListener {
+    ScheduleAddNavigator, View.OnTouchListener {
 
     private lateinit var binding: ActivityScheduleAddBinding
     private lateinit var viewmodelFactory: ViewModelProvider.AndroidViewModelFactory
-    private lateinit var viewModel: ScheduleViewModel
+    private lateinit var viewModel: ScheduleAddViewModel
 
     private var dialogListener: DialogInterface.OnClickListener =
         DialogInterface.OnClickListener { _, _ -> finish() }
@@ -47,17 +47,14 @@ class ScheduleAddActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
             this,
-            cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_schedule_add
+            R.layout.activity_schedule_add
         )
 
         viewmodelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-
-        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleViewModel::class.java)
-       // viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
-
-        binding.viewmodel = viewModel
-
-        viewModel.navigator = this
+        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleAddViewModel::class.java).apply {
+            binding.viewmodel = this
+            navigator = this@ScheduleAddActivity
+        }
 
 
         binding.tietInputPlace.setOnTouchListener(this)
