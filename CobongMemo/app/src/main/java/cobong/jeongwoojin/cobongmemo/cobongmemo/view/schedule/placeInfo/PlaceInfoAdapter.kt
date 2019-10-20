@@ -6,20 +6,18 @@ import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseMutableRecyclerviewAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemPlaceInfoBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel
 
 
-class PlaceInfoAdapter(dataSet: MutableList<Document>, private val viewModel: ScheduleViewModel) : BaseMutableRecyclerviewAdapter<Document,PlaceInfoAdapter.ViewHodler>(dataSet) {
+class PlaceInfoAdapter(dataSet: MutableList<Document>, private val viewModel: PlaceInfoViewModel) : BaseMutableRecyclerviewAdapter<Document,PlaceInfoAdapter.ViewHodler>(dataSet) {
 
-    private var listener: ScheduleNavigator? = null
+    private var listener: PlaceInfoNavigator? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHodler {
         val binding = ItemPlaceInfoBinding.inflate(LayoutInflater.from(parent.context),parent,false)
 
         //선언하고
         listener = object :
-            ScheduleNavigator {
+            PlaceInfoNavigator {
             override fun onDocumentClick(document: Document) {
                 viewModel.onDocumentClick(document)
             }

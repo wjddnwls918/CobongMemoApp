@@ -9,7 +9,7 @@
 
         <variable
             name="viewmodel"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoViewModel" />
 
     </data>
 

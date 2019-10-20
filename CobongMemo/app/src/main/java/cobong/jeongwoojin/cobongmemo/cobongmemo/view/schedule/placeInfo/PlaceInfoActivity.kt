@@ -10,7 +10,7 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
@@ -19,14 +19,14 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityPlaceInfoBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel
 
 
-class PlaceInfoActivity : AppCompatActivity(), ScheduleNavigator {
+class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
 
     private lateinit var binding: ActivityPlaceInfoBinding
-    private lateinit var viewModel: ScheduleViewModel
+
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
+    private lateinit var viewModel: PlaceInfoViewModel
 
     private lateinit var placeInfoAdapter: PlaceInfoAdapter
 
@@ -36,12 +36,16 @@ class PlaceInfoActivity : AppCompatActivity(), ScheduleNavigator {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
             this,
-            cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_place_info
+            R.layout.activity_place_info
         )
 
-        viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
-        binding.viewmodel = viewModel
-        viewModel.navigator = this
+
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(PlaceInfoViewModel::class.java).apply {
+            binding.viewmodel = this
+            navigator = this@PlaceInfoActivity
+        }
 
         initToolbar()
 
