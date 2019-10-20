@@ -15,7 +15,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBind
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.calendar.CalendarDecorator
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleadd.ScheduleAddActivity
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleview.ScheduleViewActivity
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow.ScheduleShowActivity
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
@@ -43,12 +43,10 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
 
         viewModelFactory =
             ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java)
-        //viewModel = ViewModelProviders.of(this).get(ScheduleViewModel::class.java)
-
-
-        viewModel.navigator = this
-        binding.viewmodel = viewModel
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java).apply {
+            navigator = this@ScheduleFragment
+            binding.viewmodel = this
+        }
 
         initScheduleRecyclerView()
         initScheduleObserveByDate()
@@ -115,7 +113,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
         startActivity(
             Intent(
                 context,
-                ScheduleViewActivity::class.java
+                ScheduleShowActivity::class.java
             ).apply { this.putExtra("schedule", schedule) })
     }
 
@@ -126,6 +124,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
                 if (!viewModel.transDate.equals(""))
                     viewModel.getAllScheduleByDate(viewModel.transDate)
 
+                binding.mcvScheduleCalendar.removeDecorators()
                 val set = HashSet<CalendarDay>()
                 for (i in it.indices) {
                     val trans = it[i].date.split("-")

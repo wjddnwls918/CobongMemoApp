@@ -10,7 +10,7 @@
 
         <variable
             name="listener"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoNavigator" />
 
     </data>
 

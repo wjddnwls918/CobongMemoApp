@@ -86,6 +86,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     //녹음 시작
     override fun onRecordClick() {
 
+        if (!binding.rotateloading.isStart) {
             binding.rotateloading.start()
             binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS)
             progressGenerator!!.start(binding.btnRecord)
@@ -106,9 +107,10 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
                 e.printStackTrace()
             }
 
-        GlobalScope.launch {
-            recorder!!.start()
+            GlobalScope.launch {
+                recorder!!.start()
 
+            }
         }
     }
 
@@ -117,7 +119,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         binding.rotateloading.stop()
         binding.btnRecord.progress = 100
 
-        if(recorder != null) {
+        if (recorder != null) {
             recorder!!.stop()
             recorder!!.release()
             recorder = null
