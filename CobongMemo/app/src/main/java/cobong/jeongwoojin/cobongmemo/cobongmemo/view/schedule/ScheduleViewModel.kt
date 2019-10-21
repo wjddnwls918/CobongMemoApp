@@ -37,7 +37,6 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
 
     fun onScheduleClick(schedule: ScheduleItem) {
-        Log.d("checkarrive", "hihi")
         navigator.onScheduleClick(schedule)
     }
 
