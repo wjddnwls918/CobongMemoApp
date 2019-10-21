@@ -1,7 +1,9 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo
 
 import android.app.Application
+import android.content.Intent
 import android.os.Environment
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.alarm.AlarmReceiver
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import okhttp3.OkHttpClient
@@ -54,6 +56,9 @@ class MemoApplication : Application() {
          * 데이터베이스 이름
          */
         var DATABASE_NAME = "memo/memo.db"
+
+
+        lateinit var intent:Intent
     }
 
     override fun onCreate() {
@@ -65,6 +70,8 @@ class MemoApplication : Application() {
             .addNetworkInterceptor(StethoInterceptor())
             .build()
 
+        intent = Intent(applicationContext, AlarmReceiver::class.java)
+        intent.action = "ALARM_ACTION"
     }
 
     override fun onTerminate() {

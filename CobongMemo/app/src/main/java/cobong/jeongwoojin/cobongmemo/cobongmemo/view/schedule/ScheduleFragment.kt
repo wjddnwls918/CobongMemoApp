@@ -10,15 +10,22 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.work.Data
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.CalendarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.alarm.AlarmAddWorker
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.calendar.CalendarDecorator
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleadd.ScheduleAddActivity
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow.ScheduleShowActivity
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+import java.util.*
+import kotlin.collections.HashSet
 
 
 class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
@@ -43,17 +50,16 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
 
         viewModelFactory =
             ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java).apply {
-            navigator = this@ScheduleFragment
-            binding.viewmodel = this
-        }
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java).apply {
+                navigator = this@ScheduleFragment
+                binding.viewmodel = this
+            }
 
         initScheduleRecyclerView()
         initScheduleObserveByDate()
         initScheduleObserve()
         initScheduleCalendar()
-
-        //binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongGray, hashSetOf(CalendarDay.from(2019,7,5) )))
 
         return binding.root
     }
@@ -124,14 +130,40 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
                 if (!viewModel.transDate.equals(""))
                     viewModel.getAllScheduleByDate(viewModel.transDate)
 
+                val calendar = Calendar.getInstance()
+
+
+                val work = OneTimeWorkRequest.Builder(AlarmAddWorker::class.java)
+                val data = Data.Builder()
+
                 binding.mcvScheduleCalendar.removeDecorators()
                 val set = HashSet<CalendarDay>()
                 for (i in it.indices) {
-                    val trans = it[i].date.split("-")
-                    set.add(CalendarDay.from(trans[0].toInt(), trans[1].toInt(), trans[2].toInt()))
+                    val dateArray = it[i].date.split("-")
+                    val startTimeArray = it[i].startTime.split(":")
+
+                    set.add(CalendarDay.from(dateArray[0].toInt(), dateArray[1].toInt(), dateArray[2].toInt()))
+
+                    if (CalendarUtil.setTime(
+                            dateArray.toTypedArray(),
+                            startTimeArray.toTypedArray(),
+                            it[i].alarmType
+                        ).timeInMillis < System.currentTimeMillis()
+                    ){
+                        continue
+                    }
+                    data.putString("title",it[i].title)
+                    data.putStringArray("dateArray", dateArray.toTypedArray())
+                    data.putStringArray("startTimeArray", startTimeArray.toTypedArray())
+                    data.putInt("requestCode",it[i].index)
+                    data.putInt("alarmType",it[i].alarmType)
+                    work.setInputData(data.build())
+                    WorkManager.getInstance(activity!!.applicationContext).enqueue(work.build())
+
                 }
                 //달력 표시
                 binding.mcvScheduleCalendar.addDecorator(CalendarDecorator(R.color.cobongRed, set))
+
 
             }
         })

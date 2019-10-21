@@ -21,8 +21,6 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleNavigator
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleViewModel
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoActivity
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -51,10 +49,11 @@ class ScheduleAddActivity : AppCompatActivity(),
         )
 
         viewmodelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleAddViewModel::class.java).apply {
-            binding.viewmodel = this
-            navigator = this@ScheduleAddActivity
-        }
+        viewModel =
+            ViewModelProvider(this, viewmodelFactory).get(ScheduleAddViewModel::class.java).apply {
+                binding.viewmodel = this
+                navigator = this@ScheduleAddActivity
+            }
 
 
         binding.tietInputPlace.setOnTouchListener(this)
@@ -178,7 +177,7 @@ class ScheduleAddActivity : AppCompatActivity(),
 
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
 
-        val DRAWABLE_RIGHT = 2;
+        val DRAWABLE_RIGHT = 2
 
         if (event?.getAction() == MotionEvent.ACTION_UP) {
             if (event.getRawX() >= (binding.tietInputPlace.getRight() - binding.tietInputPlace.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
@@ -188,23 +187,25 @@ class ScheduleAddActivity : AppCompatActivity(),
                 val intent = Intent(this, PlaceInfoActivity::class.java)
                 startActivityForResult(intent, 100)
 
-                return true;
+                return true
             }
         }
-        return false;
+        return false
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == 101) {
 
-                mapView = MapView(this)
+            mapView = MapView(this)
 
-                mapView.removeAllPOIItems()
+            mapView.removeAllPOIItems()
 
-                viewModel.document.value = data?.getParcelableExtra("result")
+            viewModel.document.value = data?.getParcelableExtra("result")
 
         }
     }
+
 
     override fun onBackPressed() {
 
@@ -221,14 +222,14 @@ class ScheduleAddActivity : AppCompatActivity(),
 
     override fun onScheduleWriteFinishClick() {
 
-        KeyBoardUtil.hideSoftKeyboard(binding.root,this)
+        KeyBoardUtil.hideSoftKeyboard(binding.root, this)
 
         if (inputCheck()) {
 
-            var y:Double = -1.0
-            var x:Double = -1.0
+            var y: Double = -1.0
+            var x: Double = -1.0
 
-            if( binding.tietInputPlace.text?.toString().equals(viewModel.place.get()) ) {
+            if (binding.tietInputPlace.text?.toString().equals(viewModel.place.get())) {
                 y = viewModel.document.value?.y!!.toDouble()
                 x = viewModel.document.value?.x!!.toDouble()
             }
@@ -240,7 +241,7 @@ class ScheduleAddActivity : AppCompatActivity(),
                 binding.tietInputEndTime.text.toString(),
                 binding.tietInputPlace.text.toString(),
                 binding.tietInputDescription.text.toString(),
-                viewModel.alarmType.value,
+                viewModel.alarmType.value ?: 0,
                 y,
                 x
             )
@@ -274,17 +275,11 @@ class ScheduleAddActivity : AppCompatActivity(),
 
         val alarmType = arrayOf<CharSequence>(
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_ontime).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_five_minutes_ago).toString(),
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_ten_minutes_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_fifteen_minutes_ago).toString(),
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_thirty_minutes_ago).toString(),
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_hours_ago).toString(),
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_two_hours_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_three_hours_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_twelve_hours_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_day_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_two_days_ago).toString(),
-            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_week_ago).toString()
+            resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_day_ago).toString()
         )
 
         android.app.AlertDialog.Builder(this).apply {
@@ -326,7 +321,7 @@ class ScheduleAddActivity : AppCompatActivity(),
             DatePickerDialog.OnDateSetListener { _, year, month, date ->
 
 
-                var tempMonth:String
+                var tempMonth: String
 
                 if (month + 1 < 10) {
                     tempMonth = "0" + (month + 1)
@@ -334,7 +329,7 @@ class ScheduleAddActivity : AppCompatActivity(),
                     tempMonth = (month + 1).toString()
                 }
 
-                var tempDate:String
+                var tempDate: String
                 if (date < 10) {
                     tempDate = "0" + date
                 } else {
@@ -344,10 +339,6 @@ class ScheduleAddActivity : AppCompatActivity(),
                 val temp = year.toString() + "-" + tempMonth + "-" + tempDate
 
                 viewModel.date.set(temp)
-                //viewModel.date.set(String.format("%d년 %d월 %d일", year, month + 1, date))
-
-                //viewModel.dateString.value = temp
-
 
             }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE)
         ).apply {
@@ -373,7 +364,20 @@ class ScheduleAddActivity : AppCompatActivity(),
                             viewModel.endTime,
                             "시작 시간을 다시 입력해주세요",
                             { date, hour, min ->
-                                (date.hours >= hour && date.minutes >= min)
+
+                                when {
+                                    (date.hours > hour) -> true
+
+                                    (date.hours == hour) -> when {
+                                        date.minutes < min ->
+                                            false
+                                        else ->
+                                            true
+                                    }
+                                    else -> false
+                                }
+
+
                             })
                     }
 
@@ -386,7 +390,20 @@ class ScheduleAddActivity : AppCompatActivity(),
                             viewModel.startTime,
                             "종료 시간을 다시 입력해주세요",
                             { date, hour, min ->
-                                (date.hours <= hour && date.minutes <= min)
+
+                                when {
+                                    (date.hours < hour) -> true
+
+                                    (date.hours == hour) -> when {
+                                        date.minutes > min ->
+                                            false
+                                        else ->
+                                            true
+                                    }
+                                    else -> false
+                                }
+
+
                             })
 
                     }
@@ -409,7 +426,7 @@ class ScheduleAddActivity : AppCompatActivity(),
         ifString: (Date, Int, Int) -> Boolean
     ) {
 
-        var tempHour:String
+        var tempHour: String
 
         if (hour < 10) {
             tempHour = "0" + hour
@@ -417,7 +434,7 @@ class ScheduleAddActivity : AppCompatActivity(),
             tempHour = hour.toString()
         }
 
-        var tempMinute:String
+        var tempMinute: String
         if (min < 10) {
             tempMinute = "0" + min
         } else {
