@@ -1,15 +1,18 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow
 
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_ONE_SHOT
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.size
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleShowBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -33,20 +36,13 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
         )
 
         viewmodelFactory = ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        viewModel = ViewModelProvider(this,viewmodelFactory).get(ScheduleShowViewModel::class.java).apply {
-            binding.viewmodel = this
-            navigator = this@ScheduleShowActivity
-        }
-
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").title)
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").date)
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").startTime)
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").endTime)
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").x.toString())
-        Log.d("checkdata",intent.getParcelableExtra<ScheduleItem>("schedule").alarmType.toString())
+        viewModel =
+            ViewModelProvider(this, viewmodelFactory).get(ScheduleShowViewModel::class.java).apply {
+                binding.viewmodel = this
+                navigator = this@ScheduleShowActivity
+            }
 
         viewModel.curSchedule = intent.getParcelableExtra("schedule")
-
 
         initMap()
 
@@ -54,7 +50,7 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
 
     override fun onPause() {
 
-        if(mapView != null) {
+        if (mapView != null) {
             if (binding.flPlaceImage.size > 0)
                 binding.flPlaceImage.removeAllViews()
 
@@ -76,7 +72,7 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
                 extendMapView()
 
                 val curPoint =
-                    MapPoint.mapPointWithGeoCoord(viewModel.curSchedule.y , viewModel.curSchedule.x)
+                    MapPoint.mapPointWithGeoCoord(viewModel.curSchedule.y, viewModel.curSchedule.x)
 
                 mapView?.setMapCenterPoint(curPoint, true);
                 mapView?.setZoomLevel(2, true);
@@ -95,6 +91,7 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
             .setMessage("일정을 지우시겠습니까?")
             .setNegativeButton("확인") { _, _ ->
 
+                deleteAlarm()
                 viewModel.deleteSchedule()
 
                 finish()
@@ -102,6 +99,15 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
             .setPositiveButton("취소", null)
             .create().show()
 
+    }
+
+    fun deleteAlarm() {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val sender =
+            PendingIntent.getBroadcast(applicationContext, viewModel.curSchedule.index, MemoApplication.intent, FLAG_ONE_SHOT)
+
+        alarmManager.cancel(sender)
+        sender.cancel()
     }
 
     fun extendMapView() {
