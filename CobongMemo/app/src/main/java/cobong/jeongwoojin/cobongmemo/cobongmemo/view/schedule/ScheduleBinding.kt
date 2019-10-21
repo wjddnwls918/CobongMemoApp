@@ -6,8 +6,6 @@ import com.google.android.material.textfield.TextInputEditText
 
 object ScheduleBinding {
 
-
-
     @JvmStatic
     @BindingAdapter("startTime","endTime")
     fun setScheduleDate(view: TextView, startTime: String, endTime:String) {
@@ -21,17 +19,12 @@ object ScheduleBinding {
 
         val alarmTypeNumToString = arrayOf<CharSequence>(
             view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_ontime).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_five_minutes_ago).toString(),
             view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_ten_minutes_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_fifteen_minutes_ago).toString(),
             view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_thirty_minutes_ago).toString(),
             view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_hours_ago).toString(),
             view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_two_hours_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_three_hours_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_twelve_hours_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_day_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_two_days_ago).toString(),
-            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_week_ago).toString()
+            view.context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_one_day_ago).toString()
+
         )
 
         view.setText(alarmTypeNumToString[alarmType])
