@@ -8,26 +8,26 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "schedule")
 data class ScheduleItem(
     @PrimaryKey(autoGenerate = true)
-    var index: Int?,
+    var index: Int,
     var title: String,
     var date: String,
     var startTime: String,
     var endTime: String,
     var place: String,
     var description: String,
-    var alarmType: Int?,
+    var alarmType: Int,
     var y: Double,
     var x: Double
 ) : Parcelable {
     constructor(source: Parcel) : this(
-        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readInt(),
         source.readString(),
         source.readString(),
         source.readString(),
         source.readString(),
         source.readString(),
         source.readString(),
-        source.readValue(Int::class.java.classLoader) as Int?,
+        source.readInt(),
         source.readDouble(),
         source.readDouble()
     )
@@ -35,14 +35,14 @@ data class ScheduleItem(
     override fun describeContents() = 0
 
     override fun writeToParcel(dest: Parcel, flags: Int) = with(dest) {
-        writeValue(index)
+        writeInt(index)
         writeString(title)
         writeString(date)
         writeString(startTime)
         writeString(endTime)
         writeString(place)
         writeString(description)
-        writeValue(alarmType)
+        writeInt(alarmType)
         writeDouble(y)
         writeDouble(x)
     }
