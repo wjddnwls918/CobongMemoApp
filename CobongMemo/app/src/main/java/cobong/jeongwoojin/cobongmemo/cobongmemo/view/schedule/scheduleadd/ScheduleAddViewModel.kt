@@ -19,7 +19,7 @@ class ScheduleAddViewModel(application: Application) : AndroidViewModel(applicat
     var startTime: ObservableField<String> = ObservableField()
     var endTime: ObservableField<String> = ObservableField()
     var place: ObservableField<String> = ObservableField()
-    var alarmType: MutableLiveData<Int?> = MutableLiveData()
+    var alarmType: MutableLiveData<Int> = MutableLiveData()
 
     var document: MutableLiveData<Document> = MutableLiveData()
 
@@ -63,14 +63,14 @@ class ScheduleAddViewModel(application: Application) : AndroidViewModel(applicat
         endTime: String,
         place: String,
         description: String,
-        alarmType: Int?,
+        alarmType: Int,
         y: Double,
         x: Double
     ) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.insertByRoom(
                 ScheduleItem(
-                    index = null,
+                    0,
                     title = title,
                     date = date,
                     startTime = startTime,
