@@ -14,6 +14,9 @@ interface ScheduleDao {
     @Query( "SELECT * from schedule where date = :date order by `startTime` asc")
     fun getAllScheduleByDate(date: String): Single<List<ScheduleItem>>
 
+    @Query( "SELECT * from schedule where date = :date order by `startTime` asc")
+    fun getAllTodayOrTomorrowSchedules(date: String): LiveData<List<ScheduleItem>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(schedule: ScheduleItem)
 
