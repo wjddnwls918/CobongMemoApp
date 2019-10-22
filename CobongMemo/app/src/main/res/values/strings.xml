@@ -127,4 +127,11 @@
 
     <string name="input_check">Check your input. plz</string>
 
+
+    <!-- TodoList Fragment -->
+    <string name="todolist_today">Today Todo List!</string>
+    <string name="todolist_tomorrow">Tomorrow Todo List</string>
+
+    <string name="todolist_time_over">Time Over</string>
+
 </resources>
