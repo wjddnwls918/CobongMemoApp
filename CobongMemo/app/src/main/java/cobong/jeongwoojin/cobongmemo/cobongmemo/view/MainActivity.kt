@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val FINISH_INTERVAL_TIME = 2000
-    private var backPressedTime:Long= 0
+    private var backPressedTime: Long = 0
 
     private val memoFragment = MemoListFragment()
     private val scheduleFragment = ScheduleFragment()
@@ -47,14 +47,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(
+            this,
+            cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_main
+        )
 
         //권한
         checkDangerousPermissions()
 
         // SD Card checking
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            Toast.makeText(this, cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.no_sdcard_message, Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                this,
+                cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.no_sdcard_message,
+                Toast.LENGTH_LONG
+            ).show()
             return
         } else {
             val externalPath = Environment.getExternalStorageDirectory().absolutePath
@@ -87,7 +94,7 @@ class MainActivity : AppCompatActivity() {
     fun setLocale() {
         //set current locale
         var curLocale: Locale
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             curLocale = resources.configuration.locales.get(0)
         } else
             curLocale = resources.configuration.locale
@@ -97,21 +104,31 @@ class MainActivity : AppCompatActivity() {
     private fun setUI() {
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment).commitAllowingStateLoss()
+        transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment)
+            .commitAllowingStateLoss()
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
             val transaction = supportFragmentManager.beginTransaction()
             when (item.itemId) {
                 cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_memo -> {
-                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment).commitAllowingStateLoss()
+                    transaction.replace(
+                        cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main,
+                        memoFragment
+                    ).commitAllowingStateLoss()
                 }
 
                 cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_todo_list -> {
-                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, todoListFragment).commitAllowingStateLoss()
+                    transaction.replace(
+                        cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main,
+                        todoListFragment
+                    ).commitAllowingStateLoss()
                 }
 
                 cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_schedule -> {
-                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, scheduleFragment).commitAllowingStateLoss()
+                    transaction.replace(
+                        cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main,
+                        scheduleFragment
+                    ).commitAllowingStateLoss()
                 }
             }
 
@@ -145,12 +162,17 @@ class MainActivity : AppCompatActivity() {
 
         //첫 번째 클릭
         when {
-            0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime ->{
+            0 <= intervalTime && FINISH_INTERVAL_TIME >= intervalTime -> {
                 super.onBackPressed()
             }
             else -> {
                 backPressedTime = tempTime
-                SnackBarUtil.showSnackBar(binding.root,resources.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.finish_app))}
+                Toast.makeText(
+                    this,
+                    resources.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.finish_app),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

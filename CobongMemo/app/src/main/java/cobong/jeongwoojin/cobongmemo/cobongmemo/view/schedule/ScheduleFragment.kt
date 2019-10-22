@@ -24,8 +24,6 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow.Sched
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
-import java.util.*
-import kotlin.collections.HashSet
 
 
 class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
@@ -130,9 +128,6 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
                 if (!viewModel.transDate.equals(""))
                     viewModel.getAllScheduleByDate(viewModel.transDate)
 
-                val calendar = Calendar.getInstance()
-
-
                 val work = OneTimeWorkRequest.Builder(AlarmAddWorker::class.java)
                 val data = Data.Builder()
 
@@ -150,6 +145,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
                             it[i].alarmType
                         ).timeInMillis < System.currentTimeMillis()
                     ){
+
                         continue
                     }
                     data.putString("title",it[i].title)

@@ -18,6 +18,8 @@ fun setItems(listView: RecyclerView, items: List<ScheduleItem>?) {
 @BindingAdapter("app:remainTime", "app:date")
 fun setRemainTime(textView: TextView, startTime: String, date: String) {
 
+    var string:String = ""
+
     if (date.equals(DateUtil.getTodayOrTomorrow("today"))) {
 
         val currentTime = DateUtil.getCurrentTime()
@@ -25,10 +27,13 @@ fun setRemainTime(textView: TextView, startTime: String, date: String) {
         val currentTrans = currentTime.split(":")
         val startTimeTrans = startTime.split(":")
 
+        //Log.d("checkArrive",   "startTime hour: "+startTimeTrans[0]+" minute: "+ startTimeTrans[1]+ "cur hour : "+ currentTrans[0] +" minute: "+ currentTrans[1])
+
         when {
             startTimeTrans[0].toInt() < currentTrans[0].toInt() -> {
                 textView.setTextColor(textView.resources.getColor(R.color.cobongRed))
-                textView.setText(R.string.todolist_time_over)
+                textView.text = textView.resources.getString(R.string.todolist_time_over)
+                return
             }
 
             startTimeTrans[0].toInt() == currentTrans[0].toInt() -> {
@@ -42,13 +47,15 @@ fun setRemainTime(textView: TextView, startTime: String, date: String) {
                             minute += 60
                         }
 
-                        val string = hour.toString() + "시간 " + minute + "분 남았습니다"
+                        string = hour.toString() + "시간 " + minute + "분 남았습니다"
 
-                        textView.setText(string)
+                        textView.text = string
+                        return
                     }
-                    else -> {
+                    startTimeTrans[1].toInt() < currentTrans[1].toInt() -> {
                         textView.setTextColor(textView.resources.getColor(R.color.cobongRed))
-                        textView.setText(R.string.todolist_time_over)
+                        textView.text = textView.resources.getString(R.string.todolist_time_over)
+                        return
                     }
                 }
             }
@@ -61,13 +68,15 @@ fun setRemainTime(textView: TextView, startTime: String, date: String) {
                     minute += 60
                 }
 
-                val string = hour.toString() + "시간 " + minute + "분 남았습니다"
+                string = hour.toString() + "시간 " + minute + "분 남았습니다"
 
-                textView.setText(string)
+                textView.text = string
+                return
             }
         }
     } else {
         textView.setText(startTime)
+        return
     }
 
 }
