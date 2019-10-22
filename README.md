@@ -15,6 +15,7 @@
 - [Viewmodel](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
 - [Databinding](https://developer.android.com/topic/libraries/data-binding?hl=ko)
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [coroutine](https://codelabs.developers.google.com/codelabs/kotlin-coroutines/#0)
 
 - [DrawableView](https://github.com/PaNaVTEC/DrawableView)
@@ -27,7 +28,7 @@
 
 ##### 1)메인
 <div>
-<img src="./image/memo_list.jpg" width="30%" />
+<img src="./image/memo_fragment.jpg" width="30%" />
 
 </div>
   
@@ -35,9 +36,7 @@
 ##### 2)텍스트
 
 <div>
-<img src="./image/text_memo.jpg" width="30%" />
-  
-  <img src="./image/text_view.jpg" width="30%" />
+<img src="./image/text_memo.jpg" width="30%" /> 
   
  </div>
  
@@ -53,19 +52,28 @@
  <div>
   
 <img src="./image/handwrite_memo.jpg" width="30%" />
-  
-  <img src="./image/handwrite_view.jpg" width="30%" />
-  
+    
  
  </div>
  
-#### 2.일정
+#### 2.할일
+ 
+ <div>
+  
+<img src="./image/today_and_tomorrow_todo_list.jpg" width="30%" />
+    
+ 
+ </div>
+ 
+ 
+ 
+#### 3.일정
 
 
 ##### 1)달력
 <div>
   
-<img src="./image/schedule_main.jpg" width="30%" />
+<img src="./image/calendar_and_schedule.jpg" width="30%" />
   
  
  </div>
@@ -74,8 +82,8 @@
 
 <div>
   
-<img src="./image/schedule_add.jpg" width="30%" />
-  <img src="./image/input_schedule.jpg" width="30%" />
+<img src="./image/add_schedule.jpg" width="30%" />
+  <img src="./image/show_schedule.jpg" width="30%" />
  
  </div>
 
