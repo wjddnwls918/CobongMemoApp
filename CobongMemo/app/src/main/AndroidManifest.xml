@@ -22,7 +22,7 @@
             android:name=".view.schedule.alarm.AlarmReceiver"
             android:enabled="true"
             android:exported="true"/>
-        <activity android:name=".view.schedule.scheduleshow.ScheduleShowActivity"></activity>
+        <activity android:name=".view.schedule.scheduleshow.ScheduleShowActivity"/>
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -43,15 +43,12 @@
             android:theme="@style/noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.VIEW"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Main Activity -->
         <activity
             android:name=".view.memo.textmemo.TextMemoWriteActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".view.setting.SettingsActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.memo.textmemo.TextMemoViewActivity"

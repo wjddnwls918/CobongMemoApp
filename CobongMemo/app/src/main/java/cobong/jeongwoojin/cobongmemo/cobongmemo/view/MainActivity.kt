@@ -1,36 +1,35 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view
 
 import android.Manifest
-import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentStatePagerAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
-import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoListFragment
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleFragment
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.setting.SettingsActivity
-import com.google.android.material.tabs.TabLayout
+import cobong.jeongwoojin.cobongmemo.cobongmemo.view.todolist.TodoListFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import java.io.File
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var pagerAdapter: MainPagerAdapter
     private lateinit var binding: ActivityMainBinding
 
     private val FINISH_INTERVAL_TIME = 2000
     private var backPressedTime:Long= 0
+
+    private val memoFragment = MemoListFragment()
+    private val scheduleFragment = ScheduleFragment()
+    private val todoListFragment = TodoListFragment()
 
     //TedPermission
     internal var permissionlistener: PermissionListener = object : PermissionListener {
@@ -44,39 +43,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    //메뉴 이벤트
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-        when (item.itemId) {
-            R.id.cobong_custom -> {
-                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
-        return super.onOptionsItemSelected(item)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.activity_main)
 
         //권한
         checkDangerousPermissions()
 
         // SD Card checking
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            Toast.makeText(this, R.string.no_sdcard_message, Toast.LENGTH_LONG).show()
+            Toast.makeText(this, cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.no_sdcard_message, Toast.LENGTH_LONG).show()
             return
         } else {
             val externalPath = Environment.getExternalStorageDirectory().absolutePath
@@ -108,56 +86,38 @@ class MainActivity : AppCompatActivity() {
 
     fun setLocale() {
         //set current locale
-        val curLocale = resources.configuration.locale
+        var curLocale: Locale
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            curLocale = resources.configuration.locales.get(0)
+        } else
+            curLocale = resources.configuration.locale
         MemoApplication.language = curLocale.language
     }
 
     private fun setUI() {
 
-        pagerAdapter = MainPagerAdapter(supportFragmentManager, binding.tlMainTab.tabCount)
-        binding.vpMain.adapter = pagerAdapter
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment).commitAllowingStateLoss()
 
+        binding.bottomNavigation.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
+            val transaction = supportFragmentManager.beginTransaction()
+            when (item.itemId) {
+                cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_memo -> {
+                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment).commitAllowingStateLoss()
+                }
 
-        binding.vpMain.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(binding.tlMainTab))
+                cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_todo_list -> {
+                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, todoListFragment).commitAllowingStateLoss()
+                }
 
-
-        binding.tlMainTab.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab) {
-                binding.vpMain.currentItem = tab.position
+                cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_schedule -> {
+                    transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, scheduleFragment).commitAllowingStateLoss()
+                }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab) {
-
-            }
+            true
         })
-    }
 
-    inner class MainPagerAdapter(fm: FragmentManager, private val mPageCount: Int) :
-        FragmentStatePagerAdapter(fm) {
-
-        override fun getItem(position: Int): Fragment {
-
-            var fragment:Fragment = MemoListFragment()
-
-            when (position) {
-                0 -> {
-                    fragment = MemoListFragment()
-                }
-
-                1 -> {
-                    fragment = ScheduleFragment()
-                }
-            }
-            return fragment
-        }
-
-        override fun getCount(): Int {
-            return mPageCount
-        }
 
     }
 
@@ -190,7 +150,7 @@ class MainActivity : AppCompatActivity() {
             }
             else -> {
                 backPressedTime = tempTime
-                SnackBarUtil.showSnackBar(binding.root,resources.getString(R.string.finish_app))}
+                SnackBarUtil.showSnackBar(binding.root,resources.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.finish_app))}
         }
     }
 

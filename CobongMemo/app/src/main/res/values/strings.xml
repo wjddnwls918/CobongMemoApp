@@ -70,6 +70,9 @@
     <!-- main -->
     <string name="finish_app">If you click back button one more, Application is gonna close</string>
 
+    <string name="main_bottom_memo">Memo</string>
+    <string name="main_bottom_schedule">Schedule</string>
+    <string name="main_bottom_settings">Todo List</string>
 
     <!-- color picker -->
     <string name="confirm">Ok</string>

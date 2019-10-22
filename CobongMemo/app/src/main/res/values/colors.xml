@@ -8,7 +8,7 @@
     <color name="cobongGray">#4d718c</color>
     <color name="cobongDarkGray">#666666</color>
 
-    <color name="cobongGreen">#91f752</color>
+    <color name="cobongGreen">#4CB050</color>
 
     <color name="cobongRed">#ff4040</color>
 
@@ -17,6 +17,8 @@
     <color name="cobongLightDarkGray">#DBDBDB</color>
 
     <!-- end of custom -->
+
+    <!-- main -->
 
 
     <!-- Floating opensource values -->

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_memo"
+        android:icon="@drawable/ic_mode_edit_white_24dp"
+        android:title="@string/main_bottom_memo" />
+
+    <item
+        android:id="@+id/action_todo_list"
+        android:icon="@drawable/ic_event_note_black_24dp"
+        android:title="@string/main_bottom_settings" />
+
+    <item
+        android:id="@+id/action_schedule"
+        android:icon="@drawable/ic_event_white_24dp"
+        android:title="@string/main_bottom_schedule" />
+
+
+</menu>
