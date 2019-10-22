@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.todolist.TodoListViewModel" />
+
+        <variable
+            name="schedule"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_size"
+        android:layout_margin="@dimen/space_small_margin"
+        android:background="@drawable/radius_background"
+        android:elevation="@dimen/common_elevation"
+        android:onClick="@{() -> viewmodel.onScheduleClick(schedule)}">
+
+        <TextView
+            android:id="@+id/tv_schedule_title"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:drawableStart="@drawable/ic_title_black_24dp"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/space_small_padding"
+            android:text="@{schedule.title}"
+            android:textSize="@dimen/text_size"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_schedule_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_schedule_place"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:drawableStart="@drawable/ic_place_black_24dp"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/space_small_padding"
+            android:text="@{schedule.place}"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintBottom_toBottomOf="@id/gl_end_of_schedule_place"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_schedule_title" />
+
+        <TextView
+            android:id="@+id/tv_schedule_time"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:drawableStart="@drawable/ic_access_time_black_24dp"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/space_small_padding"
+            android:textSize="@dimen/text_size"
+            app:date="@{schedule.date}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_schedule_place"
+            app:remainTime="@{schedule.startTime}" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_schedule_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.3" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end_of_schedule_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.6" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

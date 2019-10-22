@@ -21,14 +21,37 @@ object DateUtil {
         return sdf.format(date)
     }
 
-    fun dateTransForCalendar(date: Long): String {
-        try {
-            val formatter = SimpleDateFormat("yyyy년 MM월", Locale.ENGLISH)
-            val d = Date(date)
-            return formatter.format(d).toUpperCase()
-        } catch (e: Exception) {
-            return " "
+
+    fun getTodayOrTomorrow(date:String):String {
+        val calendar = Calendar.getInstance()
+        val today = calendar.time
+        calendar.add(Calendar.DAY_OF_WEEK, 1)
+        val tomorrow = calendar.time
+
+        val df = "yyyy-MM-dd"
+        val todayString = SimpleDateFormat(df).format(today)
+        val tomorrowString = SimpleDateFormat(df).format(tomorrow)
+
+        return when(date) {
+            "today" -> {
+                todayString
+            }
+            else -> {
+                tomorrowString
+            }
         }
+
     }
+
+    fun getCurrentTime(): String {
+        val now = System.currentTimeMillis()
+        val date = Date(now)
+
+        val sdf = SimpleDateFormat("HH:mm:ss")
+        val currentTime = sdf.format(date)
+
+        return currentTime
+    }
+
 
 }

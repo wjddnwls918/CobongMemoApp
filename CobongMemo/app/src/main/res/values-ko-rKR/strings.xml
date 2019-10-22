@@ -129,4 +129,10 @@
 
     <string name="input_check">입력을 확인해 주세요.</string>
 
+    <!-- TodoList Fragment -->
+    <string name="todolist_today">오늘 할일!</string>
+    <string name="todolist_tomorrow">내일 할일</string>
+
+    <string name="todolist_time_over">시간 경과</string>
+
 </resources>

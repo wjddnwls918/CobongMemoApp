@@ -54,13 +54,19 @@ class ScheduleRepository(application: Application) {
      */
     val schedule: LiveData<List<ScheduleItem>> = scheduleDao.getAllSchedule()
 
+
+    fun getAllTodayOrTomorrowSchedules(date: String): LiveData<List<ScheduleItem>> =
+        scheduleDao.getAllTodayOrTomorrowSchedules(date)
+
     suspend fun insertByRoom(schedule: ScheduleItem) {
         scheduleDao.insert(schedule)
     }
 
-    fun getAllScheduleByDate(date: String): Single<List<ScheduleItem>> = scheduleDao.getAllScheduleByDate(date).subscribeOn(Schedulers.io())
+    fun getAllScheduleByDate(date: String)
+            : Single<List<ScheduleItem>> =
+        scheduleDao.getAllScheduleByDate(date).subscribeOn(Schedulers.io())
 
-    suspend fun deleteSchedule(schedule:ScheduleItem) {
+    suspend fun deleteSchedule(schedule: ScheduleItem) {
         scheduleDao.deleteSchedule(schedule)
     }
 
