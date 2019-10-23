@@ -9,7 +9,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoListDao
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleDao
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 
-@Database(entities = arrayOf(MemoItem::class, ScheduleItem::class), version = 1)
+@Database(entities = arrayOf(MemoItem::class, ScheduleItem::class), version = 1, exportSchema = false)
 abstract class MemoDatabase : RoomDatabase() {
 
     abstract fun memolistDao(): MemoListDao

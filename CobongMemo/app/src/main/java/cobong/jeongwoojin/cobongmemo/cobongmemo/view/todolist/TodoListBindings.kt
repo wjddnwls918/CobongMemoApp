@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.todolist
 
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
@@ -10,15 +11,15 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 /**
  * [BindingAdapter]s for the [ScheduleItem]s list.
  */
-@BindingAdapter("app:items")
+@BindingAdapter("items")
 fun setItems(listView: RecyclerView, items: List<ScheduleItem>?) {
     (listView.adapter as? TodoListAdapter)?.submitList(items ?: listOf())
 }
 
-@BindingAdapter("app:remainTime", "app:date")
+@BindingAdapter("remainTime", "date")
 fun setRemainTime(textView: TextView, startTime: String, date: String) {
 
-    var string:String = ""
+    var string:String
 
     if (date.equals(DateUtil.getTodayOrTomorrow("today"))) {
 
@@ -31,7 +32,7 @@ fun setRemainTime(textView: TextView, startTime: String, date: String) {
 
         when {
             startTimeTrans[0].toInt() < currentTrans[0].toInt() -> {
-                textView.setTextColor(textView.resources.getColor(R.color.cobongRed))
+                textView.setTextColor( ContextCompat.getColor(textView.context,R.color.cobongRed))
                 textView.text = textView.resources.getString(R.string.todolist_time_over)
                 return
             }
@@ -53,7 +54,7 @@ fun setRemainTime(textView: TextView, startTime: String, date: String) {
                         return
                     }
                     startTimeTrans[1].toInt() < currentTrans[1].toInt() -> {
-                        textView.setTextColor(textView.resources.getColor(R.color.cobongRed))
+                        textView.setTextColor( ContextCompat.getColor(textView.context,R.color.cobongRed))
                         textView.text = textView.resources.getString(R.string.todolist_time_over)
                         return
                     }

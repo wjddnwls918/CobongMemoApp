@@ -27,10 +27,10 @@ class AlarmReceiver : BroadcastReceiver() {
             val alarmChannelId = context.resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.channel_id).toString()
 
             //이동 화면
-            val intent = Intent(context, MainActivity::class.java).apply {
+            val moveIntent = Intent(context, MainActivity::class.java).apply {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-            val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+            val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, moveIntent, 0)
 
             //Notification 설정
             var builder = NotificationCompat.Builder(context, alarmChannelId)

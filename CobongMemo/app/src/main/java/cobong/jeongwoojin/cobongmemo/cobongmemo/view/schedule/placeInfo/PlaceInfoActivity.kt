@@ -138,10 +138,9 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
     fun initKeyboardSearchListener() {
         binding.etInputPlaceKeyword.setOnEditorActionListener {
 
-                v, actionId, _ ->
+                _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                searchPlaceByKeyword();
-                true
+                searchPlaceByKeyword()
             }
             false
         }
