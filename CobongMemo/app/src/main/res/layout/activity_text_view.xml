@@ -105,7 +105,7 @@
                 android:singleLine="true"
                 android:text="@{viewmodel.item.title}"
                 android:textColor="#737373"
-                android:textSize="@dimen/text_size"
+                android:textSize="@dimen/text_size_sp"
                 android:textStyle="bold" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +135,7 @@
                 android:singleLine="true"
                 android:text="@{viewmodel.item.subTitle}"
                 android:textColor="#737373"
-                android:textSize="@dimen/text_size" />
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,7 +165,7 @@
                 android:scrollbars="vertical"
                 android:text="@{viewmodel.item.content}"
                 android:textColor="#737373"
-                android:textSize="@dimen/text_size" />
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -211,14 +211,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.16" />
+            app:layout_constraintGuide_percent="0.17" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_subTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.23" />
+            app:layout_constraintGuide_percent="0.26" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_content"

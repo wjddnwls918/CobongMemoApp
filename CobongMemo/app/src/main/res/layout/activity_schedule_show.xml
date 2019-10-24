@@ -60,12 +60,13 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_input_schedule"
-                android:text="@{viewmodel.curSchedule.title}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_title_black_24dp"
                 android:focusable="false"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:text="@{viewmodel.curSchedule.title}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -89,7 +90,8 @@
                 android:drawableLeft="@drawable/ic_event_black_24dp"
                 android:focusable="false"
                 android:singleLine="true"
-                android:text="@{viewmodel.curSchedule.date}" />
+                android:text="@{viewmodel.curSchedule.date}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +114,8 @@
                 android:drawableLeft="@drawable/ic_access_time_black_24dp"
                 android:focusable="false"
                 android:singleLine="true"
-                android:text="@{viewmodel.curSchedule.startTime}" />
+                android:text="@{viewmodel.curSchedule.startTime}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +138,8 @@
                 android:layout_height="match_parent"
                 android:focusable="false"
                 android:singleLine="true"
-                android:text="@{viewmodel.curSchedule.endTime}" />
+                android:text="@{viewmodel.curSchedule.endTime}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,7 +163,8 @@
                 android:drawableLeft="@drawable/ic_place_black_24dp"
                 android:focusable="false"
                 android:singleLine="true"
-                android:text="@{viewmodel.curSchedule.place}" />
+                android:text="@{viewmodel.curSchedule.place}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,8 +197,9 @@
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_description_black_24dp"
                 android:focusable="false"
+                android:singleLine="true"
                 android:text="@{viewmodel.curSchedule.description}"
-                android:singleLine="true" />
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -215,9 +221,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_alarm_black_24dp"
-                app:alarmType="@{viewmodel.curSchedule.alarmType}"
                 android:focusable="false"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_sp"
+                app:alarmType="@{viewmodel.curSchedule.alarmType}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

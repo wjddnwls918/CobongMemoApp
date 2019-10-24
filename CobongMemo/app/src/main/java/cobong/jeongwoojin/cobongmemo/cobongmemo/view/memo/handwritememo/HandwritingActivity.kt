@@ -89,7 +89,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
 
         windowManager.defaultDisplay.getMetrics(dm)
         width = dm.widthPixels
-        height = (dm.heightPixels * 0.65).toInt()
+        height = (dm.heightPixels * 0.58).toInt()
 
         config = DrawableViewConfig()
         config!!.strokeColor = resources.getColor(android.R.color.black)

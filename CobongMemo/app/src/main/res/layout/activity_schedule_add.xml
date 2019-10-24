@@ -63,7 +63,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_title_black_24dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,7 +89,8 @@
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onDateClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.date}" />
+                android:text="@{viewmodel.date}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -112,7 +114,8 @@
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onStartTimeSettingClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.startTime}" />
+                android:text="@{viewmodel.startTime}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -136,7 +139,8 @@
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onEndTimeSettingClick()}"
                 android:singleLine="true"
-                android:text="@{viewmodel.endTime}" />
+                android:text="@{viewmodel.endTime}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +164,8 @@
                 android:drawableLeft="@drawable/ic_place_black_24dp"
                 android:drawableRight="@drawable/ic_search_black_24dp"
                 android:singleLine="true"
-                android:text="@{viewmodel.place}" />
+                android:text="@{viewmodel.place}"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -192,7 +197,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_description_black_24dp"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -216,7 +222,8 @@
                 android:drawableLeft="@drawable/ic_alarm_black_24dp"
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onSetAlarmClick()}"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:textSize="@dimen/text_size_sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
