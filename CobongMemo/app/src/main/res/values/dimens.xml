@@ -35,7 +35,7 @@
     <dimen name="text_size_sp_large">20sp</dimen>
     <dimen name="text_size_dp_schedule">18dp</dimen>
 
-    <dimen name="schedule_calendar_height">330dp</dimen>
+    <dimen name="schedule_calendar_height">350dp</dimen>
     <dimen name="schedule_calendar_min_height">200dp</dimen>
     <dimen name="schedule_calendar_margin_top">100dp</dimen>
 
