@@ -28,7 +28,7 @@
             android:layout_height="0dp"
             android:gravity="center_vertical"
             android:text="@{schedule.title}"
-            android:textSize="@dimen/text_size_sp"
+            android:textSize="@dimen/text_size_sp_large"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_shedule_title"
             app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center_vertical"
-            android:textSize="@dimen/text_size_sp"
+            android:textSize="@dimen/text_size_dp_schedule"
             app:endTime="@{schedule.endTime}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.4" />
+            app:layout_constraintGuide_percent="0.5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_time_line"

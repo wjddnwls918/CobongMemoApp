@@ -64,7 +64,7 @@
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_title_black_24dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,7 +90,7 @@
                 android:onClick="@{() -> viewmodel.onDateClick()}"
                 android:singleLine="true"
                 android:text="@{viewmodel.date}"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -115,7 +115,7 @@
                 android:onClick="@{() -> viewmodel.onStartTimeSettingClick()}"
                 android:singleLine="true"
                 android:text="@{viewmodel.startTime}"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -140,7 +140,7 @@
                 android:onClick="@{() -> viewmodel.onEndTimeSettingClick()}"
                 android:singleLine="true"
                 android:text="@{viewmodel.endTime}"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -165,7 +165,7 @@
                 android:drawableRight="@drawable/ic_search_black_24dp"
                 android:singleLine="true"
                 android:text="@{viewmodel.place}"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -198,7 +198,7 @@
                 android:layout_height="match_parent"
                 android:drawableLeft="@drawable/ic_description_black_24dp"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -223,7 +223,7 @@
                 android:focusable="false"
                 android:onClick="@{() -> viewmodel.onSetAlarmClick()}"
                 android:singleLine="true"
-                android:textSize="@dimen/text_size_sp" />
+                android:textSize="@dimen/text_size_dp_schedule" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

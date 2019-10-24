@@ -143,6 +143,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_small_margin"
             android:clickable="false"
             android:hint="@string/text_content"
             app:boxStrokeColor="@color/cobongDarkGray"

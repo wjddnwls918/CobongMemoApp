@@ -123,6 +123,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/memo_input_margin"
+            android:layout_marginTop="@dimen/space_small_margin"
             android:layout_marginEnd="@dimen/memo_input_margin"
             android:hint="@string/writeMemoContent"
             app:boxStrokeColor="@color/cobongDarkGray"
