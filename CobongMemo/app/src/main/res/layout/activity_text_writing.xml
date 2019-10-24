@@ -66,10 +66,9 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/memo_input_margin"
-            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/space_small_margin"
             android:hint="@string/writeMemoTitle"
             app:boxStrokeColor="@color/cobongDarkGray"
             app:hintEnabled="true"
@@ -81,7 +80,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:inputType="text"
                 android:maxLength="15"
@@ -95,10 +94,8 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/memo_input_margin"
-            android:layout_marginEnd="@dimen/memo_input_margin"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:hint="@string/writeMemoSub"
             app:boxStrokeColor="@color/cobongDarkGray"
             app:hintEnabled="true"
@@ -110,7 +107,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/subTitle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="@android:color/transparent"
                 android:inputType="text"
                 android:maxLength="15"
@@ -123,7 +120,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/memo_input_margin"
             android:layout_marginEnd="@dimen/memo_input_margin"
