@@ -2,27 +2,26 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ScheduleShowViewModel(application: Application) : AndroidViewModel(application) {
 
-    lateinit var navigator: ScheduleShowNavigator
     lateinit var curSchedule: ScheduleItem
 
-    private var repository: ScheduleRepository
-
-    init {
-        repository = ScheduleRepository.getInstance(application)
-    }
+    //메모 보기
+    private val _scheduleDeleteClickEvent = MutableLiveData<Event<Unit>>()
+    val scheduleDeleteClickEvent: LiveData<Event<Unit>> = _scheduleDeleteClickEvent
 
     fun onScheduleDeleteClick() {
-        navigator.onScheduleDeleteClick()
+        _scheduleDeleteClickEvent.value = Event(Unit)
     }
-
     /*  From Room
    *
    *
@@ -30,6 +29,10 @@ class ScheduleShowViewModel(application: Application) : AndroidViewModel(applica
 
     //delete Schedule
     fun deleteSchedule() {
-        viewModelScope.launch(Dispatchers.IO) { repository.deleteSchedule(curSchedule) }
+        viewModelScope.launch(Dispatchers.IO) {
+            MemoApplication.scheduleRepository.deleteSchedule(
+                curSchedule
+            )
+        }
     }
 }

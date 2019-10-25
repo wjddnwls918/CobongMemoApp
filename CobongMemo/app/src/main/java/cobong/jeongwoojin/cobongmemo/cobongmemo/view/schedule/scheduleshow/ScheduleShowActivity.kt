@@ -12,12 +12,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleShowBinding
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
+class ScheduleShowActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityScheduleShowBinding
     private lateinit var viewmodelFactory: ViewModelProvider.AndroidViewModelFactory
@@ -39,13 +40,19 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
         viewModel =
             ViewModelProvider(this, viewmodelFactory).get(ScheduleShowViewModel::class.java).apply {
                 binding.viewmodel = this
-                navigator = this@ScheduleShowActivity
             }
 
         viewModel.curSchedule = intent.getParcelableExtra("schedule")
 
         initMap()
+        setupNavigation()
+    }
 
+    private fun setupNavigation() {
+
+        viewModel.scheduleDeleteClickEvent.observe(this, EventObserver {
+            onScheduleDeleteClick()
+        })
     }
 
     override fun onPause() {
@@ -86,7 +93,7 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
 
     }
 
-    override fun onScheduleDeleteClick() {
+    fun onScheduleDeleteClick() {
         AlertDialog.Builder(this@ScheduleShowActivity).setTitle("확인")
             .setMessage("일정을 지우시겠습니까?")
             .setNegativeButton("확인") { _, _ ->
@@ -104,7 +111,12 @@ class ScheduleShowActivity : AppCompatActivity(), ScheduleShowNavigator {
     fun deleteAlarm() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val sender =
-            PendingIntent.getBroadcast(applicationContext, viewModel.curSchedule.index, MemoApplication.intent, FLAG_ONE_SHOT)
+            PendingIntent.getBroadcast(
+                applicationContext,
+                viewModel.curSchedule.index,
+                MemoApplication.intent,
+                FLAG_ONE_SHOT
+            )
 
         alarmManager.cancel(sender)
         sender.cancel()
