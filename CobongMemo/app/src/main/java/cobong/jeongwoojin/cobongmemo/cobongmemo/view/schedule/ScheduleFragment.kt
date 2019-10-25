@@ -9,11 +9,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.CalendarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
@@ -26,7 +26,7 @@ import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
 
 
-class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
+class ScheduleFragment : Fragment(), OnDateSelectedListener {
 
     private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: ScheduleViewModel
@@ -50,7 +50,6 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
             ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(ScheduleViewModel::class.java).apply {
-                navigator = this@ScheduleFragment
                 binding.viewmodel = this
             }
 
@@ -58,8 +57,20 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
         initScheduleObserveByDate()
         initScheduleObserve()
         initScheduleCalendar()
+        setupNavigation()
 
         return binding.root
+    }
+
+    private fun setupNavigation() {
+
+        viewModel.scheduleClickEvent.observe(this, EventObserver {
+            onScheduleClick(it)
+        })
+
+        viewModel.addScheduleStartClickEvent.observe(this, EventObserver {
+            onAddScheduleStartClick()
+        })
     }
 
     fun initScheduleCalendar() {
@@ -68,18 +79,17 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
     }
 
     fun initScheduleRecyclerView() {
-        scheduleAdapter = ScheduleAdapter(arrayListOf(), viewModel)
-
-        binding.rcvScheduleList.layoutManager = LinearLayoutManager(context)
-        binding.rcvScheduleList.adapter = scheduleAdapter
-
+        if (binding.viewmodel != null) {
+            scheduleAdapter = ScheduleAdapter(viewModel)
+            binding.rcvScheduleList.adapter = scheduleAdapter
+        }
     }
 
 
     fun initScheduleObserveByDate() {
         viewModel.allSchedulesByRoomByDate.observe(this, Observer { schedules ->
             schedules.let {
-                scheduleAdapter.setItem(it.toMutableList())
+                it?.let(scheduleAdapter::submitList)
             }
         })
     }
@@ -109,11 +119,11 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener, ScheduleNavigator {
 
     }
 
-    override fun onAddScheduleStartClick() {
+    fun onAddScheduleStartClick() {
         startActivity(Intent(context, ScheduleAddActivity::class.java))
     }
 
-    override fun onScheduleClick(schedule: ScheduleItem) {
+    fun onScheduleClick(schedule: ScheduleItem) {
         startActivity(
             Intent(
                 context,
