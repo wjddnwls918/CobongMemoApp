@@ -3,17 +3,17 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleadd
 import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ScheduleAddViewModel(application: Application) : AndroidViewModel(application) {
-
-    lateinit var navigator: ScheduleAddNavigator
 
     var date: ObservableField<String> = ObservableField()
     var startTime: ObservableField<String> = ObservableField()
@@ -23,30 +23,46 @@ class ScheduleAddViewModel(application: Application) : AndroidViewModel(applicat
 
     var document: MutableLiveData<Document> = MutableLiveData()
 
-    private var repository: ScheduleRepository
 
-    init {
-        repository = ScheduleRepository.getInstance(application)
-    }
+    //일정 작성
+    private val _scheduleWriteFinishClickEvent = MutableLiveData<Event<Unit>>()
+    val scheduleWriteFinishClickEvent: LiveData<Event<Unit>> = _scheduleWriteFinishClickEvent
+
+    //알람 설정
+    private val _setAlarmClickEvent = MutableLiveData<Event<Unit>>()
+    val setAlarmClickEvent: LiveData<Event<Unit>> = _setAlarmClickEvent
+
+    //시간 설정열기
+    private val _startTimeSettingClickEvent = MutableLiveData<Event<Unit>>()
+    val startTimeSettingClickEvent: LiveData<Event<Unit>> = _startTimeSettingClickEvent
+
+    //시간 설정완료
+    private val _endTimeSettingClickEvent = MutableLiveData<Event<Unit>>()
+    val endTimeSettingClickEvent: LiveData<Event<Unit>> = _endTimeSettingClickEvent
+
+    //날짜 설정
+    private val _dateClickEvent = MutableLiveData<Event<Unit>>()
+    val dateClickEvent: LiveData<Event<Unit>> = _dateClickEvent
+
 
     fun onScheduleWriteFinishClick() {
-        navigator.onScheduleWriteFinishClick()
+        _scheduleWriteFinishClickEvent.value = Event(Unit)
     }
 
     fun onSetAlarmClick() {
-        navigator.onSetAlarmClick()
+        _setAlarmClickEvent.value = Event(Unit)
     }
 
     fun onStartTimeSettingClick() {
-        navigator.onStartTimeSettingClick()
+        _startTimeSettingClickEvent.value = Event(Unit)
     }
 
     fun onEndTimeSettingClick() {
-        navigator.onEndTimeSettingClick()
+        _endTimeSettingClickEvent.value = Event(Unit)
     }
 
     fun onDateClick() {
-        navigator.onDateClick()
+        _dateClickEvent.value = Event(Unit)
     }
 
 
@@ -68,7 +84,7 @@ class ScheduleAddViewModel(application: Application) : AndroidViewModel(applicat
         x: Double
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertByRoom(
+            MemoApplication.scheduleRepository.insertByRoom(
                 ScheduleItem(
                     0,
                     title = title,
