@@ -6,11 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
-import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoiceRecordBinding
 import com.dd.processbutton.iml.ActionProcessButton
@@ -18,7 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListener, VoiceNavigator {
+class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListener{
 
     private var progressGenerator: ProgressGenerator? = null
 
@@ -30,6 +29,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     private var onDismissListener: DialogInterface.OnDismissListener? = null
 
     private lateinit var binding: FragmentVoiceRecordBinding
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: VoiceViewModel
 
     fun setOnDismissListener(onDismissListener: DialogInterface.OnDismissListener) {
@@ -58,15 +58,20 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_voice_record, container, false)
 
-        viewModel = ViewModelProviders.of(this).get(VoiceViewModel::class.java)
-        viewModel.navigator = this
-
-        binding.viewmodel = viewModel
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(VoiceViewModel::class.java).apply {
+                item = arguments?.getParcelable("voiceItem")
+            }
+        binding = FragmentVoiceRecordBinding.inflate(inflater,container,false).apply {
+            viewmodel = viewModel
+        }
 
         progressGenerator = ProgressGenerator(this)
+
+        setupNavigation()
 
         // Inflate the layout for this fragment
         return binding.root
@@ -82,9 +87,26 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         super.onDestroy()
     }
 
+    private fun setupNavigation() {
+
+        //닫기
+        viewModel.exitClickEvent.observe(this, EventObserver {
+            dismiss()
+        })
+
+        //녹음 시작
+        viewModel.recordClickEvent.observe(this, EventObserver {
+            onRecordClick()
+        })
+
+        //녹음 끝
+        viewModel.recordStopClickEvent.observe(this, EventObserver {
+            onStopClick()
+        })
+    }
 
     //녹음 시작
-    override fun onRecordClick() {
+    fun onRecordClick() {
 
         if (!binding.rotateloading.isStart) {
             binding.rotateloading.start()
@@ -115,7 +137,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     }
 
     //녹음 끝
-    override fun onStopClick() {
+    fun onStopClick() {
         binding.rotateloading.stop()
         binding.btnRecord.progress = 100
 
@@ -129,9 +151,5 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
         }
     }
 
-    //닫기
-    override fun onExitClick() {
-        dismiss()
-    }
 
 }
