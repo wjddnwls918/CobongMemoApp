@@ -1,46 +1,62 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cobong.jeongwoojin.cobongmemo.cobongmemo.common.BaseRecyclerVIewAdapter
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemMemoBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
-class MemoAdapter(list: List<MemoItem>, private val viewModel: MemoViewModel) : BaseRecyclerVIewAdapter<MemoItem, MemoAdapter.MemoViewHolder>(list) {
-    private var listener: ItemClickListener? = null
+/**
+ * Adapter for the task list. Has a reference to the [MemoViewModel] to send actions back to it.
+ */
+class MemoAdapter(private val viewModel: MemoViewModel) :
+    ListAdapter<MemoItem, MemoAdapter.ViewHolder>(TaskDiffCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
-        val binding = ItemMemoBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent, false
-        )
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = getItem(position)
 
-        //선언하고
-        listener = object :
-            ItemClickListener {
-            override fun onMemoClick(item: MemoItem) {
-                viewModel.sendMemo(item)
-            }
+        holder.bind(viewModel, item)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder.from(parent)
+    }
+
+    class ViewHolder private constructor(val binding: ItemMemoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(viewModel: MemoViewModel, item: MemoItem) {
+
+            binding.viewmodel = viewModel
+            binding.memo = item
+            binding.executePendingBindings()
         }
 
-        //아이템 레이아웃에 뷰모델,리스너 등록
-        binding.listener = listener
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemMemoBinding.inflate(layoutInflater, parent, false)
 
-        binding.viewmodel = viewModel
-        return MemoViewHolder(
-            binding
-        )
+                return ViewHolder(binding)
+            }
+        }
+    }
+}
+
+/**
+ * Callback for calculating the diff between two non-null items in a list.
+ *
+ * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
+ * list that's been passed to `submitList`.
+ */
+class TaskDiffCallback : DiffUtil.ItemCallback<MemoItem>() {
+    override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
+        return oldItem.index == newItem.index
     }
 
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position)!!.hashCode().toLong()
+    override fun areContentsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
+        return oldItem == newItem
     }
-
-    override fun onBindView(holder: MemoViewHolder, position: Int) {
-        holder.binding.memo = getItem(position)
-    }
-
-    class MemoViewHolder(var binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root)
 }
