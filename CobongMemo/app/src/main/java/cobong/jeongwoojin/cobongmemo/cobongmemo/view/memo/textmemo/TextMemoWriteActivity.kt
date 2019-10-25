@@ -7,15 +7,17 @@ import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextWritingBinding
 
-class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMemoNavigator {
+class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var binding: ActivityTextWritingBinding
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: TextMemoViewModel
 
     internal var dialogListener: DialogInterface.OnClickListener =
@@ -23,14 +25,32 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_text_writing)
 
-        viewModel = ViewModelProviders.of(this).get(TextMemoViewModel::class.java)
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(TextMemoViewModel::class.java).apply {
+                item.value = intent.getParcelableExtra("textItem")
+            }
 
-        viewModel.item.value = intent.getParcelableExtra("textItem")
+        binding = DataBindingUtil.setContentView<ActivityTextWritingBinding>(this, R.layout.activity_text_writing).apply {
+            viewmodel = viewModel
+        }
 
-        viewModel.navigator = this
-        binding.viewmodel = viewModel
+        setupNavigation()
+    }
+
+    private fun setupNavigation() {
+
+        //뒤로 가기
+        viewModel.exitClickEvent.observe(this, EventObserver {
+            onBackPressed()
+        })
+
+        //작성하기
+        viewModel.writeClickEvent.observe(this, EventObserver {
+            onWriteClick()
+        })
     }
 
     override fun onClick(v: View) {
@@ -39,13 +59,8 @@ class TextMemoWriteActivity : AppCompatActivity(), View.OnClickListener, TextMem
         }
     }
 
-    //뒤로가기
-    override fun onExitClick() {
-        onBackPressed()
-    }
-
     //작성하기
-    override fun onWriteClick() {
+    fun onWriteClick() {
 
         //키보드 숨기기
         KeyBoardUtil.hideSoftKeyboard(binding.root, applicationContext)
