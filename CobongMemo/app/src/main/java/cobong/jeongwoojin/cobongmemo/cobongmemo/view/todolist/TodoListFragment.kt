@@ -58,7 +58,7 @@ class TodoListFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.openTaskEvent.observe(this, EventObserver {
+        viewModel.openTodoListEvent.observe(this, EventObserver {
             openTaskDetails(it)
         })
 

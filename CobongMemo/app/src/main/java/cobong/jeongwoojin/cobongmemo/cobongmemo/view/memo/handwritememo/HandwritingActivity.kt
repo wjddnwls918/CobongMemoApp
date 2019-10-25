@@ -11,9 +11,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
@@ -24,8 +25,7 @@ import me.panavtec.drawableview.DrawableViewConfig
 import java.io.File
 import java.io.FileOutputStream
 
-class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPickerDialogListener,
-    HandwriteNavigator {
+class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPickerDialogListener{
 
     private var config: DrawableViewConfig? = null
 
@@ -41,19 +41,26 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         DialogInterface.OnClickListener { _, _ -> finish() }
 
     private lateinit var binding: ActivityHandWritingBinding
+
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: HandwriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_hand_writing)
 
-        viewModel = ViewModelProviders.of(this).get(HandwriteViewModel::class.java)
-        viewModel.navigator = this
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(HandwriteViewModel::class.java)
+
+        binding = DataBindingUtil.setContentView<ActivityHandWritingBinding>(
+            this,
+            R.layout.activity_hand_writing
+        ).apply {
+            viewmodel = viewModel
+        }
 
         erase = false
-
-        binding.viewmodel = viewModel
-
 
         //읽어와서 저장
         val intent = intent
@@ -81,8 +88,22 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         //클릭리스너 등록
         initClickListener()
 
+        setupNavigation()
+
     }
 
+    private fun setupNavigation() {
+
+        //뒤로 가기
+        viewModel.exitClickEvent.observe(this, EventObserver {
+            onBackPressed()
+        })
+
+        //작성하기
+        viewModel.writeClickEvent.observe(this, EventObserver {
+            onWriteClick()
+        })
+    }
 
     fun initCanvas() {
         val dm = resources.displayMetrics
@@ -234,13 +255,9 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         dialog.show()
     }
 
-    //나가기
-    override fun onExitClick() {
-        onBackPressed()
-    }
 
     //작성
-    override fun onWriteClick() {
+    fun onWriteClick() {
 
         KeyBoardUtil.hideSoftKeyboard(binding.root, this)
 

@@ -7,16 +7,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
-import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentVoicePlayBinding
 import com.dd.processbutton.iml.ActionProcessButton
 
 
-class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener, VoiceNavigator {
+class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener {
 
     private var progressGenerator: ProgressGenerator? = null
 
@@ -29,6 +28,7 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
     private var length: Int = 0
 
     private lateinit var binding: FragmentVoicePlayBinding
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: VoiceViewModel
 
     override fun onComplete() {
@@ -42,19 +42,25 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_voice_play, container, false)
-        viewModel = ViewModelProviders.of(this).get(VoiceViewModel::class.java)
-        binding.viewmodel = viewModel
-        viewModel.navigator = this
 
-        //inputDate = arguments!!.getString("inputdate")
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(VoiceViewModel::class.java).apply {
+                item = arguments?.getParcelable("voiceItem")
+            }
 
-        viewModel.item = arguments?.getParcelable("voiceItem")
+
+        binding = FragmentVoicePlayBinding.inflate(inflater,container,false).apply {
+            viewmodel = viewModel
+        }
 
         filename = MemoApplication.root +  "/" + viewModel.item?.title + ".mp3"
         Log.d("checkfilename",filename)
 
         progressGenerator = ProgressGenerator(this)
+
+        setupNavigation()
 
         return binding.root
     }
@@ -87,8 +93,26 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
     }
 
+    private fun setupNavigation() {
+
+        //닫기
+        viewModel.exitClickEvent.observe(this, EventObserver {
+            dismiss()
+        })
+
+        //녹음 시작
+        viewModel.playClickEvent.observe(this, EventObserver {
+            onPlayClick()
+        })
+
+        //녹음 끝
+        viewModel.pauseClickEvent.observe(this, EventObserver {
+            onPauseClick()
+        })
+    }
+
     //시작
-    override fun onPlayClick() {
+    fun onPlayClick() {
         binding.rotateloading.start()
         binding.play.setMode(ActionProcessButton.Mode.ENDLESS)
         progressGenerator?.start(binding.play)
@@ -121,7 +145,7 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
 
     //정지
-    override fun onPauseClick() {
+    fun onPauseClick() {
         if (player == null)
             return
 
@@ -136,10 +160,6 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
         player = null
     }
 
-    //닫기
-    override fun onExitClick() {
-        dismiss()
-    }
 }
 
 

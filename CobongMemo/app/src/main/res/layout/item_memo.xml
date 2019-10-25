@@ -5,22 +5,14 @@
 
     <data>
 
-        <!--
-        <variable
-            name="memo"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoListItem" />
-            -->
         <variable
             name="memo"
             type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem" />
 
         <variable
             name="viewmodel"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.MemoViewModel" />
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel" />
 
-        <variable
-            name="listener"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist.ItemClickListener" />
 
     </data>
 
@@ -31,7 +23,7 @@
         android:layout_margin="@dimen/space_small_margin"
         android:background="@drawable/radius_background"
         android:elevation="@dimen/common_elevation"
-        android:onClick="@{() -> listener.onMemoClick(memo)}"
+        android:onClick="@{() -> viewmodel.onMemoClick(memo)}"
         android:orientation="horizontal">
 
 

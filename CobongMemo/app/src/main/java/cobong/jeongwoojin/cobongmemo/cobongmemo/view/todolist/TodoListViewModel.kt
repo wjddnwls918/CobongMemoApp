@@ -4,33 +4,36 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 
 
 class TodoListViewModel(application: Application) : AndroidViewModel(application) {
-
-    //Room
-    private var repository: ScheduleRepository
-
     val todayItems: LiveData<List<ScheduleItem>>
     val tomorrowItems: LiveData<List<ScheduleItem>>
 
-    private val _openTaskEvent = MutableLiveData<Event<ScheduleItem>>()
-    val openTaskEvent: LiveData<Event<ScheduleItem>> = _openTaskEvent
+    private val _openTodoListEvent = MutableLiveData<Event<ScheduleItem>>()
+    val openTodoListEvent: LiveData<Event<ScheduleItem>> = _openTodoListEvent
 
     init {
-        repository = ScheduleRepository.getInstance(application)
         todayItems =
-            repository.getAllTodayOrTomorrowSchedules(DateUtil.getTodayOrTomorrow("today"))
+            MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
+                DateUtil.getTodayOrTomorrow(
+                    "today"
+                )
+            )
         tomorrowItems =
-            repository.getAllTodayOrTomorrowSchedules(DateUtil.getTodayOrTomorrow("tomorrow"))
+            MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
+                DateUtil.getTodayOrTomorrow(
+                    "tomorrow"
+                )
+            )
     }
 
     fun onScheduleClick(schedule: ScheduleItem) {
-        _openTaskEvent.value = Event(schedule)
+        _openTodoListEvent.value = Event(schedule)
     }
 
 }

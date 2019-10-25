@@ -1,43 +1,45 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import io.reactivex.disposables.CompositeDisposable
 
 
 class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
-    lateinit var navigator: ScheduleNavigator
-
     val disposable: CompositeDisposable = CompositeDisposable()
 
     var transDate: String = ""
-
-    //Room
-    private var repository: ScheduleRepository
 
     var allSchedulesByRoomByDate: MutableLiveData<List<ScheduleItem>> = MutableLiveData()
 
     val allSchedulesByRoom: LiveData<List<ScheduleItem>>
 
+
+    private val _scheduleClickEvent = MutableLiveData<Event<ScheduleItem>>()
+    val scheduleClickEvent: LiveData<Event<ScheduleItem>> = _scheduleClickEvent
+
+
+    private val _addScheduleStartClickEvent = MutableLiveData<Event<Unit>>()
+    val addScheduleStartClickEvent: LiveData<Event<Unit>> = _addScheduleStartClickEvent
+
     init {
-        repository = ScheduleRepository.getInstance(application)
-        allSchedulesByRoom = repository.schedule
+        allSchedulesByRoom = MemoApplication.scheduleRepository.schedule
     }
 
 
     fun onAddScheduleStartClick() {
-        navigator.onAddScheduleStartClick()
+        _addScheduleStartClickEvent.value = Event(Unit)
     }
 
 
     fun onScheduleClick(schedule: ScheduleItem) {
-        navigator.onScheduleClick(schedule)
+        _scheduleClickEvent.value = Event(schedule)
     }
 
 
@@ -46,14 +48,9 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
     *
      */
 
-
     fun getAllScheduleByDate(date: String) {
-        /*viewModelScope.launch (Dispatchers.IO){
-            allSchedulesByRoom = repository.getAllScheduleByDate(date)
-        }*/
-
         disposable.add(
-            repository.getAllScheduleByDate(date)
+            MemoApplication.scheduleRepository.getAllScheduleByDate(date)
                 .subscribe({ data ->
 
                     if (data.size == 0)
@@ -61,16 +58,11 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
                     else
                         allSchedulesByRoomByDate.postValue(data)
 
-                    Log.d("checkdate", data.size.toString())
-
                 }, { e ->
-                    Log.d("checkdate", "error occured")
                     e.printStackTrace()
                 })
         )
-
     }
-
 
 
 }

@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityScheduleAddBinding
@@ -29,8 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ScheduleAddActivity : AppCompatActivity(),
-    ScheduleAddNavigator, View.OnTouchListener {
+class ScheduleAddActivity : AppCompatActivity(), View.OnTouchListener {
 
     private lateinit var binding: ActivityScheduleAddBinding
     private lateinit var viewmodelFactory: ViewModelProvider.AndroidViewModelFactory
@@ -52,7 +52,6 @@ class ScheduleAddActivity : AppCompatActivity(),
         viewModel =
             ViewModelProvider(this, viewmodelFactory).get(ScheduleAddViewModel::class.java).apply {
                 binding.viewmodel = this
-                navigator = this@ScheduleAddActivity
             }
 
 
@@ -63,7 +62,30 @@ class ScheduleAddActivity : AppCompatActivity(),
         initObservePlace()
         initPlaceEditTextListener()
 
+        setupNavigation()
 
+    }
+
+    private fun setupNavigation() {
+
+        viewModel.setAlarmClickEvent.observe(this, EventObserver {
+            onSetAlarmClick()
+        })
+
+        viewModel.scheduleWriteFinishClickEvent.observe(this, EventObserver {
+            onScheduleWriteFinishClick()
+        })
+
+        viewModel.dateClickEvent.observe(this, EventObserver {
+            onDateClick()
+        })
+
+        viewModel.startTimeSettingClickEvent.observe(this, EventObserver {
+            onStartTimeSettingClick()
+        })
+        viewModel.endTimeSettingClickEvent.observe(this, EventObserver {
+            onEndTimeSettingClick()
+        })
     }
 
     fun initToolbar() {
@@ -220,7 +242,7 @@ class ScheduleAddActivity : AppCompatActivity(),
 
     }
 
-    override fun onScheduleWriteFinishClick() {
+    fun onScheduleWriteFinishClick() {
 
         KeyBoardUtil.hideSoftKeyboard(binding.root, this)
 
@@ -271,7 +293,7 @@ class ScheduleAddActivity : AppCompatActivity(),
     }
 
 
-    override fun onSetAlarmClick() {
+    fun onSetAlarmClick() {
 
         val alarmType = arrayOf<CharSequence>(
             resources?.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.alarm_ontime).toString(),
@@ -300,16 +322,16 @@ class ScheduleAddActivity : AppCompatActivity(),
     }
 
 
-    override fun onDateClick() {
+    fun onDateClick() {
         showDatePicker()
     }
 
-    override fun onStartTimeSettingClick() {
+    fun onStartTimeSettingClick() {
         showTimePicker("start")
 
     }
 
-    override fun onEndTimeSettingClick() {
+    fun onEndTimeSettingClick() {
         showTimePicker("end")
     }
 

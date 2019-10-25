@@ -1,19 +1,18 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemScheduleBinding
-import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
-import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemMemoBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
 /**
  * Adapter for the task list. Has a reference to the [MemoViewModel] to send actions back to it.
  */
-class ScheduleAdapter(private val viewModel: ScheduleViewModel) :
-    ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(TaskDiffCallback()) {
+class MemoAdapter(private val viewModel: MemoViewModel) :
+    ListAdapter<MemoItem, MemoAdapter.ViewHolder>(TaskDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -25,20 +24,20 @@ class ScheduleAdapter(private val viewModel: ScheduleViewModel) :
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ItemScheduleBinding) :
+    class ViewHolder private constructor(val binding: ItemMemoBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(viewModel: ScheduleViewModel, item: ScheduleItem) {
+        fun bind(viewModel: MemoViewModel, item: MemoItem) {
 
             binding.viewmodel = viewModel
-            binding.schedule = item
+            binding.memo = item
             binding.executePendingBindings()
         }
 
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemScheduleBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemMemoBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }
@@ -52,12 +51,12 @@ class ScheduleAdapter(private val viewModel: ScheduleViewModel) :
  * Used by ListAdapter to calculate the minimum number of changes between and old list and a new
  * list that's been passed to `submitList`.
  */
-class TaskDiffCallback : DiffUtil.ItemCallback<ScheduleItem>() {
-    override fun areItemsTheSame(oldItem: ScheduleItem, newItem: ScheduleItem): Boolean {
+class TaskDiffCallback : DiffUtil.ItemCallback<MemoItem>() {
+    override fun areItemsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
         return oldItem.index == newItem.index
     }
 
-    override fun areContentsTheSame(oldItem: ScheduleItem, newItem: ScheduleItem): Boolean {
+    override fun areContentsTheSame(oldItem: MemoItem, newItem: MemoItem): Boolean {
         return oldItem == newItem
     }
 }

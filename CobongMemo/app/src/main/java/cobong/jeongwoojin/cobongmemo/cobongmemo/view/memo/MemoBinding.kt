@@ -1,4 +1,4 @@
-package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.memolist
+package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo
 
 import android.widget.ImageView
 import androidx.core.content.ContextCompat

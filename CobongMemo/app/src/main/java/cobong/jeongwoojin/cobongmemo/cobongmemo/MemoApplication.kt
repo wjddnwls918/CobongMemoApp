@@ -3,6 +3,8 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo
 import android.app.Application
 import android.content.Intent
 import android.os.Environment
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoRepository
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.alarm.AlarmReceiver
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -59,7 +61,14 @@ class MemoApplication : Application() {
 
 
         lateinit var intent:Intent
+
+
+        lateinit var memoRepository: MemoRepository
+        lateinit var scheduleRepository: ScheduleRepository
+
     }
+
+
 
     override fun onCreate() {
         super.onCreate()
@@ -72,6 +81,11 @@ class MemoApplication : Application() {
 
         intent = Intent(applicationContext, AlarmReceiver::class.java)
         intent.action = "ALARM_ACTION"
+
+
+        memoRepository = MemoRepository.getInstance(this)
+        scheduleRepository = ScheduleRepository(this)
+
     }
 
     override fun onTerminate() {

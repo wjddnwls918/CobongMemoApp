@@ -6,36 +6,54 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityTextViewBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 
 
-class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
+class TextMemoViewActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTextViewBinding
+    private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: TextMemoViewModel
-
-    override fun onResume() {
-        super.onResume()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_text_view)
 
-        viewModel = ViewModelProviders.of(this).get(TextMemoViewModel::class.java)
+        viewModelFactory =
+            ViewModelProvider.AndroidViewModelFactory.getInstance(application)
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(TextMemoViewModel::class.java).apply {
+                item.value = intent.getParcelableExtra("textItem")
+            }
 
-        viewModel.item.value = intent.getParcelableExtra("textItem")
+        binding = DataBindingUtil.setContentView<ActivityTextViewBinding>(this, R.layout.activity_text_view).apply {
+            viewmodel = viewModel
+        }
 
-
-        //네비게이터 지정
-        viewModel.navigator = this
-
-        binding.viewmodel = viewModel
-
+        setupNavigation()
     }
+
+    private fun setupNavigation() {
+
+        //뒤로 가기
+        viewModel.exitClickEvent.observe(this, EventObserver {
+            finish()
+        })
+
+        //작성하기
+        viewModel.editMemoEvent.observe(this, EventObserver {
+            onEditClick()
+        })
+
+        //삭제
+        viewModel.deleteMemoEvent.observe(this, EventObserver {
+            onDeleteClick()
+        })
+    }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -55,19 +73,19 @@ class TextMemoViewActivity : AppCompatActivity(), TextMemoNavigator {
         }
     }
 
-    override fun onExitClick() {
+    fun onExitClick() {
         finish()
     }
 
     //메모 수정
-    override fun onEditClick() {
+    fun onEditClick() {
         val intent = Intent(this@TextMemoViewActivity, TextMemoWriteActivity::class.java)
         intent.putExtra("textItem", viewModel.item.value)
         startActivityForResult(intent, 100)
     }
 
     //메모 삭제
-    override fun onDeleteClick() {
+    fun onDeleteClick() {
         val builder = AlertDialog.Builder(this@TextMemoViewActivity)
         builder.setTitle("확인")
             .setMessage("메모를 지우시겠습니까?")
