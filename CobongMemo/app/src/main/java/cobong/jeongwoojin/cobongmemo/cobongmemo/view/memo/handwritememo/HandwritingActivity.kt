@@ -10,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
@@ -113,7 +114,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         height = (dm.heightPixels * 0.58).toInt()
 
         config = DrawableViewConfig()
-        config!!.strokeColor = resources.getColor(android.R.color.black)
+        config!!.strokeColor = ContextCompat.getColor(this,android.R.color.black)
         config!!.isShowCanvasBounds =
             true // If the view is bigger than canvas, with this the user will see the bounds (Recommended)
         config!!.strokeWidth = 20.0f
