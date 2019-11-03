@@ -46,12 +46,39 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/gl_horizontal_center" />
 
+
+        <TextView
+            android:id="@+id/tv_today_empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todolist_no_today_schedule"
+            android:textSize="@dimen/text_size_sp_large"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/gl_horizontal_center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_today_list" />
+
+        <TextView
+            android:id="@+id/tv_tomorrow_empty_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/todolist_no_tomorrow_schedule"
+            android:textSize="@dimen/text_size_sp_large"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/gl_end_of_tomorrow_list" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_today_todo_list"
+            items="@{viewmodel.todayItems}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
-            items="@{viewmodel.todayItems}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="@id/gl_horizontal_center"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,10 +87,10 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv_tomorrow_todo_list"
+            items="@{viewmodel.tomorrowItems}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
-            items="@{viewmodel.tomorrowItems}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
