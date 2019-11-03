@@ -24,7 +24,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     private var filename = ""
     // MediaPlayer 클래스에 재생에 관련된 메서드와 멤버변수가 저장어되있다.
     private var recorder: MediaRecorder? = null
-    private lateinit var resultDate: String
+    private lateinit var voiceTitle: String
 
     private var onDismissListener: DialogInterface.OnDismissListener? = null
 
@@ -108,13 +108,17 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     //녹음 시작
     fun onRecordClick() {
 
-        if (!binding.rotateloading.isStart) {
-            binding.rotateloading.start()
-            binding.btnRecord.setMode(ActionProcessButton.Mode.ENDLESS)
-            progressGenerator!!.start(binding.btnRecord)
+        if (!binding.rlLoading.isStart) {
+            binding.rlLoading.start()
+            binding.apbRecord.setMode(ActionProcessButton.Mode.ENDLESS)
+            progressGenerator!!.start(binding.apbRecord)
 
-            resultDate = DateUtil.curDateForVoiceMemo()
-            filename = MemoApplication.root + "/" + resultDate + ".mp3"
+            if(binding.tietVoiceTitle.text!!.toString().equals("")) {
+                voiceTitle = DateUtil.curDateForVoiceMemo()
+            } else {
+                voiceTitle = binding.tietVoiceTitle.text.toString()
+            }
+            filename = MemoApplication.root + "/" + voiceTitle + ".mp3"
 
             recorder = MediaRecorder().apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -138,8 +142,8 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
 
     //녹음 끝
     fun onStopClick() {
-        binding.rotateloading.stop()
-        binding.btnRecord.progress = 100
+        binding.rlLoading.stop()
+        binding.apbRecord.progress = 100
 
         if (recorder != null) {
             recorder!!.stop()
@@ -147,7 +151,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
             recorder = null
 
             //insert voice memo
-            viewModel.insertVoiceMemoByRoom(resultDate)
+            viewModel.insertVoiceMemoByRoom(voiceTitle)
         }
     }
 
