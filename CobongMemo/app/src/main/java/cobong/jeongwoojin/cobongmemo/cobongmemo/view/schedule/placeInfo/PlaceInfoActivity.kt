@@ -81,7 +81,7 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
     }
 
     fun initToolbar() {
-        setSupportActionBar(binding.tbPlaceInfo);
+        setSupportActionBar(binding.tbPlaceInfo)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -89,8 +89,8 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater: MenuInflater = menuInflater
-        menuInflater.inflate(R.menu.menu_place_info, menu);
-        return true;
+        menuInflater.inflate(R.menu.menu_place_info, menu)
+        return true
     }
 
     fun initRecyclerView() {
