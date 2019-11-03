@@ -49,14 +49,11 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
             ViewModelProvider(this, viewModelFactory).get(VoiceViewModel::class.java).apply {
                 item = arguments?.getParcelable("voiceItem")
             }
-
-
         binding = FragmentVoicePlayBinding.inflate(inflater,container,false).apply {
             viewmodel = viewModel
         }
 
         filename = MemoApplication.root +  "/" + viewModel.item?.title + ".mp3"
-        Log.d("checkfilename",filename)
 
         progressGenerator = ProgressGenerator(this)
 
@@ -113,17 +110,17 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
     //시작
     fun onPlayClick() {
-        binding.rotateloading.start()
-        binding.play.setMode(ActionProcessButton.Mode.ENDLESS)
-        progressGenerator?.start(binding.play)
+        binding.rlLoading.start()
+        binding.apbPlay.setMode(ActionProcessButton.Mode.ENDLESS)
+        progressGenerator?.start(binding.apbPlay)
 
         try {
             // 오디오를 플레이 하기위해 MediaPlayer 객체 player를 생성한다.
             player = MediaPlayer()
             player?.setOnCompletionListener {
 
-                binding.rotateloading.stop()
-                binding.play.progress = 100
+                binding.rlLoading.stop()
+                binding.apbPlay.progress = 100
                 // 오디오 재생 중지
                 player?.stop()
 
@@ -149,8 +146,8 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
         if (player == null)
             return
 
-        binding.rotateloading.stop()
-        binding.play.progress = 100
+        binding.rlLoading.stop()
+        binding.apbPlay.progress = 100
 
         // 오디오 재생 중지
         player?.stop()

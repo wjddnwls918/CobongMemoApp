@@ -17,7 +17,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/showContent"
+        android:id="@+id/cl_showContent"
         android:layout_width="match_parent"
         android:layout_height="@dimen/item_size"
         android:layout_margin="@dimen/space_small_margin"
@@ -28,7 +28,7 @@
 
 
         <TextView
-            android:id="@+id/memo_title"
+            android:id="@+id/tv_memo_title"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="@dimen/space_small_margin"
@@ -44,7 +44,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/memo_subtitle"
+            android:id="@+id/tv_memo_subtitle"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center_vertical"
@@ -61,7 +61,7 @@
         <!-- Memo type icon -->
 
         <ImageView
-            android:id="@+id/memo_type"
+            android:id="@+id/iv_memo_type"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="5dp"
@@ -73,7 +73,7 @@
 
 
         <TextView
-            android:id="@+id/memo_inputTime"
+            android:id="@+id/tv_memo_inputTime"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="0dp"
@@ -88,7 +88,7 @@
 
 
         <ImageView
-            android:id="@+id/edit"
+            android:id="@+id/iv_edit"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/space_small_margin"
@@ -100,7 +100,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/remove"
+            android:id="@+id/iv_remove"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="@dimen/space_small_margin"

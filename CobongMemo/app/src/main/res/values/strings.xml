@@ -51,6 +51,15 @@
     <string name="text_input_title_subTitle">input yout title and subTitle</string>
     <string name="text_input_subTitle">input your subTitle</string>
     <string name="text_content">content</string>
+    <string name="input_title_to_find">Input memo title to find</string>
+
+    <string name="error_title">Error Occurred!</string>
+    <string name="error_info"> You can push below button to refresh your page</string>
+    <string name="error_refresh">Refresh</string>
+
+    <string name="permission_denied_finish_activity">You should grant permission. App finish.</string>
+
+    <string name="no_memo_item">There is not any memo.</string>
 
     <!-- Text Fragment -->
 
@@ -58,6 +67,7 @@
 
     <!-- Voice Fragment -->
     <string name="voice_play_end">play</string>
+    <string name="voice_input_title">Input your voice memo title</string>
 
     <!-- Schedule Fragemnt -->
     <string name="input_date">Date</string>
@@ -91,5 +101,8 @@
     <string name="todolist_tomorrow">Tomorrow Todo List</string>
 
     <string name="todolist_time_over">Time Over</string>
+
+    <string name="todolist_no_today_schedule">There is no today schedule.</string>
+    <string name="todolist_no_tomorrow_schedule">There is no tomorrow schedule.</string>
 
 </resources>

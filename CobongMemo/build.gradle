@@ -61,4 +61,6 @@ ext {
     workVersion = '2.2.0'
     firebaseAnalyticsVersion = '17.2.0'
     crashlyticsVersion = '2.10.1'
+    multidexVersion = '2.0.1'
+    threetenVersion = '1.1.1'
 }

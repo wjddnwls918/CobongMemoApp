@@ -38,7 +38,7 @@ class HandwriteViewActivity : AppCompatActivity() {
         }
 
         val bitmap =
-            BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg")
+            BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.item.handwriteId + ".jpg")
         binding.handwriteViewImage.setImageBitmap(bitmap)
 
         setupNavigation()
@@ -58,14 +58,16 @@ class HandwriteViewActivity : AppCompatActivity() {
     }
 
     fun onDeleteClick() {
-        val builder = AlertDialog.Builder(this@HandwriteViewActivity)
-        builder.setTitle("확인")
-            .setMessage("메모를 지우시겠습니까?")
-            .setNegativeButton("확인") { _, _ -> delHandwrite() }
-            .setPositiveButton("취소", null)
+        AlertDialog.Builder(this@HandwriteViewActivity).apply {
+            setTitle("확인")
+                setMessage("메모를 지우시겠습니까?")
+                setNegativeButton("확인") { _, _ -> delHandwrite() }
+                setPositiveButton("취소", null)
 
-        val alertDialog = builder.create()
-        alertDialog.show()
+        }.create().apply {
+            setCanceledOnTouchOutside(false)
+            show()
+        }
     }
 
     fun delHandwrite() {
@@ -73,7 +75,7 @@ class HandwriteViewActivity : AppCompatActivity() {
         //viewModel.deleteHandwriteMemo(viewModel.item!!.index)
         viewModel.deleteHandwriteMemoByRoom()
 
-        val path = MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg"
+        val path = MemoApplication.root + "/saved_images/" + viewModel.item.handwriteId + ".jpg"
         val file = File(path)
         Log.d("filedelete", path)
         if (file.exists()) {

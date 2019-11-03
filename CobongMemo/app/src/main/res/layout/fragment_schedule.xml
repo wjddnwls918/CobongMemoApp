@@ -27,7 +27,6 @@
             android:scrollbars="none"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_schedule_list"
                 android:layout_width="match_parent"
@@ -42,15 +41,16 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/space_small_margin"
             android:layout_marginTop="@dimen/space_small_margin"
-            android:background="@android:color/transparent"
-            android:paddingEnd="@dimen/space_medium_margin">
+            android:layout_marginEnd="@dimen/space_small_margin"
+            android:background="@drawable/radius_background"
+            android:elevation="@dimen/common_elevation">
 
 
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@android:color/transparent"
                 android:minHeight="@dimen/schedule_calendar_min_height"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
@@ -65,6 +65,7 @@
                         android:id="@+id/mcv_schedule_calendar"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/schedule_calendar_height"
+                        android:layout_marginEnd="@dimen/space_small_margin"
                         android:paddingTop="@dimen/space_large_padding"
                         app:mcv_selectionColor="@color/cobongGray"
                         app:mcv_tileHeight="@dimen/calendar_item_height_size"

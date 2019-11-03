@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class HandwriteViewModel(application: Application) : AndroidViewModel(application) {
 
-    var item: MemoItem? = null
+    var item: MemoItem
 
     //메모 삭제
     private val _deleteMemoEvent = MutableLiveData<Event<Unit>>()
@@ -27,6 +27,9 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
     private val _writeClickEvent = MutableLiveData<Event<Unit>>()
     val writeClickEvent: LiveData<Event<Unit>> = _writeClickEvent
 
+    init {
+        item = MemoItem(0,"","","","","","","")
+    }
 
     //뒤로가기
     fun onExitClick() {
@@ -44,7 +47,7 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun insertHandWriteMemoByRoom(title: String, subTitle: String, handwriteId: String) {
-        viewModelScope.launch (Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             MemoApplication.memoRepository.insertByRoom(
                 MemoItem(
                     index = null,
@@ -55,6 +58,17 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
                     voiceId = null,
                     handwriteId = handwriteId
                 )
+            )
+        }
+    }
+
+    fun updateHandWriteMemoByRoom(title: String, subTitle: String) {
+        item.title = title
+        item.subTitle = subTitle
+
+        viewModelScope.launch(Dispatchers.IO) {
+            MemoApplication.memoRepository.updateByRoom(
+                item
             )
         }
     }

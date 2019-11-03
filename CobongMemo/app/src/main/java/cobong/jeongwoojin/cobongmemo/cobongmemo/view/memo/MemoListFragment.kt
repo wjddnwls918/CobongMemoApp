@@ -4,15 +4,17 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentMemoListBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
@@ -24,7 +26,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoicePlayFra
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo.VoiceRecordFragment
 import com.google.android.material.snackbar.Snackbar
 
-class MemoListFragment : Fragment(), View.OnClickListener {
+class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener {
 
     private lateinit var binding: FragmentMemoListBinding
 
@@ -37,7 +39,12 @@ class MemoListFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_memo_list, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            cobong.jeongwoojin.cobongmemo.cobongmemo.R.layout.fragment_memo_list,
+            container,
+            false
+        )
 
         viewModelFactory =
             ViewModelProvider.AndroidViewModelFactory.getInstance(activity!!.application)
@@ -56,13 +63,16 @@ class MemoListFragment : Fragment(), View.OnClickListener {
         initRecyclerView()
         initObserveLivedata()
         setupNavigation()
-
     }
 
     fun initRecyclerView() {
         if (binding.viewmodel != null) {
             memoAdapter = MemoAdapter(viewModel)
             binding.rcvMemoList.adapter = memoAdapter
+        }
+
+        ItemTouchHelper(SwipeToDeleteCallback(activity!!.applicationContext, viewModel)).apply {
+            attachToRecyclerView(binding.rcvMemoList)
         }
 
         //스크롤시 fab 없애기
@@ -75,7 +85,10 @@ class MemoListFragment : Fragment(), View.OnClickListener {
                     binding.fabAdd.hide()
                 } else if (newState == RecyclerView.SCROLL_STATE_IDLE) {
 
-                    val anim = AnimationUtils.loadAnimation(context, R.anim.delay)
+                    val anim = AnimationUtils.loadAnimation(
+                        context,
+                        cobong.jeongwoojin.cobongmemo.cobongmemo.R.anim.delay
+                    )
                     binding.fabAdd.animation = anim
                     binding.fabAdd.show()
                 }
@@ -83,17 +96,34 @@ class MemoListFragment : Fragment(), View.OnClickListener {
         })
 
         binding.fabAdd.setOnClickListener(this@MemoListFragment)
-
+        initKeyboardSearchListener()
 
     }
 
     fun initObserveLivedata() {
+
+        viewModel.isFiltered.value = false
+
         viewModel.items.observe(this, Observer { memos ->
             memos.let {
-                //memoAdapter.setItem(it)
                 it?.let(memoAdapter::submitList)
+                when (it.size) {
+                    0 -> binding.tvEmptyList.visibility = View.VISIBLE
+                    else -> binding.tvEmptyList.visibility = View.GONE
+                }
             }
         })
+
+        viewModel.filteredList.observe(this, Observer { memos ->
+            memos.let {
+                it?.let(memoAdapter::submitList)
+                when (it.size) {
+                    0 -> binding.tvEmptyList.visibility = View.VISIBLE
+                    else -> binding.tvEmptyList.visibility = View.GONE
+                }
+            }
+        })
+
     }
 
 
@@ -114,20 +144,42 @@ class MemoListFragment : Fragment(), View.OnClickListener {
             editMemo(it)
         })
 
+        //스와이프
+        viewModel.swipedEvent.observe(this, EventObserver {
+            if (viewModel._alertFlag.value != true) {
+                makeDialog {
+                    //delete memo
+                    viewModel.deleteByListPosition(it)
+                }
+            }
+        })
+    }
+
+    fun initKeyboardSearchListener() {
+
+        binding.tietInputMemoFilter.setOnTouchListener(this)
+        binding.tietInputMemoFilter.setOnEditorActionListener {
+
+                _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                setFilter()
+            }
+            false
+        }
     }
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.fab_add -> {
+            cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fab_add -> {
 
                 val memoType = arrayOf<CharSequence>(
-                    context?.resources!!.getString(R.string.text),
-                    context?.resources!!.getString(R.string.voice),
-                    context?.resources!!.getString(R.string.handwrite)
+                    context?.resources!!.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.text),
+                    context?.resources!!.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.voice),
+                    context?.resources!!.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.handwrite)
                 )
 
                 AlertDialog.Builder(context).apply {
-                    setTitle(context?.resources!!.getString(R.string.select_memo_type))
+                    setTitle(context?.resources!!.getString(cobong.jeongwoojin.cobongmemo.cobongmemo.R.string.select_memo_type))
                     setItems(memoType) { _, which ->
                         when (which) {
 
@@ -156,7 +208,33 @@ class MemoListFragment : Fragment(), View.OnClickListener {
             }
         }
 
+    }
 
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+
+        val DRAWABLE_RIGHT = 2
+
+        if (event?.getAction() == MotionEvent.ACTION_UP) {
+            if (event.getRawX() >= (binding.tietInputMemoFilter.getRight() - binding.tietInputMemoFilter.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+
+                setFilter()
+                return true
+            }
+        }
+        return false
+    }
+
+    fun setFilter() {
+
+        val curString = binding.tietInputMemoFilter.text.toString()
+        if (curString.equals("")) {
+            viewModel.isFiltered.value = false
+            viewModel.setFilteredList(binding.tietInputMemoFilter.text.toString())
+        } else {
+            viewModel.isFiltered.value = true
+            viewModel.setFilteredList(binding.tietInputMemoFilter.text.toString())
+            binding.rcvMemoList.scrollToPosition(0)
+        }
     }
 
     //메모 보기로 이동
@@ -186,9 +264,11 @@ class MemoListFragment : Fragment(), View.OnClickListener {
 
     fun deleteMemo(memo: MemoItem) {
 
-        makeDialog {
-            //delete memo
-            viewModel.deleteByRoom(memo)
+        if (viewModel._alertFlag.value != true) {
+            makeDialog {
+                //delete memo
+                viewModel.deleteByRoom(memo)
+            }
         }
     }
 
@@ -229,15 +309,18 @@ class MemoListFragment : Fragment(), View.OnClickListener {
     }
 
     fun makeDialog(dialogProcess: () -> Unit) {
-        AlertDialog.Builder(context).apply {
 
-            this.setTitle("경고")
+        AlertDialog.Builder(context).apply {
             this.setMessage("메모를 지우시겠습니까?")
-            this.setPositiveButton("닫기", null)
+            this.setPositiveButton("취소") { _, _ ->
+                viewModel._alertFlag.value = false
+                memoAdapter.notifyDataSetChanged()
+            }
             setNegativeButton("확인") { _, _ ->
 
                 dialogProcess()
 
+                viewModel._alertFlag.value = false
             }
 
         }.create().apply {

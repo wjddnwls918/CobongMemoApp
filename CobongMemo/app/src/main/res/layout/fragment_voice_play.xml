@@ -17,9 +17,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
-        android:background="#fffbfb"
+        android:background="@drawable/radius_background"
         android:minWidth="1000dp"
         android:orientation="vertical">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_small_margin"
+            android:hint="@string/writeMemoTitle"
+            app:boxStrokeColor="@color/cobongDarkGray"
+            app:hintEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tiet_voice_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:focusable="false"
+                android:inputType="text"
+                android:maxLength="30"
+                android:singleLine="true"
+                android:text="@{viewmodel.item.title}"
+                android:textSize="@dimen/text_size_sp"
+                android:textStyle="bold" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -29,10 +55,10 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/voice" />
+                android:src="@drawable/ic_keyboard_voice_black_24dp" />
 
             <com.victor.loading.rotate.RotateLoading
-                android:id="@+id/rotateloading"
+                android:id="@+id/rl_loading"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_centerInParent="true"
@@ -50,7 +76,7 @@
 
 
             <com.dd.processbutton.iml.ActionProcessButton
-                android:id="@+id/play"
+                android:id="@+id/apb_play"
                 android:layout_width="0dp"
                 android:layout_height="46.5dp"
                 android:layout_margin="2dp"
@@ -68,7 +94,7 @@
 
 
             <com.dd.processbutton.iml.ActionProcessButton
-                android:id="@+id/pause"
+                android:id="@+id/apb_pause"
                 android:layout_width="0dp"
                 android:layout_height="47dp"
                 android:layout_margin="3dp"
@@ -86,7 +112,7 @@
 
 
             <com.dd.processbutton.iml.ActionProcessButton
-                android:id="@+id/playexit"
+                android:id="@+id/apb_exit"
                 android:layout_width="0dp"
                 android:layout_height="47dp"
                 android:layout_margin="3dp"
