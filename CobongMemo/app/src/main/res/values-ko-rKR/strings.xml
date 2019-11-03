@@ -49,6 +49,16 @@
     <string name="text_input_subTitle">소제목을 입력하세요</string>
     <string name="text_content">내용</string>
 
+    <string name="input_title_to_find">메모 검색</string>
+
+    <string name="error_title">에러가 발생했습니다</string>
+    <string name="error_info">새로 고침 버튼을 눌러 페이지를 다시 불러올 수 있습니다.</string>
+    <string name="error_refresh">새로고침</string>
+
+    <string name="permission_denied_finish_activity">권한을 얻어야 사용할 수 있습니다. 앱을 종료합니다.</string>
+
+    <string name="no_memo_item">메모가 없습니다.</string>
+
     <!-- Text Fragment -->
 
 
@@ -56,6 +66,7 @@
 
     <!-- Voice Fragment -->
     <string name="voice_play_end">재생</string>
+    <string name="voice_input_title">음성 메모 제목을 입력하세요.</string>
 
 
     <!-- Schedule Fragemnt -->
@@ -88,5 +99,8 @@
     <string name="todolist_tomorrow">내일 할일</string>
 
     <string name="todolist_time_over">시간 경과</string>
+
+    <string name="todolist_no_today_schedule">오늘 할일이 없습니다.</string>
+    <string name="todolist_no_tomorrow_schedule">내일 할일이 없습니다.</string>
 
 </resources>
