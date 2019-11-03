@@ -6,7 +6,6 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -18,11 +17,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".view.ErrorActivity"
+            android:theme="@style/noActionBar"
+            android:screenOrientation="portrait" />
+
         <receiver
             android:name=".view.schedule.alarm.AlarmReceiver"
             android:enabled="true"
-            android:exported="true"/>
-        <activity android:name=".view.schedule.scheduleshow.ScheduleShowActivity"/>
+            android:exported="true" />
+
+        <activity android:name=".view.schedule.scheduleshow.ScheduleShowActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -43,7 +48,8 @@
             android:theme="@style/noActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW"/>
+                <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity> <!-- Main Activity -->
@@ -55,7 +61,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".view.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".view.memo.handwritememo.HandwritingActivity"
             android:screenOrientation="portrait" />
