@@ -25,7 +25,18 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     private val _editMemoEvent = MutableLiveData<Event<MemoItem>>()
     val editMemoEvent: LiveData<Event<MemoItem>> = _editMemoEvent
 
+    val _alertFlag = MutableLiveData<Boolean>()
+
+    //스와이프 완료시
+    val _swipedEvent = MutableLiveData<Event<Int>>()
+    val swipedEvent: LiveData<Event<Int>> = _swipedEvent
+
     val items: LiveData<List<MemoItem>>
+
+    val _filteredList = MutableLiveData<List<MemoItem>>()
+    val filteredList:LiveData<List<MemoItem>> = _filteredList
+
+    val isFiltered = MutableLiveData<Boolean>()
 
     init {
         items = MemoApplication.memoRepository.memos
@@ -35,11 +46,13 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         MemoApplication.memoRepository.deleteByRoom(memo)
     }
 
-
-    /*fun sendMemo(item: MemoItem) {
-        _openMemoEvent.value = Event(item)
-        navigator!!.sendMemo(item)
-    }*/
+    fun deleteByListPosition(listPosition: Int) = viewModelScope.launch(Dispatchers.IO) {
+        if(isFiltered.value as Boolean) {
+            MemoApplication.memoRepository.deleteByRoom(filteredList.value!!.get(listPosition))
+        } else {
+            MemoApplication.memoRepository.deleteByRoom(items.value!!.get(listPosition))
+        }
+    }
 
     fun onMemoClick(memo: MemoItem) {
         _openMemoEvent.value = Event(memo)
@@ -51,6 +64,24 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
     fun onEditMemoClick(memo: MemoItem) {
         _editMemoEvent.value = Event(memo)
+    }
+
+    fun setFilteredList(filter:String) {
+
+        val filteredList = mutableListOf<MemoItem>()
+
+        val regex = Regex(pattern = filter)
+        var matched:Boolean
+
+        for( i in items.value!!.indices ) {
+            val cur = items.value!!.get(i).title as CharSequence
+            matched = regex.containsMatchIn(input= cur)
+
+            if(matched)
+                filteredList.add(items.value!!.get(i))
+        }
+
+        _filteredList.value = filteredList
     }
 
 }
