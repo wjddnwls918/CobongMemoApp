@@ -20,6 +20,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandWritingBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 import com.jaredrummler.android.colorpicker.ColorPickerDialog
 import com.jaredrummler.android.colorpicker.ColorPickerDialogListener
 import me.panavtec.drawableview.DrawableViewConfig
@@ -63,25 +64,18 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
 
         erase = false
 
-        //읽어와서 저장
-        val intent = intent
-        viewModel.item = intent.getParcelableExtra("handwriteItem")
-
         //캔버스 초기화
         initCanvas()
 
         //작성인지 수정인지 설정
         type = intent.getStringExtra("type")
 
-        //수정이면
-        if (type == "edit") {
-            binding.handwriteTitle.keyListener = null
-            binding.handwriteSubtitle.keyListener = null
-        }
+        //읽어와서 저장
+        if(intent.getParcelableExtra<MemoItem>("handwriteItem") != null) {
+            viewModel.item = intent.getParcelableExtra("handwriteItem")
 
-        if (viewModel.item != null) {
             val bitmap =
-                BitmapFactory.decodeFile(MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg")
+                BitmapFactory.decodeFile(MemoApplication.root + "/saved_images/" + viewModel.item.handwriteId + ".jpg")
             val bitmapDrawable = BitmapDrawable(bitmap)
             binding.paintView.background = bitmapDrawable
         }
@@ -182,7 +176,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
     fun editHandwrite() {
 
         val editFile =
-            File(MemoApplication.root + "/saved_images/" + viewModel.item?.handwriteId + ".jpg")
+            File(MemoApplication.root + "/saved_images/" + viewModel.item.handwriteId + ".jpg")
         try {
             val out: FileOutputStream
             val back = (binding.paintView.background.current as BitmapDrawable).bitmap
@@ -208,6 +202,11 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         } catch (e: Exception) {
             e.printStackTrace()
         }
+
+
+
+        //update handwrtie memo
+        viewModel.updateHandWriteMemoByRoom(binding.handwriteTitle.text.toString(), binding.handwriteSubtitle.text.toString() )
 
     }
 
