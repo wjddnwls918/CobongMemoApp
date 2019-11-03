@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
-import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
+import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityMainBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoListFragment
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.ScheduleFragment
@@ -34,11 +34,15 @@ class MainActivity : AppCompatActivity() {
     //TedPermission
     internal var permissionlistener: PermissionListener = object : PermissionListener {
         override fun onPermissionGranted() {
-            //SnackBarUtil.showSnackBar(binding.getRoot(), "Permission Granted");
         }
 
         override fun onPermissionDenied(deniedPermissions: List<String>) {
-            SnackBarUtil.showSnackBar(binding.root, "Permission Denied\n$deniedPermissions")
+            Toast.makeText(
+                this@MainActivity,
+                applicationContext.getText(R.string.permission_denied_finish_activity).toString(),
+                Toast.LENGTH_SHORT
+            ).show()
+            finish()
         }
 
     }
@@ -103,12 +107,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUI() {
 
-        val transaction = supportFragmentManager.beginTransaction()
+        var transaction = supportFragmentManager.beginTransaction()
         transaction.replace(cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.fl_main, memoFragment)
             .commitAllowingStateLoss()
 
         binding.bottomNavigation.setOnNavigationItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            val transaction = supportFragmentManager.beginTransaction()
+
+            transaction = supportFragmentManager.beginTransaction()
             when (item.itemId) {
                 cobong.jeongwoojin.cobongmemo.cobongmemo.R.id.action_memo -> {
                     transaction.replace(
@@ -149,8 +154,7 @@ class MainActivity : AppCompatActivity() {
             .setPermissions(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.RECORD_AUDIO
             )
             .check()
     }
