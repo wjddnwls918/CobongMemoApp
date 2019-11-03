@@ -1,16 +1,19 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo
 
-import android.app.Application
 import android.content.Intent
 import android.os.Environment
+import androidx.multidex.MultiDexApplication
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.error.CobongMemoExceptionHandler
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoRepository
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleRepository
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.alarm.AlarmReceiver
+import com.crashlytics.android.Crashlytics
 import com.facebook.stetho.Stetho
 import com.facebook.stetho.okhttp3.StethoInterceptor
+import io.fabric.sdk.android.Fabric
 import okhttp3.OkHttpClient
 
-class MemoApplication : Application() {
+class MemoApplication : MultiDexApplication() {
     companion object {
         var language = ""
 
@@ -86,6 +89,24 @@ class MemoApplication : Application() {
         memoRepository = MemoRepository.getInstance(this)
         scheduleRepository = ScheduleRepository(this)
 
+        setCrashHandler()
+
+    }
+
+    private fun setCrashHandler() {
+        val defaultExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { _, _ ->
+            // Crashlytics에서 기본 handler를 호출하기 때문에 이중으로 호출되는것을 막기위해 빈 handler로 설정
+        }
+        Fabric.with(this, Crashlytics())
+        val fabricExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler(
+            CobongMemoExceptionHandler(
+                this,
+                defaultExceptionHandler,
+                fabricExceptionHandler
+            )
+        )
     }
 
     override fun onTerminate() {
