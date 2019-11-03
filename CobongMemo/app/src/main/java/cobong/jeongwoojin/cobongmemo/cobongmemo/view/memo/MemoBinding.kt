@@ -12,11 +12,11 @@ object MemoBinding {
     fun setMemoType(view: ImageView, memoType: String) {
         //check memoType
         if (memoType == "text") {
-            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.text))
+            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.ic_text_format_black_24dp))
         } else if (memoType == "handwrite") {
-            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.handwriting))
+            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.ic_palette_black_24dp))
         } else {
-            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.voice))
+            view.setImageDrawable(ContextCompat.getDrawable(view.context, R.drawable.ic_keyboard_voice_black_24dp))
         }
 
     }
