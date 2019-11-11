@@ -27,7 +27,7 @@ import me.panavtec.drawableview.DrawableViewConfig
 import java.io.File
 import java.io.FileOutputStream
 
-class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPickerDialogListener{
+class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPickerDialogListener {
 
     private var config: DrawableViewConfig? = null
 
@@ -71,7 +71,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         type = intent.getStringExtra("type")
 
         //읽어와서 저장
-        if(intent.getParcelableExtra<MemoItem>("handwriteItem") != null) {
+        if (intent.getParcelableExtra<MemoItem>("handwriteItem") != null) {
             viewModel.item = intent.getParcelableExtra("handwriteItem")
 
             val bitmap =
@@ -108,7 +108,7 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         height = (dm.heightPixels * 0.58).toInt()
 
         config = DrawableViewConfig()
-        config!!.strokeColor = ContextCompat.getColor(this,android.R.color.black)
+        config!!.strokeColor = ContextCompat.getColor(this, android.R.color.black)
         config!!.isShowCanvasBounds =
             true // If the view is bigger than canvas, with this the user will see the bounds (Recommended)
         config!!.strokeWidth = 20.0f
@@ -143,9 +143,22 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
                     .setShowAlphaSlider(true)
                     .show(this)
 
-            R.id.widthUp -> config!!.strokeWidth = config!!.strokeWidth + 10
+            R.id.widthUp -> {
+                config!!.strokeWidth = config!!.strokeWidth + 10
+                val trans = (config!!.strokeWidth / 10 + 1).toInt().toString()
+                viewModel.pencilSize.set(trans)
+            }
 
-            R.id.widthDown -> config!!.strokeWidth = config!!.strokeWidth - 10
+            R.id.widthDown -> {
+
+                if (config!!.strokeWidth - 10 >= 0) {
+                    config!!.strokeWidth = config!!.strokeWidth - 10
+
+                    val trans = (config!!.strokeWidth / 10 + 1).toInt().toString()
+                    viewModel.pencilSize.set(trans)
+                }
+
+            }
 
             R.id.eraser -> {
 
@@ -204,9 +217,11 @@ class HandwritingActivity : AppCompatActivity(), View.OnClickListener, ColorPick
         }
 
 
-
         //update handwrtie memo
-        viewModel.updateHandWriteMemoByRoom(binding.handwriteTitle.text.toString(), binding.handwriteSubtitle.text.toString() )
+        viewModel.updateHandWriteMemoByRoom(
+            binding.handwriteTitle.text.toString(),
+            binding.handwriteSubtitle.text.toString()
+        )
 
     }
 

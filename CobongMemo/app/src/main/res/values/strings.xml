@@ -64,6 +64,7 @@
     <!-- Text Fragment -->
 
     <!-- Handwrite Fragment -->
+    <string name="handwrite_pen_size">Pencil Size</string>
 
     <!-- Voice Fragment -->
     <string name="voice_play_end">play</string>

@@ -1,6 +1,8 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo
 
 import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaRecorder
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,7 +19,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListener{
+class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListener {
 
     private var progressGenerator: ProgressGenerator? = null
 
@@ -48,6 +50,13 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
 
     override fun onResume() {
         super.onResume()
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val wrapContent = ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog?.window?.setLayout(width, wrapContent)
+        dialog?.setCancelable(true);
+        dialog?.setCanceledOnTouchOutside(true);
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,9 +74,10 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
             ViewModelProvider(this, viewModelFactory).get(VoiceViewModel::class.java).apply {
                 item = arguments?.getParcelable("voiceItem")
             }
-        binding = FragmentVoiceRecordBinding.inflate(inflater,container,false).apply {
+        binding = FragmentVoiceRecordBinding.inflate(inflater, container, false).apply {
             viewmodel = viewModel
         }
+
 
         progressGenerator = ProgressGenerator(this)
 
@@ -113,7 +123,7 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
             binding.apbRecord.setMode(ActionProcessButton.Mode.ENDLESS)
             progressGenerator!!.start(binding.apbRecord)
 
-            if(binding.tietVoiceTitle.text!!.toString().equals("")) {
+            if (binding.tietVoiceTitle.text!!.toString().equals("")) {
                 voiceTitle = DateUtil.curDateForVoiceMemo()
             } else {
                 voiceTitle = binding.tietVoiceTitle.text.toString()

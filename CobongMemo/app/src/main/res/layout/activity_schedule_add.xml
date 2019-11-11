@@ -40,7 +40,7 @@
                 android:layout_gravity="end"
                 android:layout_marginEnd="@dimen/space_medium_margin"
                 android:onClick="@{() -> viewmodel.onScheduleWriteFinishClick()}"
-                android:src="@drawable/icon_ok" />
+                android:src="@drawable/ic_check_black_24dp" />
 
         </androidx.appcompat.widget.Toolbar>
 

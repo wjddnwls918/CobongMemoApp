@@ -1,6 +1,8 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.voicememo
 
 
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -53,6 +55,8 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
             viewmodel = viewModel
         }
 
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
         filename = MemoApplication.root +  "/" + viewModel.item?.title + ".mp3"
 
         progressGenerator = ProgressGenerator(this)
@@ -83,6 +87,14 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
 
     override fun onResume() {
         super.onResume()
+
+        dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        val width = (resources.displayMetrics.widthPixels * 0.9).toInt()
+        val wrapContent = ViewGroup.LayoutParams.WRAP_CONTENT
+        dialog?.window?.setLayout(width, wrapContent)
+        dialog?.setCancelable(true);
+        dialog?.setCanceledOnTouchOutside(true);
+
         if (player != null) {
             player?.seekTo(length)
             player?.start()

@@ -63,7 +63,7 @@ class ScheduleRepository(application: Application) {
     }
 
     fun getAllScheduleByDate(date: String)
-            : Single<List<ScheduleItem>> =
+            : Single<MutableList<ScheduleItem>> =
         scheduleDao.getAllScheduleByDate(date).subscribeOn(Schedulers.io())
 
     suspend fun deleteSchedule(schedule: ScheduleItem) {

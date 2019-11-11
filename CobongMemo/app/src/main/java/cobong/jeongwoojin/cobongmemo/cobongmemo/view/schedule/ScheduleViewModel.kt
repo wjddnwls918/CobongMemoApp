@@ -16,7 +16,7 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     var transDate: String = ""
 
-    var allSchedulesByRoomByDate: MutableLiveData<List<ScheduleItem>> = MutableLiveData()
+    var allSchedulesByRoomByDate: MutableLiveData<MutableList<ScheduleItem>> = MutableLiveData()
 
     val allSchedulesByRoom: LiveData<List<ScheduleItem>>
 
@@ -53,8 +53,16 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
             MemoApplication.scheduleRepository.getAllScheduleByDate(date)
                 .subscribe({ data ->
 
+                    data.add(
+                        0,
+                        ScheduleItem(
+                            0,
+                            "", transDatetoHangul(), "", "", "", "", 0, 0.0, 0.0
+                        )
+                    )
+
                     if (data.size == 0)
-                        allSchedulesByRoomByDate.postValue(listOf())
+                        allSchedulesByRoomByDate.postValue(mutableListOf())
                     else
                         allSchedulesByRoomByDate.postValue(data)
 
@@ -64,5 +72,16 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
         )
     }
 
+    fun transDatetoHangul(): String {
+        val temp = transDate.split("-")
+        var result = ""
+
+        result += (temp[0] + "년 ")
+        result += (temp[1] + "월 ")
+        result += (temp[2] + "일")
+
+        return result
+
+    }
 
 }
