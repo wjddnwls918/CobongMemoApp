@@ -24,6 +24,8 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.scheduleshow.Sched
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener
+import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormatter
+import org.threeten.bp.format.DateTimeFormatter
 
 
 class ScheduleFragment : Fragment(), OnDateSelectedListener {
@@ -76,6 +78,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
     fun initScheduleCalendar() {
 
         binding.mcvScheduleCalendar.setOnDateChangedListener(this)
+        binding.mcvScheduleCalendar.setTitleFormatter(DateFormatTitleFormatter(DateTimeFormatter.ofPattern("yyyy년 MM월")))
     }
 
     fun initScheduleRecyclerView() {

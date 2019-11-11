@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemScheduleBinding
+import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ItemScheduleHeaderBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel
 
@@ -13,16 +14,49 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.MemoViewModel
  * Adapter for the task list. Has a reference to the [MemoViewModel] to send actions back to it.
  */
 class ScheduleAdapter(private val viewModel: ScheduleViewModel) :
-    ListAdapter<ScheduleItem, ScheduleAdapter.ViewHolder>(TaskDiffCallback()) {
+    ListAdapter<ScheduleItem, RecyclerView.ViewHolder>(TaskDiffCallback()) {
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val TYPE_HEADER = 0
+    val TYPE_ITEM = 1
+
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        when{
+            holder is HeaderViewHolder -> {
+                holder.bind(viewModel, getItem(0))
+            }
+            holder is ViewHolder -> {
+                val item = getItem(position)
+                holder.bind(viewModel, item)
+            }
+        }
+    }
+
+    /*override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
 
         holder.bind(viewModel, item)
+    }*/
+
+    override fun getItemViewType(position: Int): Int {
+        when (position) {
+            0 -> return TYPE_HEADER
+            else ->
+                return TYPE_ITEM
+        }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder.from(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when(viewType) {
+            TYPE_HEADER -> {
+                return HeaderViewHolder.from(parent)
+            }
+            else -> {
+                return ViewHolder.from(parent)
+            }
+        }
+
     }
 
     class ViewHolder private constructor(val binding: ItemScheduleBinding) :
@@ -43,6 +77,26 @@ class ScheduleAdapter(private val viewModel: ScheduleViewModel) :
                 return ViewHolder(binding)
             }
         }
+    }
+
+    class HeaderViewHolder(val binding: ItemScheduleHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(viewModel: ScheduleViewModel, item: ScheduleItem) {
+            binding.viewmodel = viewModel
+            binding.schedule = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): RecyclerView.ViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding = ItemScheduleHeaderBinding.inflate(layoutInflater, parent, false)
+
+                return HeaderViewHolder(binding)
+            }
+        }
+
     }
 }
 
