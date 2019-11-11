@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 import android.app.Application
+import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,6 +27,8 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
     //작성 완료
     private val _writeClickEvent = MutableLiveData<Event<Unit>>()
     val writeClickEvent: LiveData<Event<Unit>> = _writeClickEvent
+
+    val pencilSize = ObservableField(3.toString())
 
     init {
         item = MemoItem(0,"","","","","","","")

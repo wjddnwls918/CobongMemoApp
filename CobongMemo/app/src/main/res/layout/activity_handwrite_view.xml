@@ -23,21 +23,26 @@
             android:maxWidth="30dp"
             android:maxHeight="30dp"
             android:onClick="@{() -> viewmodel.onExitClick()}"
-            android:src="@drawable/icon_close"
+            android:src="@drawable/ic_close_black_30dp"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
-            app:layout_constraintEnd_toEndOf="@id/gl_end_of_exit"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_handwriteTitle"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="@id/gl_left"
             app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
         <TextView
+            android:id="@+id/tv_handwriteTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/space_small_margin"
             android:text="@string/writeMemoTextView"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
-            app:layout_constraintEnd_toEndOf="@id/gl_end_of_memo"
-            app:layout_constraintStart_toStartOf="@id/gl_end_of_exit"
+            app:layout_constraintEnd_toEndOf="@id/deletehandwrite"
+            app:layout_constraintStart_toEndOf="@id/handwriteViewExit"
             app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
         <ImageView
@@ -51,8 +56,7 @@
             android:onClick="@{()->viewmodel.onDeleteClick()}"
             android:src="@drawable/ic_delete_black_24dp"
             app:layout_constraintBottom_toBottomOf="@id/gl_end_of_util"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/gl_end_of_memo"
+            app:layout_constraintEnd_toEndOf="@id/gl_right"
             app:layout_constraintTop_toTopOf="@id/gl_start_util" />
 
         <View
@@ -148,26 +152,11 @@
             app:layout_constraintGuide_percent="0.01" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl_end_of_exit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.1" />
-
-
-        <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_end_of_util"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.07" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/gl_end_of_memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.9" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/gl_left"
