@@ -63,6 +63,7 @@
 
 
     <!-- Handwrite Fragment -->
+    <string name="handwrite_pen_size">선 굵기</string>
 
     <!-- Voice Fragment -->
     <string name="voice_play_end">재생</string>
