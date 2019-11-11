@@ -4,6 +4,7 @@ import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -31,6 +32,32 @@ class MainActivity : AppCompatActivity() {
     private val scheduleFragment = ScheduleFragment()
     private val todoListFragment = TodoListFragment()
 
+    override fun onStart() {
+        super.onStart()
+        Log.d("lifecyclecheck","onStart()")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d("lifecyclecheck","onResume()")
+    }
+
+    override fun onPause() {
+        Log.d("lifecyclecheck","onPause()")
+        super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("lifecyclecheck","onStop()")
+    }
+
+    override fun onDestroy() {
+        Log.d("lifecyclecheck","onDestroy()")
+        super.onDestroy()
+    }
+
+
     //TedPermission
     internal var permissionlistener: PermissionListener = object : PermissionListener {
         override fun onPermissionGranted() {
@@ -47,9 +74,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d("lifecyclecheck","onCreate()")
 
         binding = DataBindingUtil.setContentView(
             this,
