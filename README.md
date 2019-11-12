@@ -127,6 +127,8 @@
 
 [[2019-07-15]](https://youtu.be/Kb7Vr5lZ06E)
 
+[[2019-11-12]](https://youtu.be/JHdFvyvtaCc) 
+
 ------------------------------------------
 - KOREATECH
 - Computer Science Engineering
