@@ -15,6 +15,7 @@ import androidx.work.WorkManager
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.CalendarUtil
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.DateUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.FragmentScheduleBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 import cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.alarm.AlarmAddWorker
@@ -28,7 +29,7 @@ import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormat
 import org.threeten.bp.format.DateTimeFormatter
 
 
-class ScheduleFragment : Fragment(), OnDateSelectedListener {
+class ScheduleFragment : Fragment(), OnDateSelectedListener{
 
     private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: ScheduleViewModel
@@ -38,6 +39,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
     }
 
@@ -55,13 +57,20 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
                 binding.viewmodel = this
             }
 
+
+
+        return binding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
         initScheduleRecyclerView()
         initScheduleObserveByDate()
         initScheduleObserve()
         initScheduleCalendar()
         setupNavigation()
 
-        return binding.root
     }
 
     private fun setupNavigation() {
@@ -78,7 +87,18 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
     fun initScheduleCalendar() {
 
         binding.mcvScheduleCalendar.setOnDateChangedListener(this)
-        binding.mcvScheduleCalendar.setTitleFormatter(DateFormatTitleFormatter(DateTimeFormatter.ofPattern("yyyy년 MM월")))
+        binding.mcvScheduleCalendar.setTitleFormatter(
+            DateFormatTitleFormatter(
+                DateTimeFormatter.ofPattern(
+                    "yyyy년 MM월"
+                )
+            )
+        )
+
+        onDateSelected(binding.mcvScheduleCalendar, CalendarDay.from(
+            DateUtil.curYear().toInt(),
+            DateUtil.curMonth().toInt(),
+            DateUtil.curDay().toInt()),true)
     }
 
     fun initScheduleRecyclerView() {
@@ -122,6 +142,12 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+
+         binding.mcvScheduleCalendar.clearSelection()
+    }
+
     fun onAddScheduleStartClick() {
         startActivity(Intent(context, ScheduleAddActivity::class.java))
     }
@@ -150,22 +176,28 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener {
                     val dateArray = it[i].date.split("-")
                     val startTimeArray = it[i].startTime.split(":")
 
-                    set.add(CalendarDay.from(dateArray[0].toInt(), dateArray[1].toInt(), dateArray[2].toInt()))
+                    set.add(
+                        CalendarDay.from(
+                            dateArray[0].toInt(),
+                            dateArray[1].toInt(),
+                            dateArray[2].toInt()
+                        )
+                    )
 
                     if (CalendarUtil.setTime(
                             dateArray.toTypedArray(),
                             startTimeArray.toTypedArray(),
                             it[i].alarmType
                         ).timeInMillis < System.currentTimeMillis()
-                    ){
+                    ) {
 
                         continue
                     }
-                    data.putString("title",it[i].title)
+                    data.putString("title", it[i].title)
                     data.putStringArray("dateArray", dateArray.toTypedArray())
                     data.putStringArray("startTimeArray", startTimeArray.toTypedArray())
-                    data.putInt("requestCode",it[i].index)
-                    data.putInt("alarmType",it[i].alarmType)
+                    data.putInt("requestCode", it[i].index)
+                    data.putInt("alarmType", it[i].alarmType)
                     work.setInputData(data.build())
                     WorkManager.getInstance(activity!!.applicationContext).enqueue(work.build())
 
