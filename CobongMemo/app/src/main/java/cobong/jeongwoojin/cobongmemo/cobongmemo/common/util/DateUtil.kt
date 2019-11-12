@@ -5,6 +5,27 @@ import java.util.*
 
 object DateUtil {
 
+    fun curYear() :String{
+        val curTime = Calendar.getInstance().time
+
+        val yearFormat = SimpleDateFormat("yyyy",Locale.getDefault())
+        return yearFormat.format(curTime)
+    }
+
+    fun curMonth() :String{
+        val curTime = Calendar.getInstance().time
+
+        val monthFormat = SimpleDateFormat("MM",Locale.getDefault())
+        return monthFormat.format(curTime)
+    }
+
+    fun curDay() :String{
+        val curTime = Calendar.getInstance().time
+
+        val dayFormat = SimpleDateFormat("dd",Locale.getDefault())
+        return dayFormat.format(curTime)
+    }
+
     fun curDate(): String {
         val now = System.currentTimeMillis()
         val date = Date(now)
