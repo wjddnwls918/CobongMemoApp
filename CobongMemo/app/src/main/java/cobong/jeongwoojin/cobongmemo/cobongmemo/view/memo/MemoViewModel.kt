@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,10 +11,13 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
-    val adapter: MemoAdapter
+    val adapter: MemoAdapter by lazy {
+        MemoAdapter(this)
+    }
 
     //메모 보기
     private val _openMemoEvent = MutableLiveData<Event<MemoItem>>()
@@ -37,12 +41,14 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     var items: LiveData<List<MemoItem>> = _items
 
     init {
-        adapter = MemoAdapter(this)
         items = MemoApplication.memoRepository.memos
     }
 
     fun deleteByRoom(memo: MemoItem) = viewModelScope.launch(Dispatchers.IO) {
         MemoApplication.memoRepository.deleteByRoom(memo)
+        if(memo.memoType!!.equals("handwrite") ) {
+            deleteHandwriteInStorage(memo.handwriteId)
+        }
     }
 
     fun deleteByListPosition(listPosition: Int) = viewModelScope.launch(Dispatchers.IO) {
@@ -77,6 +83,19 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         }
 
         adapter.submitList(filteredList.toList())
+    }
+
+    fun deleteHandwriteInStorage(handwriteId :String?) {
+        val path = MemoApplication.root + "/saved_images/" + handwriteId + ".jpg"
+        val file = File(path)
+        Log.d("filedelete", path)
+        if (file.exists()) {
+            if (file.delete()) {
+                Log.d("filedelete", "삭제완료")
+            } else {
+                Log.d("filedelete", "실패")
+            }
+        }
     }
 
 }

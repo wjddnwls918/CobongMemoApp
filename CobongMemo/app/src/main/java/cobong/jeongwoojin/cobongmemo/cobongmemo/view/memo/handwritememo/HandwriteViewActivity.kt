@@ -3,16 +3,13 @@ package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 import android.app.AlertDialog
 import android.graphics.BitmapFactory
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
-import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication
 import cobong.jeongwoojin.cobongmemo.cobongmemo.MemoApplication.Companion.root
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityHandwriteViewBinding
-import java.io.File
 
 class HandwriteViewActivity : AppCompatActivity() {
 
@@ -37,11 +34,14 @@ class HandwriteViewActivity : AppCompatActivity() {
             viewmodel = viewModel
         }
 
+        initViewImage()
+        setupNavigation()
+    }
+
+    private fun initViewImage() {
         val bitmap =
             BitmapFactory.decodeFile(root + "/saved_images/" + viewModel.item.handwriteId + ".jpg")
         binding.handwriteViewImage.setImageBitmap(bitmap)
-
-        setupNavigation()
     }
 
     private fun setupNavigation() {
@@ -72,19 +72,8 @@ class HandwriteViewActivity : AppCompatActivity() {
 
     fun delHandwrite() {
 
-        //viewModel.deleteHandwriteMemo(viewModel.item!!.index)
         viewModel.deleteHandwriteMemoByRoom()
-
-        val path = MemoApplication.root + "/saved_images/" + viewModel.item.handwriteId + ".jpg"
-        val file = File(path)
-        Log.d("filedelete", path)
-        if (file.exists()) {
-            if (file.delete()) {
-                Log.d("filedelete", "삭제완료")
-            } else {
-                Log.d("filedelete", "실패")
-            }
-        }
+        viewModel.deleteHandwriteInStorage()
         finish()
 
     }

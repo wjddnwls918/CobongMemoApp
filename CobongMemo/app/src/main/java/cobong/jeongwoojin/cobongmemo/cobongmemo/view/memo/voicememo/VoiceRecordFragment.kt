@@ -100,17 +100,17 @@ class VoiceRecordFragment : DialogFragment(), ProgressGenerator.OnCompleteListen
     private fun setupNavigation() {
 
         //닫기
-        viewModel.exitClickEvent.observe(this, EventObserver {
+        viewModel.exitClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             dismiss()
         })
 
         //녹음 시작
-        viewModel.recordClickEvent.observe(this, EventObserver {
+        viewModel.recordClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onRecordClick()
         })
 
         //녹음 끝
-        viewModel.recordStopClickEvent.observe(this, EventObserver {
+        viewModel.recordStopClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onStopClick()
         })
     }

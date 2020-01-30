@@ -9,8 +9,8 @@
             type="cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document" />
 
         <variable
-            name="listener"
-            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoNavigator" />
+            name="viewmodel"
+            type="cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule.placeInfo.PlaceInfoViewModel" />
 
     </data>
 
@@ -20,7 +20,7 @@
         android:layout_height="@dimen/item_small_size"
         android:layout_margin="@dimen/memo_input_margin"
         android:elevation="@dimen/cardview_default_elevation"
-        android:onClick="@{() -> listener.onDocumentClick(document)}">
+        android:onClick="@{() -> viewmodel.onDocumentClick(document)}">
 
 
         <ImageView

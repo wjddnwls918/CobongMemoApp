@@ -13,7 +13,9 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
-    val scheduleAdapter:ScheduleAdapter
+    val scheduleAdapter:ScheduleAdapter by lazy {
+        ScheduleAdapter(this)
+    }
 
     val disposable: CompositeDisposable = CompositeDisposable()
 
@@ -21,7 +23,9 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
 
     var allSchedulesByRoomByDate= MutableLiveData<List<ScheduleItem>>()
 
-    var allSchedulesByRoom: LiveData<List<ScheduleItem>>
+    val allSchedulesByRoom: LiveData<List<ScheduleItem>> by lazy {
+        MemoApplication.scheduleRepository.schedule
+    }
 
 
     private val _scheduleClickEvent = MutableLiveData<Event<ScheduleItem>>()
@@ -31,21 +35,13 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
     private val _addScheduleStartClickEvent = MutableLiveData<Event<Unit>>()
     val addScheduleStartClickEvent: LiveData<Event<Unit>> = _addScheduleStartClickEvent
 
-    init {
-        scheduleAdapter = ScheduleAdapter(this)
-        allSchedulesByRoom = MemoApplication.scheduleRepository.schedule
-    }
-
-
     fun onAddScheduleStartClick() {
         _addScheduleStartClickEvent.value = Event(Unit)
     }
 
-
     fun onScheduleClick(schedule: ScheduleItem) {
         _scheduleClickEvent.value = Event(schedule)
     }
-
 
     /*  From Room
     *

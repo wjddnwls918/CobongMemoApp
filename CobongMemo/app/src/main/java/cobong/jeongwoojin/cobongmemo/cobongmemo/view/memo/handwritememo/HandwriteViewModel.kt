@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.memo.handwritememo
 
 import android.app.Application
+import android.util.Log
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -11,6 +12,7 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.common.Event
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.memo.MemoItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 
 class HandwriteViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -78,6 +80,19 @@ class HandwriteViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun deleteHandwriteMemoByRoom() = viewModelScope.launch(Dispatchers.IO) {
         MemoApplication.memoRepository.deleteMemoNullableByRoom(item)
+    }
+
+    fun deleteHandwriteInStorage() {
+        val path = MemoApplication.root + "/saved_images/" + item.handwriteId + ".jpg"
+        val file = File(path)
+        Log.d("filedelete", path)
+        if (file.exists()) {
+            if (file.delete()) {
+                Log.d("filedelete", "삭제완료")
+            } else {
+                Log.d("filedelete", "실패")
+            }
+        }
     }
 
 }
