@@ -105,17 +105,17 @@ class VoicePlayFragment : DialogFragment(), ProgressGenerator.OnCompleteListener
     private fun setupNavigation() {
 
         //닫기
-        viewModel.exitClickEvent.observe(this, EventObserver {
+        viewModel.exitClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             dismiss()
         })
 
         //녹음 시작
-        viewModel.playClickEvent.observe(this, EventObserver {
+        viewModel.playClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onPlayClick()
         })
 
         //녹음 끝
-        viewModel.pauseClickEvent.observe(this, EventObserver {
+        viewModel.pauseClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onPauseClick()
         })
     }

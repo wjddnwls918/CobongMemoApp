@@ -44,30 +44,9 @@ class TodoListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-        //initObserveLivedata()
         setupListAdapter()
         setupNavigation()
     }
-/*
-    private fun initObserveLivedata() {
-        viewModel.todayItems.observe(this, Observer { schedules ->
-            schedules.let {
-                when (it.size) {
-                    0 -> binding.tvTodayEmptyList.visibility = View.VISIBLE
-                    else -> binding.tvTodayEmptyList.visibility = View.GONE
-                }
-            }
-        })
-
-        viewModel.tomorrowItems.observe(this, Observer { schedules ->
-            schedules.let {
-                when (it.size) {
-                    0 -> binding.tvTomorrowEmptyList.visibility = View.VISIBLE
-                    else -> binding.tvTomorrowEmptyList.visibility = View.GONE
-                }
-            }
-        })
-    }*/
 
     private fun setupListAdapter() {
         if (binding.viewmodel != null) {
@@ -79,7 +58,7 @@ class TodoListFragment : Fragment() {
     }
 
     private fun setupNavigation() {
-        viewModel.openTodoListEvent.observe(this, EventObserver {
+        viewModel.openTodoListEvent.observe(this.viewLifecycleOwner, EventObserver {
             openTaskDetails(it)
         })
 

@@ -11,26 +11,23 @@ import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.ScheduleItem
 
 
 class TodoListViewModel(application: Application) : AndroidViewModel(application) {
-    val todayItems: LiveData<List<ScheduleItem>>
-    val tomorrowItems: LiveData<List<ScheduleItem>>
+    val todayItems: LiveData<List<ScheduleItem>> by lazy {
+        MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
+            DateUtil.getTodayOrTomorrow(
+                "today"
+            )
+        )
+    }
+    val tomorrowItems: LiveData<List<ScheduleItem>> by lazy {
+        MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
+            DateUtil.getTodayOrTomorrow(
+                "tomorrow"
+            )
+        )
+    }
 
     private val _openTodoListEvent = MutableLiveData<Event<ScheduleItem>>()
     val openTodoListEvent: LiveData<Event<ScheduleItem>> = _openTodoListEvent
-
-    init {
-        todayItems =
-            MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
-                DateUtil.getTodayOrTomorrow(
-                    "today"
-                )
-            )
-        tomorrowItems =
-            MemoApplication.scheduleRepository.getAllTodayOrTomorrowSchedules(
-                DateUtil.getTodayOrTomorrow(
-                    "tomorrow"
-                )
-            )
-    }
 
     fun onScheduleClick(schedule: ScheduleItem) {
         _openTodoListEvent.value = Event(schedule)

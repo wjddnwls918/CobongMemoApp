@@ -63,7 +63,6 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
         //initObserveLivedata()
         setupNavigation()
 
-
     }
 
     fun initRecyclerView() {
@@ -96,33 +95,6 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
         initKeyboardSearchListener()
 
     }
-
-    /*  fun initObserveLivedata() {
-
-          viewModel.isFiltered.value = false
-
-          viewModel.items.observe(this, Observer { memos ->
-              memos.let {
-                  it?.let(memoAdapter::submitList)
-                  when (it.size) {
-                      0 -> binding.tvEmptyList.visibility = View.VISIBLE
-                      else -> binding.tvEmptyList.visibility = View.GONE
-                  }
-              }
-          })
-
-          viewModel.filteredList.observe(this, Observer { memos ->
-              memos.let {
-                  it?.let(memoAdapter::submitList)
-                  when (it.size) {
-                      0 -> binding.tvEmptyList.visibility = View.VISIBLE
-                      else -> binding.tvEmptyList.visibility = View.GONE
-                  }
-              }
-          })
-
-      }*/
-
 
     private fun setupNavigation() {
 

@@ -15,13 +15,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EndlessRecyclerViewScrollListener
+import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.KeyBoardUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.util.SnackBarUtil
 import cobong.jeongwoojin.cobongmemo.cobongmemo.databinding.ActivityPlaceInfoBinding
 import cobong.jeongwoojin.cobongmemo.cobongmemo.model.schedule.placeinfo.Document
 
 
-class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
+class PlaceInfoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPlaceInfoBinding
 
@@ -44,7 +45,6 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         viewModel = ViewModelProvider(this, viewModelFactory).get(PlaceInfoViewModel::class.java).apply {
             binding.viewmodel = this
-            navigator = this@PlaceInfoActivity
         }
 
         initToolbar()
@@ -52,7 +52,7 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
         initRecyclerView()
         initSearchObserver()
         initKeyboardSearchListener()
-
+        setupNavigation()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -78,6 +78,17 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
             , binding.etInputPlaceKeyword.text.toString()
             , 1
         )
+    }
+
+    private fun setupNavigation() {
+        viewModel.documentClickEvent.observe(this, EventObserver {
+            val intent = Intent()
+            intent.putExtra("result",it)
+            setResult(101, intent)
+
+            finish()
+        })
+
     }
 
     fun initToolbar() {
@@ -149,13 +160,13 @@ class PlaceInfoActivity : AppCompatActivity(), PlaceInfoNavigator {
     override fun onBackPressed() {
         finish()
     }
-
+/*
     override fun onDocumentClick(document: Document) {
         val intent = Intent()
         intent.putExtra("result",document)
         setResult(101, intent)
 
         finish()
-    }
+    }*/
 
 }
