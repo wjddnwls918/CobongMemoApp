@@ -29,19 +29,12 @@ import com.prolificinteractive.materialcalendarview.format.DateFormatTitleFormat
 import org.threeten.bp.format.DateTimeFormatter
 
 
-class ScheduleFragment : Fragment(), OnDateSelectedListener{
+class ScheduleFragment : Fragment(), OnDateSelectedListener {
 
     private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: ScheduleViewModel
 
     private lateinit var binding: FragmentScheduleBinding
-    private lateinit var scheduleAdapter: ScheduleAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,16 +50,13 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener{
                 binding.viewmodel = this
             }
 
-
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        initScheduleRecyclerView()
-        initScheduleObserveByDate()
+        binding.lifecycleOwner = this.viewLifecycleOwner
         initScheduleObserve()
         initScheduleCalendar()
         setupNavigation()
@@ -75,11 +65,11 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener{
 
     private fun setupNavigation() {
 
-        viewModel.scheduleClickEvent.observe(this, EventObserver {
+        viewModel.scheduleClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onScheduleClick(it)
         })
 
-        viewModel.addScheduleStartClickEvent.observe(this, EventObserver {
+        viewModel.addScheduleStartClickEvent.observe(this.viewLifecycleOwner, EventObserver {
             onAddScheduleStartClick()
         })
     }
@@ -95,26 +85,13 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener{
             )
         )
 
-        onDateSelected(binding.mcvScheduleCalendar, CalendarDay.from(
-            DateUtil.curYear().toInt(),
-            DateUtil.curMonth().toInt(),
-            DateUtil.curDay().toInt()),true)
-    }
-
-    fun initScheduleRecyclerView() {
-        if (binding.viewmodel != null) {
-            scheduleAdapter = ScheduleAdapter(viewModel)
-            binding.rcvScheduleList.adapter = scheduleAdapter
-        }
-    }
-
-
-    fun initScheduleObserveByDate() {
-        viewModel.allSchedulesByRoomByDate.observe(this, Observer { schedules ->
-            schedules.let {
-                it?.let(scheduleAdapter::submitList)
-            }
-        })
+        onDateSelected(
+            binding.mcvScheduleCalendar, CalendarDay.from(
+                DateUtil.curYear().toInt(),
+                DateUtil.curMonth().toInt(),
+                DateUtil.curDay().toInt()
+            ), true
+        )
     }
 
     override fun onDateSelected(
@@ -145,7 +122,7 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener{
     override fun onStop() {
         super.onStop()
 
-         binding.mcvScheduleCalendar.clearSelection()
+        binding.mcvScheduleCalendar.clearSelection()
     }
 
     fun onAddScheduleStartClick() {
@@ -161,8 +138,11 @@ class ScheduleFragment : Fragment(), OnDateSelectedListener{
     }
 
     fun initScheduleObserve() {
-        viewModel.allSchedulesByRoom.observe(this, Observer { memos ->
-            memos.let {
+        viewModel.allSchedulesByRoom.observe(this.viewLifecycleOwner, Observer { memos ->
+
+            memos?.let {
+
+                viewModel.scheduleAdapter.notifyDataSetChanged()
 
                 if (!viewModel.transDate.equals(""))
                     viewModel.getAllScheduleByDate(viewModel.transDate)
