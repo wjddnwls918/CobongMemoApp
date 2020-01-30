@@ -1,6 +1,7 @@
 package cobong.jeongwoojin.cobongmemo.cobongmemo.view.schedule
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,13 +13,15 @@ import io.reactivex.disposables.CompositeDisposable
 
 class ScheduleViewModel(application: Application) : AndroidViewModel(application) {
 
+    val scheduleAdapter:ScheduleAdapter
+
     val disposable: CompositeDisposable = CompositeDisposable()
 
     var transDate: String = ""
 
-    var allSchedulesByRoomByDate: MutableLiveData<MutableList<ScheduleItem>> = MutableLiveData()
+    var allSchedulesByRoomByDate= MutableLiveData<List<ScheduleItem>>()
 
-    val allSchedulesByRoom: LiveData<List<ScheduleItem>>
+    var allSchedulesByRoom: LiveData<List<ScheduleItem>>
 
 
     private val _scheduleClickEvent = MutableLiveData<Event<ScheduleItem>>()
@@ -29,6 +32,7 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
     val addScheduleStartClickEvent: LiveData<Event<Unit>> = _addScheduleStartClickEvent
 
     init {
+        scheduleAdapter = ScheduleAdapter(this)
         allSchedulesByRoom = MemoApplication.scheduleRepository.schedule
     }
 
@@ -53,18 +57,21 @@ class ScheduleViewModel(application: Application) : AndroidViewModel(application
             MemoApplication.scheduleRepository.getAllScheduleByDate(date)
                 .subscribe({ data ->
 
-                    data.add(
-                        0,
+                    val list = mutableListOf<ScheduleItem>()
+                    list.add( 0,
                         ScheduleItem(
                             0,
                             "", transDatetoHangul(), "", "", "", "", 0, 0.0, 0.0
-                        )
-                    )
+                        ))
 
-                    if (data.size == 0)
-                        allSchedulesByRoomByDate.postValue(mutableListOf())
+                    list.addAll(data)
+
+                    if (list.size == 0)
+                        allSchedulesByRoomByDate.postValue(listOf())
                     else
-                        allSchedulesByRoomByDate.postValue(data)
+                        allSchedulesByRoomByDate.postValue(list)
+
+                    Log.d("checklist","ghihihihi : " +list.size)
 
                 }, { e ->
                     e.printStackTrace()

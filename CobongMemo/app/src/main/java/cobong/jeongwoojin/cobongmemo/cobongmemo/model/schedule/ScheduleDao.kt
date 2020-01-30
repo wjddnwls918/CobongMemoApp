@@ -12,7 +12,7 @@ interface ScheduleDao {
     fun getAllSchedule(): LiveData<List<ScheduleItem>>
 
     @Query( "SELECT * from schedule where date = :date order by `startTime` asc")
-    fun getAllScheduleByDate(date: String): Single<MutableList<ScheduleItem>>
+    fun getAllScheduleByDate(date: String): Single<List<ScheduleItem>>
 
     @Query( "SELECT * from schedule where date = :date order by `startTime` asc")
     fun getAllTodayOrTomorrowSchedules(date: String): LiveData<List<ScheduleItem>>
