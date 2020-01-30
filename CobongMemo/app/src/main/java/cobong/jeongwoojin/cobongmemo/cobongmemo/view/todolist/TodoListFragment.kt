@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cobong.jeongwoojin.cobongmemo.cobongmemo.R
 import cobong.jeongwoojin.cobongmemo.cobongmemo.common.EventObserver
@@ -45,11 +44,11 @@ class TodoListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         binding.lifecycleOwner = this.viewLifecycleOwner
 
-        initObserveLivedata()
+        //initObserveLivedata()
         setupListAdapter()
         setupNavigation()
     }
-
+/*
     private fun initObserveLivedata() {
         viewModel.todayItems.observe(this, Observer { schedules ->
             schedules.let {
@@ -68,7 +67,7 @@ class TodoListFragment : Fragment() {
                 }
             }
         })
-    }
+    }*/
 
     private fun setupListAdapter() {
         if (binding.viewmodel != null) {
