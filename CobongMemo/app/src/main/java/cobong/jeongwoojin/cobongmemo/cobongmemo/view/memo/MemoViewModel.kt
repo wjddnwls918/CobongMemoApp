@@ -13,8 +13,6 @@ import kotlinx.coroutines.launch
 
 class MemoViewModel(application: Application) : AndroidViewModel(application) {
 
-    val adapter: MemoAdapter
-
     //메모 보기
     private val _openMemoEvent = MutableLiveData<Event<MemoItem>>()
     val openMemoEvent: LiveData<Event<MemoItem>> = _openMemoEvent
@@ -33,11 +31,14 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     val _swipedEvent = MutableLiveData<Event<Int>>()
     val swipedEvent: LiveData<Event<Int>> = _swipedEvent
 
-    private val _items = MutableLiveData<List<MemoItem>>(listOf())
-    var items: LiveData<List<MemoItem>> = _items
+    val items: LiveData<List<MemoItem>>
+
+    val _filteredList = MutableLiveData<List<MemoItem>>()
+    val filteredList:LiveData<List<MemoItem>> = _filteredList
+
+    val isFiltered = MutableLiveData<Boolean>()
 
     init {
-        adapter = MemoAdapter(this)
         items = MemoApplication.memoRepository.memos
     }
 
@@ -46,7 +47,11 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun deleteByListPosition(listPosition: Int) = viewModelScope.launch(Dispatchers.IO) {
-        MemoApplication.memoRepository.deleteByRoom(items.value!![listPosition])
+        if(isFiltered.value as Boolean) {
+            MemoApplication.memoRepository.deleteByRoom(filteredList.value!!.get(listPosition))
+        } else {
+            MemoApplication.memoRepository.deleteByRoom(items.value!!.get(listPosition))
+        }
     }
 
     fun onMemoClick(memo: MemoItem) {
@@ -61,22 +66,22 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
         _editMemoEvent.value = Event(memo)
     }
 
-    fun setFilteredList(filter: String) {
+    fun setFilteredList(filter:String) {
 
         val filteredList = mutableListOf<MemoItem>()
 
         val regex = Regex(pattern = filter)
-        var matched: Boolean
+        var matched:Boolean
 
-        for (i in items.value!!.indices) {
-            val cur = items.value!![i].title as CharSequence
-            matched = regex.containsMatchIn(input = cur)
+        for( i in items.value!!.indices ) {
+            val cur = items.value!!.get(i).title as CharSequence
+            matched = regex.containsMatchIn(input= cur)
 
-            if (matched)
-                filteredList.add(items.value!![i])
+            if(matched)
+                filteredList.add(items.value!!.get(i))
         }
 
-        adapter.submitList(filteredList.toList())
+        _filteredList.value = filteredList
     }
 
 }

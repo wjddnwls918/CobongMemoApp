@@ -29,8 +29,6 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_schedule_list"
-                bind_adapter="@{viewmodel.scheduleAdapter}"
-                setScheduleItems="@{viewmodel.allSchedulesByRoomByDate}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -54,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:minHeight="@dimen/schedule_calendar_min_height"
-                app:layout_scrollFlags="scroll">
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"

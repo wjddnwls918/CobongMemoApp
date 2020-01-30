@@ -11,6 +11,7 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
 
     private lateinit var viewModelFactory: ViewModelProvider.AndroidViewModelFactory
     private lateinit var viewModel: MemoViewModel
+    private lateinit var memoAdapter: MemoAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,16 +59,17 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        binding.lifecycleOwner = this.viewLifecycleOwner
         //RecyclerView init
         initRecyclerView()
-        //initObserveLivedata()
+        initObserveLivedata()
         setupNavigation()
-
-
     }
 
     fun initRecyclerView() {
+        if (binding.viewmodel != null) {
+            memoAdapter = MemoAdapter(viewModel)
+            binding.rcvMemoList.adapter = memoAdapter
+        }
 
         ItemTouchHelper(SwipeToDeleteCallback(activity!!.applicationContext, viewModel)).apply {
             attachToRecyclerView(binding.rcvMemoList)
@@ -97,52 +100,52 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
 
     }
 
-    /*  fun initObserveLivedata() {
+    fun initObserveLivedata() {
 
-          viewModel.isFiltered.value = false
+        viewModel.isFiltered.value = false
 
-          viewModel.items.observe(this, Observer { memos ->
-              memos.let {
-                  it?.let(memoAdapter::submitList)
-                  when (it.size) {
-                      0 -> binding.tvEmptyList.visibility = View.VISIBLE
-                      else -> binding.tvEmptyList.visibility = View.GONE
-                  }
-              }
-          })
+        viewModel.items.observe(this, Observer { memos ->
+            memos.let {
+                it?.let(memoAdapter::submitList)
+                when (it.size) {
+                    0 -> binding.tvEmptyList.visibility = View.VISIBLE
+                    else -> binding.tvEmptyList.visibility = View.GONE
+                }
+            }
+        })
 
-          viewModel.filteredList.observe(this, Observer { memos ->
-              memos.let {
-                  it?.let(memoAdapter::submitList)
-                  when (it.size) {
-                      0 -> binding.tvEmptyList.visibility = View.VISIBLE
-                      else -> binding.tvEmptyList.visibility = View.GONE
-                  }
-              }
-          })
+        viewModel.filteredList.observe(this, Observer { memos ->
+            memos.let {
+                it?.let(memoAdapter::submitList)
+                when (it.size) {
+                    0 -> binding.tvEmptyList.visibility = View.VISIBLE
+                    else -> binding.tvEmptyList.visibility = View.GONE
+                }
+            }
+        })
 
-      }*/
+    }
 
 
     private fun setupNavigation() {
 
         //메모 보기
-        viewModel.openMemoEvent.observe(this.viewLifecycleOwner, EventObserver {
+        viewModel.openMemoEvent.observe(this, EventObserver {
             sendMemo(it)
         })
 
         //삭제
-        viewModel.deleteMemoEvent.observe(this.viewLifecycleOwner, EventObserver {
+        viewModel.deleteMemoEvent.observe(this, EventObserver {
             deleteMemo(it)
         })
 
         //수정
-        viewModel.editMemoEvent.observe(this.viewLifecycleOwner, EventObserver {
+        viewModel.editMemoEvent.observe(this, EventObserver {
             editMemo(it)
         })
 
         //스와이프
-        viewModel.swipedEvent.observe(this.viewLifecycleOwner, EventObserver {
+        viewModel.swipedEvent.observe(this, EventObserver {
             if (viewModel._alertFlag.value != true) {
                 makeDialog {
                     //delete memo
@@ -222,7 +225,16 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
     }
 
     fun setFilter() {
-        viewModel.setFilteredList(binding.tietInputMemoFilter.text.toString())
+
+        val curString = binding.tietInputMemoFilter.text.toString()
+        if (curString.equals("")) {
+            viewModel.isFiltered.value = false
+            viewModel.setFilteredList(binding.tietInputMemoFilter.text.toString())
+        } else {
+            viewModel.isFiltered.value = true
+            viewModel.setFilteredList(binding.tietInputMemoFilter.text.toString())
+            binding.rcvMemoList.scrollToPosition(0)
+        }
     }
 
     //메모 보기로 이동
@@ -302,7 +314,7 @@ class MemoListFragment : Fragment(), View.OnClickListener, View.OnTouchListener 
             this.setMessage("메모를 지우시겠습니까?")
             this.setPositiveButton("취소") { _, _ ->
                 viewModel._alertFlag.value = false
-                viewModel.adapter.notifyDataSetChanged()
+                memoAdapter.notifyDataSetChanged()
             }
             setNegativeButton("확인") { _, _ ->
 
